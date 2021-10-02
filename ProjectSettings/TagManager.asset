@@ -11,9 +11,9 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Ground
+  - Character
+  - Items
   - 
   - 
   - 
@@ -40,4 +40,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: ProtoTerrain
+    uniqueID: 1934806729
+    locked: 0
+  - name: Player
+    uniqueID: 3874695339
     locked: 0
