@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterEngine : MonoBehaviour
-{
+{ 
+
+    #region Hanging Properties
+
+    #endregion
     // Start is called before the first frame update
     void Start()
     {

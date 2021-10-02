@@ -8,6 +8,10 @@ using UnityEngine.InputSystem.Utilities;
 
 namespace CL03
 {
+
+    /// <summary>
+    /// PlayerControls parses raw input and sends it to qualifying events
+    /// </summary>
     public class @PlayerControls : IInputActionCollection, IDisposable
     {
         public InputActionAsset asset { get; }
