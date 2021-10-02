@@ -11,4 +11,5 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/2d_version/2d_Test Arena.unity
     guid: 7362ce3ff12dc48c0936e023eb0af57b
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: f08f9af411e0345adae0c718f0fb2ac5, type: 2}

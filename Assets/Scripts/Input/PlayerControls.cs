@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/Scripts/CrashLanding ver_0_3.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/Scripts/Input/CrashLanding ver_0_3.inputactions'
 
 using System;
 using System.Collections;
@@ -29,17 +29,137 @@ namespace CL03
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Look"",
-                    ""type"": ""Value"",
-                    ""id"": ""01d7d10c-6af4-4c36-80d9-05a782b2e2d3"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""name"": ""Fire"",
+                    ""type"": ""Button"",
+                    ""id"": ""f890fe02-52d5-42e3-8d48-06d4ef455253"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Fire"",
+                    ""name"": ""MoveModify"",
                     ""type"": ""Button"",
-                    ""id"": ""f890fe02-52d5-42e3-8d48-06d4ef455253"",
+                    ""id"": ""6a65342f-026f-4c27-b33a-43df9cff609c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""8481b792-2ab8-42f4-91c3-d456ed8b6704"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Crouch"",
+                    ""type"": ""Button"",
+                    ""id"": ""802c66f5-fc5d-4029-80a7-9fdc82057091"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""5ce3d485-5960-4d37-9797-44a572f526c2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ChangeForward"",
+                    ""type"": ""Button"",
+                    ""id"": ""ce40b40f-ff21-4801-b519-c0815d2c256b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ChangeBack"",
+                    ""type"": ""Button"",
+                    ""id"": ""e56eeecb-0b13-4b57-ac70-471ad102b82f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Change1"",
+                    ""type"": ""Button"",
+                    ""id"": ""14215a75-5559-40b8-ac70-f28c0bf45204"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Change2"",
+                    ""type"": ""Button"",
+                    ""id"": ""bc4c7b71-04fa-4c0c-8db6-1fa9a945b3f2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Change3"",
+                    ""type"": ""Button"",
+                    ""id"": ""2d22c5d2-92c5-49f1-8224-715af6ef6ea8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Change4"",
+                    ""type"": ""Button"",
+                    ""id"": ""9ac9e4a7-58c6-4828-ab3d-a959fac4c2bc"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Change5"",
+                    ""type"": ""Button"",
+                    ""id"": ""7959a5d0-fe78-4b3a-9044-7380c7ab4993"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Menu"",
+                    ""type"": ""Button"",
+                    ""id"": ""795468b1-2682-4a8f-aec7-4795d0566010"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""CharInfo"",
+                    ""type"": ""Button"",
+                    ""id"": ""b4d7a9cc-3238-4491-919a-44b89c230886"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""SwitchInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""10d99474-63a2-4326-9601-ad41b1de6ce0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""DropObject"",
+                    ""type"": ""Button"",
+                    ""id"": ""7e35f211-8c20-4140-9638-560d3b3db459"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Generic Action1"",
+                    ""type"": ""Button"",
+                    ""id"": ""cd62859e-f7f2-4736-83c0-50188a3db044"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -180,39 +300,6 @@ namespace CL03
                 },
                 {
                     ""name"": """",
-                    ""id"": ""c1f7a91b-d0fd-4a62-997e-7fb9b69bf235"",
-                    ""path"": ""<Gamepad>/rightStick"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Look"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8c8e490b-c610-4785-884f-f04217b23ca4"",
-                    ""path"": ""<Pointer>/delta"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse;Touch"",
-                    ""action"": ""Look"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3e5f5442-8668-4b27-a940-df99bad7e831"",
-                    ""path"": ""<Joystick>/{Hatswitch}"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Joystick"",
-                    ""action"": ""Look"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""143bb1cd-cc10-4eca-a2f0-a3664166fe91"",
                     ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
@@ -263,6 +350,204 @@ namespace CL03
                     ""processors"": """",
                     ""groups"": ""XR"",
                     ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9bfbafc1-91ed-4223-a22b-c7087fbb1e1a"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveModify"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""24a91304-b1a2-4358-8c26-df53d175ac95"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6f83fea8-75fe-4aab-b5c2-ab9258901733"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c06dc8bc-377f-43ec-8a83-8f69765e4aeb"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""927e9e13-f8d3-484a-b735-a78743bfc2fc"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeForward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1caf2419-462a-4505-8a62-acdb7fdc7196"",
+                    ""path"": ""<Keyboard>/backquote"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeBack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b13a3023-b190-4ad1-99e8-b8dc8f502674"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Change1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9cc6762f-f03b-49c4-a64d-1901b2bb988f"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Change2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f9fcc00e-f402-484c-bb2a-c60b1a81bd11"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Change3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b886b51f-3ab2-43c3-a3f2-92b1b4bf1cad"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Change4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e74858bf-34eb-43a7-a585-a0525204f48c"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Change5"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f2979ffa-a0b3-4d32-be24-b5cb45e726ad"",
+                    ""path"": ""<Keyboard>/m"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""72754cff-ba17-485c-a0c2-b58dc1131325"",
+                    ""path"": ""<Keyboard>/f10"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ebfc6732-ab5d-48cb-81c2-b4d873b36a0a"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CharInfo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4daed0af-ee17-4938-a340-3313c7087be3"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CharInfo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2906ad7a-b51f-474d-a187-60a0ff77cdfd"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e32e7855-e2df-40d8-ad54-7b05ce32106c"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DropObject"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""729d6130-8af3-433e-8614-471aa5243dd4"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Generic Action1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -841,8 +1126,23 @@ namespace CL03
             // Player
             m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
             m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
-            m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
             m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
+            m_Player_MoveModify = m_Player.FindAction("MoveModify", throwIfNotFound: true);
+            m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
+            m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
+            m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+            m_Player_ChangeForward = m_Player.FindAction("ChangeForward", throwIfNotFound: true);
+            m_Player_ChangeBack = m_Player.FindAction("ChangeBack", throwIfNotFound: true);
+            m_Player_Change1 = m_Player.FindAction("Change1", throwIfNotFound: true);
+            m_Player_Change2 = m_Player.FindAction("Change2", throwIfNotFound: true);
+            m_Player_Change3 = m_Player.FindAction("Change3", throwIfNotFound: true);
+            m_Player_Change4 = m_Player.FindAction("Change4", throwIfNotFound: true);
+            m_Player_Change5 = m_Player.FindAction("Change5", throwIfNotFound: true);
+            m_Player_Menu = m_Player.FindAction("Menu", throwIfNotFound: true);
+            m_Player_CharInfo = m_Player.FindAction("CharInfo", throwIfNotFound: true);
+            m_Player_SwitchInventory = m_Player.FindAction("SwitchInventory", throwIfNotFound: true);
+            m_Player_DropObject = m_Player.FindAction("DropObject", throwIfNotFound: true);
+            m_Player_GenericAction1 = m_Player.FindAction("Generic Action1", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -905,15 +1205,45 @@ namespace CL03
         private readonly InputActionMap m_Player;
         private IPlayerActions m_PlayerActionsCallbackInterface;
         private readonly InputAction m_Player_Move;
-        private readonly InputAction m_Player_Look;
         private readonly InputAction m_Player_Fire;
+        private readonly InputAction m_Player_MoveModify;
+        private readonly InputAction m_Player_Jump;
+        private readonly InputAction m_Player_Crouch;
+        private readonly InputAction m_Player_Interact;
+        private readonly InputAction m_Player_ChangeForward;
+        private readonly InputAction m_Player_ChangeBack;
+        private readonly InputAction m_Player_Change1;
+        private readonly InputAction m_Player_Change2;
+        private readonly InputAction m_Player_Change3;
+        private readonly InputAction m_Player_Change4;
+        private readonly InputAction m_Player_Change5;
+        private readonly InputAction m_Player_Menu;
+        private readonly InputAction m_Player_CharInfo;
+        private readonly InputAction m_Player_SwitchInventory;
+        private readonly InputAction m_Player_DropObject;
+        private readonly InputAction m_Player_GenericAction1;
         public struct PlayerActions
         {
             private @PlayerControls m_Wrapper;
             public PlayerActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
             public InputAction @Move => m_Wrapper.m_Player_Move;
-            public InputAction @Look => m_Wrapper.m_Player_Look;
             public InputAction @Fire => m_Wrapper.m_Player_Fire;
+            public InputAction @MoveModify => m_Wrapper.m_Player_MoveModify;
+            public InputAction @Jump => m_Wrapper.m_Player_Jump;
+            public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
+            public InputAction @Interact => m_Wrapper.m_Player_Interact;
+            public InputAction @ChangeForward => m_Wrapper.m_Player_ChangeForward;
+            public InputAction @ChangeBack => m_Wrapper.m_Player_ChangeBack;
+            public InputAction @Change1 => m_Wrapper.m_Player_Change1;
+            public InputAction @Change2 => m_Wrapper.m_Player_Change2;
+            public InputAction @Change3 => m_Wrapper.m_Player_Change3;
+            public InputAction @Change4 => m_Wrapper.m_Player_Change4;
+            public InputAction @Change5 => m_Wrapper.m_Player_Change5;
+            public InputAction @Menu => m_Wrapper.m_Player_Menu;
+            public InputAction @CharInfo => m_Wrapper.m_Player_CharInfo;
+            public InputAction @SwitchInventory => m_Wrapper.m_Player_SwitchInventory;
+            public InputAction @DropObject => m_Wrapper.m_Player_DropObject;
+            public InputAction @GenericAction1 => m_Wrapper.m_Player_GenericAction1;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -926,12 +1256,57 @@ namespace CL03
                     @Move.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
                     @Move.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
                     @Move.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
-                    @Look.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLook;
-                    @Look.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLook;
-                    @Look.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLook;
                     @Fire.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
                     @Fire.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
                     @Fire.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
+                    @MoveModify.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMoveModify;
+                    @MoveModify.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMoveModify;
+                    @MoveModify.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMoveModify;
+                    @Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
+                    @Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
+                    @Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
+                    @Crouch.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
+                    @Crouch.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
+                    @Crouch.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
+                    @Interact.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
+                    @Interact.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
+                    @Interact.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
+                    @ChangeForward.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChangeForward;
+                    @ChangeForward.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChangeForward;
+                    @ChangeForward.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChangeForward;
+                    @ChangeBack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChangeBack;
+                    @ChangeBack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChangeBack;
+                    @ChangeBack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChangeBack;
+                    @Change1.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChange1;
+                    @Change1.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChange1;
+                    @Change1.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChange1;
+                    @Change2.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChange2;
+                    @Change2.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChange2;
+                    @Change2.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChange2;
+                    @Change3.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChange3;
+                    @Change3.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChange3;
+                    @Change3.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChange3;
+                    @Change4.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChange4;
+                    @Change4.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChange4;
+                    @Change4.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChange4;
+                    @Change5.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChange5;
+                    @Change5.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChange5;
+                    @Change5.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChange5;
+                    @Menu.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMenu;
+                    @Menu.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMenu;
+                    @Menu.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMenu;
+                    @CharInfo.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCharInfo;
+                    @CharInfo.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCharInfo;
+                    @CharInfo.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCharInfo;
+                    @SwitchInventory.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchInventory;
+                    @SwitchInventory.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchInventory;
+                    @SwitchInventory.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchInventory;
+                    @DropObject.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDropObject;
+                    @DropObject.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDropObject;
+                    @DropObject.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDropObject;
+                    @GenericAction1.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGenericAction1;
+                    @GenericAction1.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGenericAction1;
+                    @GenericAction1.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGenericAction1;
                 }
                 m_Wrapper.m_PlayerActionsCallbackInterface = instance;
                 if (instance != null)
@@ -939,12 +1314,57 @@ namespace CL03
                     @Move.started += instance.OnMove;
                     @Move.performed += instance.OnMove;
                     @Move.canceled += instance.OnMove;
-                    @Look.started += instance.OnLook;
-                    @Look.performed += instance.OnLook;
-                    @Look.canceled += instance.OnLook;
                     @Fire.started += instance.OnFire;
                     @Fire.performed += instance.OnFire;
                     @Fire.canceled += instance.OnFire;
+                    @MoveModify.started += instance.OnMoveModify;
+                    @MoveModify.performed += instance.OnMoveModify;
+                    @MoveModify.canceled += instance.OnMoveModify;
+                    @Jump.started += instance.OnJump;
+                    @Jump.performed += instance.OnJump;
+                    @Jump.canceled += instance.OnJump;
+                    @Crouch.started += instance.OnCrouch;
+                    @Crouch.performed += instance.OnCrouch;
+                    @Crouch.canceled += instance.OnCrouch;
+                    @Interact.started += instance.OnInteract;
+                    @Interact.performed += instance.OnInteract;
+                    @Interact.canceled += instance.OnInteract;
+                    @ChangeForward.started += instance.OnChangeForward;
+                    @ChangeForward.performed += instance.OnChangeForward;
+                    @ChangeForward.canceled += instance.OnChangeForward;
+                    @ChangeBack.started += instance.OnChangeBack;
+                    @ChangeBack.performed += instance.OnChangeBack;
+                    @ChangeBack.canceled += instance.OnChangeBack;
+                    @Change1.started += instance.OnChange1;
+                    @Change1.performed += instance.OnChange1;
+                    @Change1.canceled += instance.OnChange1;
+                    @Change2.started += instance.OnChange2;
+                    @Change2.performed += instance.OnChange2;
+                    @Change2.canceled += instance.OnChange2;
+                    @Change3.started += instance.OnChange3;
+                    @Change3.performed += instance.OnChange3;
+                    @Change3.canceled += instance.OnChange3;
+                    @Change4.started += instance.OnChange4;
+                    @Change4.performed += instance.OnChange4;
+                    @Change4.canceled += instance.OnChange4;
+                    @Change5.started += instance.OnChange5;
+                    @Change5.performed += instance.OnChange5;
+                    @Change5.canceled += instance.OnChange5;
+                    @Menu.started += instance.OnMenu;
+                    @Menu.performed += instance.OnMenu;
+                    @Menu.canceled += instance.OnMenu;
+                    @CharInfo.started += instance.OnCharInfo;
+                    @CharInfo.performed += instance.OnCharInfo;
+                    @CharInfo.canceled += instance.OnCharInfo;
+                    @SwitchInventory.started += instance.OnSwitchInventory;
+                    @SwitchInventory.performed += instance.OnSwitchInventory;
+                    @SwitchInventory.canceled += instance.OnSwitchInventory;
+                    @DropObject.started += instance.OnDropObject;
+                    @DropObject.performed += instance.OnDropObject;
+                    @DropObject.canceled += instance.OnDropObject;
+                    @GenericAction1.started += instance.OnGenericAction1;
+                    @GenericAction1.performed += instance.OnGenericAction1;
+                    @GenericAction1.canceled += instance.OnGenericAction1;
                 }
             }
         }
@@ -1102,8 +1522,23 @@ namespace CL03
         public interface IPlayerActions
         {
             void OnMove(InputAction.CallbackContext context);
-            void OnLook(InputAction.CallbackContext context);
             void OnFire(InputAction.CallbackContext context);
+            void OnMoveModify(InputAction.CallbackContext context);
+            void OnJump(InputAction.CallbackContext context);
+            void OnCrouch(InputAction.CallbackContext context);
+            void OnInteract(InputAction.CallbackContext context);
+            void OnChangeForward(InputAction.CallbackContext context);
+            void OnChangeBack(InputAction.CallbackContext context);
+            void OnChange1(InputAction.CallbackContext context);
+            void OnChange2(InputAction.CallbackContext context);
+            void OnChange3(InputAction.CallbackContext context);
+            void OnChange4(InputAction.CallbackContext context);
+            void OnChange5(InputAction.CallbackContext context);
+            void OnMenu(InputAction.CallbackContext context);
+            void OnCharInfo(InputAction.CallbackContext context);
+            void OnSwitchInventory(InputAction.CallbackContext context);
+            void OnDropObject(InputAction.CallbackContext context);
+            void OnGenericAction1(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {
