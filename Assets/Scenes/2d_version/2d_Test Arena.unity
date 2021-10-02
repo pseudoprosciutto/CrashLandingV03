@@ -516,6 +516,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33241502e510e4982875146a28b6d4ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  crouchPressed: 0
+  crouchHeld: 0
+  jumpPressed: 0
+  jumpHeld: 0
+  horizontal: 0
+  vertical: 0
+  interactPressed: 0
+  interactHeld: 0
+  dropObjectPressed: 0
+  dropObjectHeld: 0
+  changeObjectPressed: 0
+  changeObjectHeld: 0
+  consoleLaunchHeld: 0
+  consoleLaunchPressed: 0
+  action1Pressed: 0
+  action1Held: 0
+  action2Pressed: 0
+  action2Held: 0
+  lastCharacterCalled: 0
+  forwardChange: 0
+  backwardChange: 0
+  chooseChar1: 0
+  chooseChar2: 0
+  chooseChar3: 0
+  chooseChar4: 0
+  chooseChar5: 0
 --- !u!114 &573176516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -783,6 +809,7 @@ GameObject:
   - component: {fileID: 1444689987}
   - component: {fileID: 1444689988}
   - component: {fileID: 1444689989}
+  - component: {fileID: 1444689990}
   m_Layer: 7
   m_Name: RED
   m_TagString: Untagged
@@ -904,6 +931,52 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.73, y: 1.8}
   m_EdgeRadius: 0
+--- !u!114 &1444689990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1444689985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da39a2b1487294ddf879c1c608285e74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isOnGround: 0
+  isOnPlatform: 0
+  isJumping: 0
+  isCrouching: 0
+  isHeadBlocked: 0
+  isHanging: 0
+  isHoldingSomething: 0
+  isHoldingSomethingAbove: 0
+  canHang: 1
+  cantHangCoolDownTime: 1.5
+  drawDebugRaycasts: 1
+  headOffset: 0.35
+  footOffset: 0.25
+  eyeHeight: 1.5
+  grabHeightLow: 0.5
+  grabHeightHigh: 1
+  reachOffset: 0.7
+  headClearance: 0.5
+  breakOverHeadDistance: 0.1
+  groundDistance: 0.1
+  grabDistance: 0.4
+  reachDistance: 0.9
+  hangingDistanceFromLedge: 0.1
+  headBounce: 0.2
+  speed: 4
+  crouchSpeedDivisor: 3
+  coyoteDuration: 0.05
+  maxFallSpeed: -25
+  jumpForce: 27
+  jumpCoolDownTime: 0.3
+  crouchJumpBoost: 2.5
+  hangingJumpForce: 31
+  jumpHoldForce: 1.9
+  jumpHoldDuration: 0.1
 --- !u!1 &1464833843
 GameObject:
   m_ObjectHideFlags: 0
