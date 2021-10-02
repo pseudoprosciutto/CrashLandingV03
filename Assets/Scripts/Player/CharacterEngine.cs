@@ -206,7 +206,7 @@ namespace CL03
 		{
 			yield return new WaitForSeconds(.8f);
 			ForceFreezeHorizontal();
-			Debug.Log("Late Deselect test");
+//			Debug.Log("Late Deselect test");
 			yield break;
 		}
 		#endregion

@@ -15,6 +15,7 @@ namespace CL03
 {
         ///this needs to go first
         [DefaultExecutionOrder(-100)]
+
         /// <summary>
         /// Handles the input events by caching them into public variables to be accessed.
         /// </summary>
@@ -142,6 +143,8 @@ namespace CL03
                     consoleLaunchPressed = context.ReadValueAsButton();
             }
             #endregion
+
+        //this is in switch character controller
 
             #region CHARACTER CHANGE
             //public void OnChangeForward(InputAction.CallbackContext context)
