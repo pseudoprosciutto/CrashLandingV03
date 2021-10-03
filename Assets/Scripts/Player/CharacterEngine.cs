@@ -221,8 +221,8 @@ namespace CL03
 			isHoldingSomethingAbove = false;
 
 			transform.position = new Vector3(transform.position.x, transform.position.y, 2f);
-	/**
-	 * walkables = groundLayer;
+	
+			 walkables = groundLayer;
 			walkables |= walkableObject;
 			walkables |= crateLayer;
 
@@ -232,7 +232,7 @@ namespace CL03
 			grabables |= itemsLayer;
 			interactablesLayer = grabables;
 			interactablesLayer |= staticInteractablesLayer;
-	*/
+	
 			changeObjectCoolingDown = false;
 			canHang = true;
 		}
@@ -613,7 +613,7 @@ namespace CL03
 			if (headCheck)
 			{
 				isHeadBlocked = true;
-				//something bonks the head, it will no longer get stuck there because we are flat headed.
+				//something bonks the head, it will no longer get stuck there because we are flat headed and smooth brained.
 				if (!headCheck.collider.CompareTag("Environment") && !headCheck.collider.CompareTag("Surface") && !headCheck.collider.Equals(ObjectBeingHeld))
 				{
 					//slight backwards force added to prevent objects from staying on head. things should just roll off
@@ -737,6 +737,8 @@ namespace CL03
 
 			//If the player is on the ground, extend the coyote time window
 			if (isOnGround)
+				//CoyoteTime is time that keeps you extended and gives player a
+                //chance to make a last second decision
 				coyoteTime = Time.time + coyoteDuration;
 		}
 
@@ -748,7 +750,7 @@ namespace CL03
 		public void ExitStaticState() => rigidBody.bodyType = RigidbodyType2D.Dynamic;
 
 		/// <summary>
-		/// Stop Moving Character while deselecting. Add delay before stopping character if they are in air to fake finishing a jump. 
+		/// Stop Moving Character immediately while deselecting. Add delay before stopping character if they are in air to fake finishing a jump. 
 		/// </summary>
 		public void StopMovingChangingChar()
 		{

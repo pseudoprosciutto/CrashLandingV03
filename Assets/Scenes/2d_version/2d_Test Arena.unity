@@ -248,6 +248,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 573176512}
     m_Modifications:
+    - target: {fileID: 7203530896771738682, guid: d90fadfdcb5004b23982d2db1e1596e0, type: 3}
+      propertyPath: groundLayer.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
     - target: {fileID: 7203530896771738685, guid: d90fadfdcb5004b23982d2db1e1596e0, type: 3}
       propertyPath: m_Name
       value: BLUE
@@ -1198,9 +1202,9 @@ GameObject:
   - component: {fileID: 1918789280}
   - component: {fileID: 1918789282}
   - component: {fileID: 1918789281}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Terrain
-  m_TagString: Untagged
+  m_TagString: Surface
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1653,6 +1657,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 573176512}
     m_Modifications:
+    - target: {fileID: 7203530896771738682, guid: 02f986a87a88845ddbe18b2794f12690, type: 3}
+      propertyPath: groundLayer.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
     - target: {fileID: 7203530896771738685, guid: 02f986a87a88845ddbe18b2794f12690, type: 3}
       propertyPath: m_Name
       value: RED

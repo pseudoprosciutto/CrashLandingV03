@@ -206,7 +206,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da39a2b1487294ddf879c1c608285e74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isSelected: 1
+  isSelected: 0
   isOnGround: 0
   isOnPlatform: 0
   isJumping: 0
