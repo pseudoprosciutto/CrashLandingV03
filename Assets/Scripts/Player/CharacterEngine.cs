@@ -232,6 +232,7 @@ namespace CL03
 			isHoldingSomething = false;
 			isHoldingSomethingAbove = false;
 
+			//place character in correct z plane
 			transform.position = new Vector3(transform.position.x, transform.position.y, 2f);
 	
 			 walkables = groundLayer;
@@ -280,8 +281,8 @@ namespace CL03
 		/// Execution Order: 
 		/// -begin 
 		/// -objectBeingHeld? 
+		///     {no:} look for and identify interactables in line of sight 
 		///     {yes:} keep its position as if held || 
-		///     {no:} identify interactables in line of sight 
 		/// -PhysicsCheck() - process and check engine states. 
 		/// -isSelected? 
 		///    {yes:} GroundMovement(); MidAirMovement() || 
@@ -290,7 +291,10 @@ namespace CL03
 		/// </summary>
 		void FixedUpdate()
 		{
+			// Holding items check.
 			// no object in hands
+			HoldingItemsCheck();
+
 			// if no object held then ...
 			if (ObjectBeingHeld == null)
 			{
@@ -300,7 +304,7 @@ namespace CL03
 				RaycastHit2D ObjectCheckLow = Raycast2(new Vector2(footOffset * direction, grabHeightLow), new Vector2(direction, 0f), reachDistance, interactablesLayer);
 				RaycastHit2D ObjectCheckHigh = Raycast2(new Vector2(footOffset * direction, grabHeightHigh), new Vector2(direction, 0f), reachDistance, interactablesLayer);
 
-				//if something close by is found then ...
+				//if something close by is found then 
 				if (ObjectCheckHigh) //up high (priority)
 				{                   //lets cache it until it no longer is in our vicinity
 					WithInArmsReach = ObjectCheckHigh.collider.gameObject;
@@ -314,6 +318,7 @@ namespace CL03
 					//run a check to see if player has any input to interact with nearby object.
 					InteractCheck();
 				}
+
 				else //nothing found
 				{
 					WithInArmsReach = null;
@@ -321,6 +326,8 @@ namespace CL03
 				}
 			}
 
+            
+			
 			//Check the environment to determine status
 			PhysicsCheck();
 
@@ -347,6 +354,16 @@ namespace CL03
 				MidAirMovement();
 			}
 		}
+
+		/// <summary>
+        /// Check to see if there is an item with in characters I
+        /// Performed in Fixed update.
+        /// </summary>
+		void HoldingItemsCheck()
+        {
+
+        }
+
 		/// <summary>
 		/// Delayed actions for after the character is deselected.
 		/// </summary>
