@@ -17,9 +17,9 @@ namespace CL03
     /// </summary>
     public class CharacterEngine : MonoBehaviour
     {
-
-		#region Component References: Rigidbody, BoxCollider, Input Handler
-		BoxCollider2D bodyCollider;             //The collider component
+        #region FIELDS
+        #region Component References: Rigidbody, BoxCollider, Input Handler
+        BoxCollider2D bodyCollider;             //The collider component
 		Rigidbody2D rigidBody;                  //The rigidbody component
 		InputHandler input;                     //The current inputs for the player
 		#endregion
@@ -42,7 +42,7 @@ namespace CL03
 		[Space]
 		#region hanging properties
 		//can hang
-		public bool canHang = true; // can your character even hang dawg?
+		public bool canHang = true; // can the character even hang dawg and kick it with the other hanging homies?
 		public float cantHangCoolDownTime = 1.5f;
 		#endregion
 		[Space]
@@ -111,12 +111,15 @@ namespace CL03
 		[GUIColor(0.8f, 0.3f, 0.3f, .2f)]
 		[PreviewField]
 		public GameObject WithInArmsReach; // { get; set{ if (!isHoldingSomething) return WithInReach(); } }
-		public float interactCoolDownTime = 0.5f;      //prevent spam It takes time to lift objects or interact with something
-		Collider2D objectCollider;
-		HoldableObjects objectScript;
+
+		public float interactCoolDownTime = 0.5f;      //prevent spamming interaction It takes time to lift objects or interact with something
+
+		Collider2D objectCollider;              //recognized object
+		HoldableObjects objectScript;			//recognized object's script
+
 		public Vector2 objectColliderSize;
-		public bool isInteracting_Test;    //
-		public bool changeObjectCoolingDown;
+		public bool isInteracting_Test;    //test bool
+		public bool changeObjectCoolingDown;  //is object cooling down?
 		public float changeObjectCoolDownTime = 1.2f;
 		#endregion
 
@@ -166,20 +169,22 @@ namespace CL03
 		int direction = 1;                      //Direction player is facing
 
 
-
 		Vector2 colliderStandSize;              //Size of the standing collider
 
 		Vector2 colliderStandOffset;            //Offset of the standing collider
 		Vector2 colliderCrouchSize;             //Size of the crouching collider
 		Vector2 colliderCrouchOffset;           //Offset of the crouching collider
-		#endregion
-		#region Selection for Player Control
+        #endregion
+        #endregion
 
-		// OnCharacterChange scripts arranged as public messages to engine
-		/// <summary>
-		/// the initial state changes and functions launch on character change. 
-		/// </summary>
-		public void OnCharacterChange_Start()
+        #region METHODS
+        #region Selection for Player Control
+
+        // OnCharacterChange scripts arranged as public messages to engine
+        /// <summary>
+        /// the initial state changes and functions launch on character change. 
+        /// </summary>
+        public void OnCharacterChange_Start()
 		{
 			ForceUnFreezeConstraints();
 			Debug.Log("Character was just selected"); //make sure this doesnt double
@@ -195,7 +200,14 @@ namespace CL03
 			Debug.Log("Character was just changed from"); //make sure this doesnt double
 		}
 
+		/// <summary>
+        /// forced freeze of rigidbody to use when deselecting character
+        /// </summary>
 		public void ForceFreezeHorizontal() => rigidBody.constraints |= RigidbodyConstraints2D.FreezePositionX;
+
+		/// <summary>
+        /// forced unfreeze of rigidbody to grant character movement again
+        /// </summary>
 		public void ForceUnFreezeConstraints() => rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
 
 		/// <summary>
@@ -243,8 +255,10 @@ namespace CL03
 			input = GetComponentInParent<InputHandler>();
 			rigidBody = GetComponent<Rigidbody2D>();
 			bodyCollider = GetComponent<BoxCollider2D>();
+
 			//assuming we are deselected to start
 			//EnterStaticState();
+
 			//Record the original x scale of the player
 			originalXScale = transform.localScale.x;
 
@@ -306,9 +320,6 @@ namespace CL03
 					//if (WithInArmsReach) { }
 				}
 			}
-
-
-
 
 			//Check the environment to determine status
 			PhysicsCheck();
@@ -541,7 +552,7 @@ namespace CL03
 			StartCoroutine(InventorySwapCoolDown());
 
 			//logic:
-			// if so are they are storeable objects?
+			// if so are they storeable objects?
 			//YES: , then remove from above head if they are
 			//cache storeable to tempVariable to store in inventory afterwards
 			//Disable visibility and deactivate scripts during store_item animation
@@ -614,7 +625,8 @@ namespace CL03
 			{
 				isHeadBlocked = true;
 				//something bonks the head, it will no longer get stuck there because we are flat headed and smooth brained.
-				if (!headCheck.collider.CompareTag("Environment") && !headCheck.collider.CompareTag("Surface") && !headCheck.collider.Equals(ObjectBeingHeld))
+				//if (!headCheck.collider.CompareTag("Environment") && !headCheck.collider.CompareTag("Surface") && !headCheck.collider.Equals(ObjectBeingHeld))
+				if (!headCheck.collider.CompareTag("Surface") && !headCheck.collider.Equals(ObjectBeingHeld))
 				{
 					//slight backwards force added to prevent objects from staying on head. things should just roll off
 					Rigidbody2D rb = headCheck.collider.GetComponent<Rigidbody2D>();
@@ -624,7 +636,6 @@ namespace CL03
 
 			if (isHoldingSomething) //ObjectBeingHeld)
 			{//attempt a wallgrab because hands are empty
-
 				WallGrabCheck();
 			}
 		}
@@ -664,21 +675,25 @@ namespace CL03
 		/// </summary>
 		void WallGrabCheck()
 		{
+
+			//(SHOULD HANGING BE BEHIND A BUTTON PRESS? if so should this be called before this check?)
+
 			//WALL GRAB CHECK
-			//(SHOULD HANGING BE BEHIND A BUTTON PRESS?)
 			//Determine the direction of the wall grab attempt
 			Vector2 grabDir = new Vector2(direction, 0f);
 
 			//Cast three rays to look for a wall grab
 			RaycastHit2D blockedCheck = Raycast(new Vector2(footOffset * direction, playerHeight), grabDir, grabDistance);
+
 			RaycastHit2D ledgeCheck = Raycast(new Vector2(reachOffset * direction, playerHeight), Vector2.down, grabDistance);
+
 			RaycastHit2D wallCheck = Raycast(new Vector2(footOffset * direction, eyeHeight), grabDir, grabDistance);
 
 			//HANGING:
 			//If the player is off the ground AND is not hanging AND (interact is pressed OR is falling) AND
 			//found a ledge AND found a wall AND the grab is NOT blocked
 			//and is not holding something in hands...
-			if ((!isOnGround && !isHanging && rigidBody.velocity.y < 0f
+			if (!isOnGround && !isHanging && rigidBody.velocity.y < 0f
 				 && !isHoldingSomething && canHang
 				 && ledgeCheck && wallCheck && !blockedCheck)
 			  //|| (!isOnGround && !isHanging /* &&  rigidBody.velocity.y < 0f */
@@ -686,7 +701,7 @@ namespace CL03
 			  //   !isHanging && input.interactPressed
 			  //    && !isHoldingSomething
 			  //  && ledgeCheck && wallCheck && !blockedCheck
-			  )
+			  
 			{
 				//...we have a ledge grab. Record the current position...
 				Vector3 pos = transform.position;
@@ -702,8 +717,8 @@ namespace CL03
 				isHanging = true;
 			}
 		}
-
 		#endregion
+
 		#region Basic Horizontal Movement
 		void GroundMovement()
 		{
@@ -773,7 +788,6 @@ namespace CL03
 
 		}
 
-
 		/// <summary>
 		/// If the character is in the air, I want to give it a more natural change feeling
 		/// </summary>
@@ -783,7 +797,6 @@ namespace CL03
 			yield return new WaitForSeconds(.25f);
 			rigidBody.velocity = new Vector2(0, 0);
 			yield return new WaitForSeconds(.25f);
-
 
 			yield break;
 		}
@@ -831,11 +844,12 @@ namespace CL03
 
 		#region Advanced Movement (Jumping, Hanging, Crouching, Standing)
 		/// <summary>
+        /// What happens once character is in air
 		/// Jumping and Hanging Controls
 		/// </summary>
 		void MidAirMovement()
 		{
-			//If the player is currently hanging...
+			//If Char currently hanging
 			if (isHanging)
 			{
 				//DropFromLedge:
@@ -892,12 +906,12 @@ namespace CL03
 			//Otherwise, if currently within the jump time window...
 			else if (isJumping)
 			{
-				//...and the jump button is held, apply an incremental force to the rigidbody...
+				//and the jump button is held, apply an incremental force to the rigidbody...
 
 				//	if (input.jumpHeld)
 				//		rigidBody.AddForce(new Vector2(0f, jumpHoldForce), ForceMode2D.Impulse);
 
-				//...and if jump time is past, set isJumping to false
+				//if jump time is past, set isJumping to false
 				if (jumpTime <= Time.time)
 					isJumping = false;
 			}
@@ -949,19 +963,36 @@ namespace CL03
 			bodyCollider.size = colliderStandSize;
 			bodyCollider.offset = colliderStandOffset;
 		}
-
 		#endregion
 
 		#region raycasts
-		//These two Raycast methods wrap the Physics2D.Raycast() and provide some extra
-		//functionality
+		//methods used to return raycasts for directional information around character
+
+		/// <summary>
+        /// Assumed Walkables layer for raycast()
+        /// returns Raycast(Vector2, Vector2, float, walkables as LayerMask) 
+        /// Call the overloaded Raycast() method using the ground layermask and return 
+        /// </summary>
+        /// <param name="offset">offset to char, Vector2 </param>
+        /// <param name="rayDirection">direction of ray, Vector2 </param>
+        /// <param name="length">length of line, float</param>
+        /// <returns> RaycastHit2D</returns>
 		RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length)
 		{
-			//Call the overloaded Raycast() method using the ground layermask and return 
-			//the results
 			return Raycast(offset, rayDirection, length, walkables);
 		}
 
+		/// <summary>
+		/// Green. hit: Red;
+        /// Specified hits with layer mask
+		/// Returns RaycastHit2D
+		/// and Creates visual line in editor scene if drawDebugRaycasts
+		/// </summary>
+		/// <param name="offset">offset to char, Vector2 </param>
+		/// <param name="rayDirection">direction of ray, Vector2 </param>
+		/// <param name="length">length of line, float</param>
+		/// <param name="mask">the layer raycast is looking to hit on, LayerMask</param>
+		/// <returns>RaycastHit2D</returns>
 		RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length, LayerMask mask)
 		{
 			//Record the player's position
@@ -983,7 +1014,17 @@ namespace CL03
 			return hit;
 		}
 
-
+		/// <summary>
+		/// Cyan. hit: Magenta; - alternate Color Raycast method - 
+		/// Specified hits with layer mask
+		/// Returns RaycastHit2D
+		/// and Creates visual line in editor scene if drawDebugRaycasts
+		/// </summary>
+		/// <param name="offset">offset to char, Vector2 </param>
+		/// <param name="rayDirection">direction of ray, Vector2 </param>
+		/// <param name="length">length of line, float</param>
+		/// <param name="mask">the layer raycast is looking to hit on, LayerMask</param>
+		/// <returns>RaycastHit2D</returns>
 		RaycastHit2D Raycast2(Vector2 offset, Vector2 rayDirection, float length, LayerMask mask)
 		{
 			//Record the player's position
@@ -1004,6 +1045,7 @@ namespace CL03
 			//Return the results of the raycast
 			return hit;
 		}
-		#endregion
-	}
+        #endregion
+    }
+        #endregion
 }
