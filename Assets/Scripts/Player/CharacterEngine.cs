@@ -247,46 +247,15 @@ namespace CL03
 		/// </summary>
 		void FixedUpdate()
 		{
-			// Holding items check.
-			// no object in hands
-		//	HoldingItemsCheck();  This is for the following code to be cleaner:
 
-			// if no object held then then look around for other items in sight. We're all grabby grabby here.
-			if (ObjectBeingHeld == null)
-			{
-				//ensure flag set/ we realize nothing is being held
-				isHoldingSomething = false;
-				//look to see if there is something close by to interact with (note: using Raycast 2 to show different debug colors (cyan, magenta))
-				RaycastHit2D ObjectCheckLow = Raycast2(new Vector2(footOffset * direction, grabHeightLow), new Vector2(direction, 0f), reachDistance, interactablesLayer);
-				RaycastHit2D ObjectCheckHigh = Raycast2(new Vector2(footOffset * direction, grabHeightHigh), new Vector2(direction, 0f), reachDistance, interactablesLayer);
+            /** no need to hold items yet
+			// any object in hands?
+			//HoldingItemsCheck(); 
+			*/
+            //Check the environment to determine status
+            PhysicsCheck();
 
-				//if something close by is found then 
-				if (ObjectCheckHigh) //up high (priority)
-				{                   //lets cache it until it no longer is in our vicinity
-					WithInArmsReach = ObjectCheckHigh.collider.gameObject;
-					//run a check to see if player has any input to interact with nearby object.
-
-					InteractCheck();
-				}
-				else if (ObjectCheckLow) //or down low
-				{
-					//lets cache it until it no longer is in our vicinity
-					WithInArmsReach = ObjectCheckLow.collider.gameObject;
-					//run a check to see if player has any input to interact with nearby object.
-					InteractCheck();
-				}
-
-				else //nothing found
-				{
-					WithInArmsReach = null;
-					//if (WithInArmsReach) { }
-				}
-			}
-			
-			//Check the environment to determine status
-			PhysicsCheck();
-
-			//if player is selected and physics have been checked then we can continue deciding how to player moves knowing state and environment
+			//if player is selected and once physics have been checked then we can continue deciding how to player moves knowing state and environment
 			if (isSelected)
 			{
 				
@@ -357,10 +326,11 @@ namespace CL03
 
 		#region Physics Check
 		/// <summary>
-		/// process and update engine states
+		/// Check Environment and update status. 
 		/// </summary>
 		void PhysicsCheck()
 		{
+			//set location of selected character so that they wont get stuck behind others.
 			if (isSelected) { bringFront(); } else { sendBack(); };
 			//Start by assuming the character isn't on the ground and the head isn't blocked
 			CharacterStandingOnSurfaceCheck();
@@ -373,6 +343,7 @@ namespace CL03
 			RaycastHit2D fullHeadCheck = Raycast(new Vector2(Math.Abs(direction) - 1.5f, playerHeight), Vector2.right, 1f, grabables);
 			if (fullHeadCheck) Debug.Log("object hit head test");
 
+			//this loc checks are to eventually push object a certain way to fall off head and not stick.
 			RaycastHit2D leftHeadCheck = Raycast(new Vector2(-headOffset, bodyCollider.size.y), Vector2.up, breakOverHeadDistance);
 			if (leftHeadCheck) //.collider.CompareTag("Holdable") )
 				hitOverHeadLeft = true;
@@ -401,7 +372,7 @@ namespace CL03
 				}
 			}
 
-			if (isHoldingSomething) //ObjectBeingHeld)
+			if (!isHoldingSomething) //ObjectBeingHeld)
 			{//attempt a wallgrab because hands are empty
 				WallGrabCheck();
 			}
@@ -448,7 +419,7 @@ namespace CL03
 		}
 		#endregion
 
-		#region Interacting Behaviors, Item control and inventory
+		#region Interacting Behaviors, Item control
 
 		/// <summary>
 		/// Check to see if there is an item with in characters I
@@ -456,8 +427,38 @@ namespace CL03
 		/// </summary>
 		void HoldingItemsCheck()
         {
+			// if no object held then then look around for other items in sight. We're all grabby grabby here.
+			if (ObjectBeingHeld == null)
+			{
+				//ensure flag set/ we realize nothing is being held
+				isHoldingSomething = false;
+				//look to see if there is something close by to interact with (note: using Raycast 2 to show different debug colors (cyan, magenta))
+				RaycastHit2D ObjectCheckLow = Raycast2(new Vector2(footOffset * direction, grabHeightLow), new Vector2(direction, 0f), reachDistance, interactablesLayer);
+				RaycastHit2D ObjectCheckHigh = Raycast2(new Vector2(footOffset * direction, grabHeightHigh), new Vector2(direction, 0f), reachDistance, interactablesLayer);
 
-        }
+				//if something close by is found then 
+				if (ObjectCheckHigh) //up high (priority)
+				{                   //lets cache it until it no longer is in our vicinity
+					WithInArmsReach = ObjectCheckHigh.collider.gameObject;
+					//run a check to see if player has any input to interact with nearby object.
+
+					InteractCheck();
+				}
+				else if (ObjectCheckLow) //or down low
+				{
+					//lets cache it until it no longer is in our vicinity
+					WithInArmsReach = ObjectCheckLow.collider.gameObject;
+					//run a check to see if player has any input to interact with nearby object.
+					InteractCheck();
+				}
+
+				else //nothing found
+				{
+					WithInArmsReach = null;
+					//if (WithInArmsReach) { }
+				}
+			}
+		}
 
 		//Interact:
 		//here we go through all the possibilities of interaction provided the character is selected.
