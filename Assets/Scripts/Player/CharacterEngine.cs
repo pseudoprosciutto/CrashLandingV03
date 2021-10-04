@@ -60,7 +60,7 @@ namespace CL03
 		[FoldoutGroup("Jump Properties", expanded: false)]
 		public float jumpForce = 27f;           //Initial force of jump
 		[FoldoutGroup("Jump Properties")]
-		public float jumpCoolDownTime = 0.3f;       //To prevent spammable jumping
+		public float jumpCoolDownTime = 0.3f;   //To prevent spammable jumping
 		[FoldoutGroup("Jump Properties")]
 		public float crouchJumpBoost = 2.5f;    //Jump boost when crouching
 		[FoldoutGroup("Jump Properties")]
@@ -174,55 +174,12 @@ namespace CL03
 		Vector2 colliderStandOffset;            //Offset of the standing collider
 		Vector2 colliderCrouchSize;             //Size of the crouching collider
 		Vector2 colliderCrouchOffset;           //Offset of the crouching collider
-        #endregion
-        #endregion
-
-        #region METHODS
-        #region Selection for Player Control
-
-        // OnCharacterChange scripts arranged as public messages to engine
-        /// <summary>
-        /// the initial state changes and functions launch on character change. 
-        /// </summary>
-        public void OnCharacterChange_Start()
-		{
-			ForceUnFreezeConstraints();
-			Debug.Log("Character was just selected"); //make sure this doesnt double
-		}
-		/// <summary>
-		/// state changes and functions for switching selection from current character.
-		/// </summary>
-		public void OnCharacterChange_End()
-		{
-			//Scheduled delayed actions.
-			//Last possible functions relating with switching away from character
-			StartCoroutine(LateDeselect());
-			Debug.Log("Character was just changed from"); //make sure this doesnt double
-		}
-
-		/// <summary>
-        /// forced freeze of rigidbody to use when deselecting character
-        /// </summary>
-		public void ForceFreezeHorizontal() => rigidBody.constraints |= RigidbodyConstraints2D.FreezePositionX;
-
-		/// <summary>
-        /// forced unfreeze of rigidbody to grant character movement again
-        /// </summary>
-		public void ForceUnFreezeConstraints() => rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
-
-		/// <summary>
-		/// Delayed actions for after the character is deselected.
-		/// </summary>
-		/// <returns></returns>
-		public IEnumerator LateDeselect()
-		{
-			yield return new WaitForSeconds(.8f);
-			ForceFreezeHorizontal();
-//			Debug.Log("Late Deselect test");
-			yield break;
-		}
 		#endregion
-		#region Initialization
+		#endregion
+
+		#region METHODS
+
+		#region Initialization; Awake() and Start()
 		private void Awake()
 		{
 			//*tests:*
@@ -239,7 +196,7 @@ namespace CL03
 			walkables |= walkableObject;
 			walkables |= crateLayer;
 
-			//			objectCollider.enabled = false;
+			//objectCollider.enabled = false;
 
 			grabables = crateLayer;
 			grabables |= itemsLayer;
@@ -276,10 +233,9 @@ namespace CL03
 		}
 		#endregion
 
-		#region Physics Engine Loop -Fixed Update Base
+		#region Character Update Loops; Fixed update
 		/// <summary>
-		/// Execution Order: 
-		/// -begin 
+		/// Fixed update Execution Order: 
 		/// -objectBeingHeld? 
 		///     {no:} look for and identify interactables in line of sight 
 		///     {yes:} keep its position as if held || 
@@ -293,9 +249,9 @@ namespace CL03
 		{
 			// Holding items check.
 			// no object in hands
-			HoldingItemsCheck();
+		//	HoldingItemsCheck();  This is for the following code to be cleaner:
 
-			// if no object held then ...
+			// if no object held then then look around for other items in sight. We're all grabby grabby here.
 			if (ObjectBeingHeld == null)
 			{
 				//ensure flag set/ we realize nothing is being held
@@ -309,6 +265,7 @@ namespace CL03
 				{                   //lets cache it until it no longer is in our vicinity
 					WithInArmsReach = ObjectCheckHigh.collider.gameObject;
 					//run a check to see if player has any input to interact with nearby object.
+
 					InteractCheck();
 				}
 				else if (ObjectCheckLow) //or down low
@@ -325,8 +282,6 @@ namespace CL03
 					//if (WithInArmsReach) { }
 				}
 			}
-
-            
 			
 			//Check the environment to determine status
 			PhysicsCheck();
@@ -334,7 +289,7 @@ namespace CL03
 			//if player is selected and physics have been checked then we can continue deciding how to player moves knowing state and environment
 			if (isSelected)
 			{
-				#region note rotate
+				
 				HandledObjectsCheck();
 				//ROTATE OBJECTS IN POSSESSION
 				//if selected and object held. press up or down the object being held changes position
@@ -343,40 +298,167 @@ namespace CL03
 					if (input.vertical > .2f) { isHoldingSomethingAbove = true; }
 					if (input.vertical < -.2f) { isHoldingSomethingAbove = false; }
 				}
-				#endregion
+
 				//should this be after held? instead of pressed
 				if (input.changeObjectPressed && !changeObjectCoolingDown)
 				{
-
+					Debug.Log("Change object button pressed and change object cooling down is false.");
 				}
 				//Process ground and air movements
 				GroundMovement();
 				MidAirMovement();
 			}
 		}
+        #endregion
+
+        #region Selection for Player Control
+        // OnCharacterChange scripts arranged as public messages to engine
+        /// <summary>
+        /// the initial state changes and functions launch on character change. 
+        /// </summary>
+        public void OnCharacterChange_Start()
+		{
+			ForceUnFreezeConstraints();
+			Debug.Log("Character was just selected"); //make sure this doesnt double
+		}
+		/// <summary>
+		/// state changes and functions for switching selection from current character.
+		/// </summary>
+		public void OnCharacterChange_End()
+		{
+			//Scheduled delayed actions.
+			//Last possible functions relating with switching away from character
+			StartCoroutine(LateDeselect());
+			Debug.Log("Character was just changed from"); //make sure this doesnt double
+		}
 
 		/// <summary>
-        /// Check to see if there is an item with in characters I
-        /// Performed in Fixed update.
-        /// </summary>
-		void HoldingItemsCheck()
-        {
+		/// forced freeze of rigidbody to use when deselecting character
+		/// </summary>
+		public void ForceFreezeHorizontal() => rigidBody.constraints |= RigidbodyConstraints2D.FreezePositionX;
 
-        }
+		/// <summary>
+		/// forced unfreeze of rigidbody to grant character movement again
+		/// </summary>
+		public void ForceUnFreezeConstraints() => rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
 
 		/// <summary>
 		/// Delayed actions for after the character is deselected.
 		/// </summary>
 		/// <returns></returns>
-		public IEnumerator ChangingInventoryObjects()
+		public IEnumerator LateDeselect()
 		{
-			changeObjectCoolingDown = true;
-			yield return new WaitForSeconds(changeObjectCoolDownTime);
-			changeObjectCoolingDown = false;
-			Debug.Log("Object change cool down complete test");
+			yield return new WaitForSeconds(.8f);
+			ForceFreezeHorizontal();
+			//			Debug.Log("Late Deselect test");
 			yield break;
 		}
-		#region Interacting Behaviors
+		#endregion
+
+		#region Physics Check
+		/// <summary>
+		/// process and update engine states
+		/// </summary>
+		void PhysicsCheck()
+		{
+			if (isSelected) { bringFront(); } else { sendBack(); };
+			//Start by assuming the character isn't on the ground and the head isn't blocked
+			CharacterStandingOnSurfaceCheck();
+			CharacterUnderSomethingCheck();
+			isHeadBlocked = false;
+			hitOverHeadLeft = false;
+			hitOverHeadRight = false;
+
+			//HEAD CHECK
+			RaycastHit2D fullHeadCheck = Raycast(new Vector2(Math.Abs(direction) - 1.5f, playerHeight), Vector2.right, 1f, grabables);
+			if (fullHeadCheck) Debug.Log("object hit head test");
+
+			RaycastHit2D leftHeadCheck = Raycast(new Vector2(-headOffset, bodyCollider.size.y), Vector2.up, breakOverHeadDistance);
+			if (leftHeadCheck) //.collider.CompareTag("Holdable") )
+				hitOverHeadLeft = true;
+			// BreakOverHead(leftHeadCheck.collider.GetComponent<HoldableObjects>());
+
+			RaycastHit2D rightHeadCheck = Raycast(new Vector2(headOffset, bodyCollider.size.y), Vector2.up, breakOverHeadDistance);
+			if (rightHeadCheck) //.collider.CompareTag("Holdable"))
+				hitOverHeadRight = true;
+			//BreakOverHead(rightHeadCheck.collider.GetComponent<HoldableObjects>());
+
+
+			//Cast the ray to check above the player's head
+			RaycastHit2D headCheck = Raycast(new Vector2(0f, bodyCollider.size.y), Vector2.up, headClearance);
+
+			//If that ray hits, the player's head is blocked
+			if (headCheck)
+			{
+				isHeadBlocked = true;
+				//something bonks the head, it will no longer get stuck there because we are flat headed and smooth brained.
+				//if (!headCheck.collider.CompareTag("Environment") && !headCheck.collider.CompareTag("Surface") && !headCheck.collider.Equals(ObjectBeingHeld))
+				if (!headCheck.collider.CompareTag("Surface") && !headCheck.collider.Equals(ObjectBeingHeld))
+				{
+					//slight backwards force added to prevent objects from staying on head. things should just roll off
+					Rigidbody2D rb = headCheck.collider.GetComponent<Rigidbody2D>();
+					rb.AddForceAtPosition(Vector2.up, new Vector2(headBounce, bodyCollider.size.y), ForceMode2D.Force);
+				}
+			}
+
+			if (isHoldingSomething) //ObjectBeingHeld)
+			{//attempt a wallgrab because hands are empty
+				WallGrabCheck();
+			}
+		}
+
+		/// <summary>
+        /// Ground Check for character. Casts rays for left and right feet and gives and updated state of character
+        /// </summary>
+        void CharacterStandingOnSurfaceCheck()
+        {
+			//assume not on ground
+			isOnPlatform = false;
+			isOnGround = false;
+			//Cast rays for the left and right foot and parse
+			RaycastHit2D leftFootCheck = Raycast(new Vector2(-footOffset, 0f), Vector2.down, groundDistance);
+			RaycastHit2D rightFootCheck = Raycast(new Vector2(footOffset, 0f), Vector2.down, groundDistance);
+			//If either ray hit the ground, the player is on the ground
+			if (leftFootCheck || rightFootCheck)
+				isOnGround = true;
+		}
+
+        void CharacterUnderSomethingCheck() {
+
+		}
+
+		void HandledObjectsCheck()
+		{
+
+			//DROP OBJECT
+			if (input.dropObjectPressed)
+			{
+				if (ObjectBeingHeld)
+				{
+					DropItem(ObjectBeingHeld);
+				}
+			}
+			//SWITCH TO INVENTORY
+			if (input.changeObjectPressed)
+			{
+				if (!inSwitchItemProcess)
+					ChangeItem();
+			}
+
+		}
+		#endregion
+
+		#region Interacting Behaviors, Item control and inventory
+
+		/// <summary>
+		/// Check to see if there is an item with in characters I
+		/// Performed in Fixed update.
+		/// </summary>
+		void HoldingItemsCheck()
+        {
+
+        }
+
 		//Interact:
 		//here we go through all the possibilities of interaction provided the character is selected.
 		void InteractCheck()
@@ -471,6 +553,13 @@ namespace CL03
 			Debug.Log("Object Dropped - Engine Side");
 		}
 
+		//LOOK AT: this might be extra code, 
+		void BreakOverHead(HoldableObjects holdable)
+		{
+			print("holdable.GetPutDown();");
+			//holdable.GetPutDown();
+		}
+
 		/// <summary>
 		/// Delayed actions for after the character is deselected.
 		/// </summary>
@@ -484,6 +573,7 @@ namespace CL03
 			yield break;
 		}
 		#endregion
+
 		#region Inventory Control
 		/// <summary>
 		/// The process of changing whats in character hand with what is in character inventory
@@ -566,6 +656,7 @@ namespace CL03
 			//now that the inventory item was migrated we can make it whatever the temp item was.
 			InventoryItem = tempItem;
 			//run cool down before we can run this process again
+
 			StartCoroutine(InventorySwapCoolDown());
 
 			//logic:
@@ -583,6 +674,7 @@ namespace CL03
 
 			//Play animation and shit
 		}
+
 		/// <summary>
 		/// count down timer to allow  in switch item process = false after switchItemcoolDownTime.
 		/// </summary>
@@ -593,96 +685,20 @@ namespace CL03
 			inSwitchItemProcess = false;
 			yield break;
 		}
-		#endregion
 
-		#region Physics Check - Above and Below
 		/// <summary>
-		/// process and update engine states
+		/// Delayed actions for after the character is deselected.
 		/// </summary>
-		void PhysicsCheck()
+		/// <returns></returns>
+		public IEnumerator ChangingInventoryObjects()
 		{
-			if (isSelected) { bringFront(); } else { sendBack(); };
-
-			//Start by assuming the player isn't on the ground and the head isn't blocked
-			isOnPlatform = false;
-			isOnGround = false;
-			isHeadBlocked = false;
-			hitOverHeadLeft = false;
-			hitOverHeadRight = false;
-
-			//GROUND CHECK
-			//Cast rays for the left and right foot
-			RaycastHit2D leftFootCheck = Raycast(new Vector2(-footOffset, 0f), Vector2.down, groundDistance);
-			RaycastHit2D rightFootCheck = Raycast(new Vector2(footOffset, 0f), Vector2.down, groundDistance);
-
-			//If either ray hit the ground, the player is on the ground
-			if (leftFootCheck || rightFootCheck)
-				isOnGround = true;
-
-			//HEAD CHECK
-			RaycastHit2D fullHeadCheck = Raycast(new Vector2(Math.Abs(direction) - 1.5f, playerHeight), Vector2.right, 1f, grabables);
-			if (fullHeadCheck) Debug.Log("object hit head test");
-
-			RaycastHit2D leftHeadCheck = Raycast(new Vector2(-headOffset, bodyCollider.size.y), Vector2.up, breakOverHeadDistance);
-			if (leftHeadCheck) //.collider.CompareTag("Holdable") )
-				hitOverHeadLeft = true;
-			// BreakOverHead(leftHeadCheck.collider.GetComponent<HoldableObjects>());
-
-			RaycastHit2D rightHeadCheck = Raycast(new Vector2(headOffset, bodyCollider.size.y), Vector2.up, breakOverHeadDistance);
-			if (rightHeadCheck) //.collider.CompareTag("Holdable"))
-				hitOverHeadRight = true;
-			//BreakOverHead(rightHeadCheck.collider.GetComponent<HoldableObjects>());
-
-
-			//Cast the ray to check above the player's head
-			RaycastHit2D headCheck = Raycast(new Vector2(0f, bodyCollider.size.y), Vector2.up, headClearance);
-
-			//If that ray hits, the player's head is blocked
-			if (headCheck)
-			{
-				isHeadBlocked = true;
-				//something bonks the head, it will no longer get stuck there because we are flat headed and smooth brained.
-				//if (!headCheck.collider.CompareTag("Environment") && !headCheck.collider.CompareTag("Surface") && !headCheck.collider.Equals(ObjectBeingHeld))
-				if (!headCheck.collider.CompareTag("Surface") && !headCheck.collider.Equals(ObjectBeingHeld))
-				{
-					//slight backwards force added to prevent objects from staying on head. things should just roll off
-					Rigidbody2D rb = headCheck.collider.GetComponent<Rigidbody2D>();
-					rb.AddForceAtPosition(Vector2.up, new Vector2(headBounce, bodyCollider.size.y), ForceMode2D.Force);
-				}
-			}
-
-			if (isHoldingSomething) //ObjectBeingHeld)
-			{//attempt a wallgrab because hands are empty
-				WallGrabCheck();
-			}
-		}
-
-		void HandledObjectsCheck()
-		{
-
-			//DROP OBJECT
-			if (input.dropObjectPressed)
-			{
-				if (ObjectBeingHeld)
-				{
-					DropItem(ObjectBeingHeld);
-				}
-			}
-			//SWITCH TO INVENTORY
-			if (input.changeObjectPressed)
-			{
-				if (!inSwitchItemProcess)
-					ChangeItem();
-			}
-
+			changeObjectCoolingDown = true;
+			yield return new WaitForSeconds(changeObjectCoolDownTime);
+			changeObjectCoolingDown = false;
+			Debug.Log("Object change cool down complete test");
+			yield break;
 		}
 		#endregion
-
-		void BreakOverHead(HoldableObjects holdable)
-		{
-			print("holdable.GetPutDown();");
-			//holdable.GetPutDown();
-		}
 
 		#region Hanging Actions
 		/// <summary>
@@ -775,7 +791,7 @@ namespace CL03
 		}
 
 		#endregion
-		#endregion
+		
 		#region Stop Scripts
 
 		public void EnterStaticState() => rigidBody.bodyType = RigidbodyType2D.Static;
