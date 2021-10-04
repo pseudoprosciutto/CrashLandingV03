@@ -224,7 +224,7 @@ MonoBehaviour:
   coyoteDuration: 0.05
   maxFallSpeed: -25
   jumpForce: 27
-  jumpCoolDownTime: 0.3
+  jumpCoolDownTime: 0.6
   crouchJumpBoost: 2.5
   hangingJumpForce: 31
   jumpHoldForce: 1.9

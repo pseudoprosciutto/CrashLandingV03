@@ -1523,10 +1523,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 573176512}
     m_Modifications:
     - target: {fileID: 7203530896771738682, guid: 02f986a87a88845ddbe18b2794f12690, type: 3}
-      propertyPath: jumpCoolDownTime
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7203530896771738682, guid: 02f986a87a88845ddbe18b2794f12690, type: 3}
       propertyPath: groundLayer.m_Bits
       value: 64
       objectReference: {fileID: 0}

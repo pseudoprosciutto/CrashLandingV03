@@ -60,7 +60,7 @@ namespace CL03
 		[FoldoutGroup("Jump Properties", expanded: false)]
 		public float jumpForce = 27f;           //Initial force of jump
 		[FoldoutGroup("Jump Properties")]
-		public float jumpCoolDownTime = 0.5f;   //To prevent spammable jumping
+		public float jumpCoolDownTime = 0.6f;   //To prevent spammable jumping
 		[FoldoutGroup("Jump Properties")]
 		public float crouchJumpBoost = 2.5f;    //Jump boost when crouching
 		[FoldoutGroup("Jump Properties")]
@@ -304,7 +304,7 @@ namespace CL03
 		public void ForceFreezeHorizontal() => rigidBody.constraints |= RigidbodyConstraints2D.FreezePositionX;
 
 		/// <summary>
-		/// forced unfreeze of rigidbody to grant character movement again
+		/// forced unfreeze of rigidbody to grant character movement again by just freezing rotation
 		/// </summary>
 		public void ForceUnFreezeConstraints() => rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
 
@@ -829,7 +829,7 @@ namespace CL03
 		public IEnumerator StopMovingToChange()
 		{
 			yield return new WaitForSeconds(.25f);
-			rigidBody.velocity = new Vector2(0, 0);
+			//rigidBody.velocity = new Vector2(0, 0);
 			yield return new WaitForSeconds(.25f);
 
 			yield break;
