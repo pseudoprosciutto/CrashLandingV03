@@ -60,7 +60,7 @@ namespace CL03
 		[FoldoutGroup("Jump Properties", expanded: false)]
 		public float jumpForce = 27f;           //Initial force of jump
 		[FoldoutGroup("Jump Properties")]
-		public float jumpCoolDownTime = 0.3f;   //To prevent spammable jumping
+		public float jumpCoolDownTime = 0.5f;   //To prevent spammable jumping
 		[FoldoutGroup("Jump Properties")]
 		public float crouchJumpBoost = 2.5f;    //Jump boost when crouching
 		[FoldoutGroup("Jump Properties")]
@@ -154,7 +154,6 @@ namespace CL03
 		public float hangingDistanceFromLedge = 0.1f; //added space between ledge and sprite
 		[FoldoutGroup("Environment Check Properties")]
 		public float headBounce = .2f;
-
 		#endregion
 
 
@@ -192,7 +191,7 @@ namespace CL03
 			//place character in correct z plane
 			transform.position = new Vector3(transform.position.x, transform.position.y, 2f);
 	
-			 walkables = groundLayer;
+			walkables = groundLayer;
 			walkables |= walkableObject;
 			walkables |= crateLayer;
 
@@ -247,7 +246,6 @@ namespace CL03
 		/// </summary>
 		void FixedUpdate()
 		{
-
             /** no need to hold items yet
 			// any object in hands?
 			//HoldingItemsCheck(); 
@@ -258,7 +256,6 @@ namespace CL03
 			//if player is selected and once physics have been checked then we can continue deciding how to player moves knowing state and environment
 			if (isSelected)
 			{
-				
 				HandledObjectsCheck();
 				//ROTATE OBJECTS IN POSSESSION
 				//if selected and object held. press up or down the object being held changes position
@@ -334,7 +331,36 @@ namespace CL03
 			if (isSelected) { bringFront(); } else { sendBack(); };
 			//Start by assuming the character isn't on the ground and the head isn't blocked
 			CharacterStandingOnSurfaceCheck();
-			CharacterUnderSomethingCheck();
+			CharacterHeadCheck();
+			
+
+			if (!isHoldingSomething) //ObjectBeingHeld)
+			{//attempt a wallgrab because hands are empty
+				WallGrabCheck();
+			}
+		}
+
+		/// <summary>
+        /// Ground Check for character. Casts rays for left and right feet and gives and updated state of character
+        /// </summary>
+        void CharacterStandingOnSurfaceCheck()
+        {
+			//assume not on ground
+			isOnPlatform = false;
+			isOnGround = false;
+			//Cast rays for the left and right foot and parse
+			RaycastHit2D leftFootCheck = Raycast(new Vector2(-footOffset, 0f), Vector2.down, groundDistance);
+			RaycastHit2D rightFootCheck = Raycast(new Vector2(footOffset, 0f), Vector2.down, groundDistance);
+			//If either ray hit the ground, the player is on the ground
+			if (leftFootCheck || rightFootCheck)
+				isOnGround = true;
+		}
+
+		/// <summary>
+        /// Head check. (aka Lets not put our head through things.)
+        /// sends out raycasthits and lets you know how large head trauma bill will be.
+        /// </summary>
+        void CharacterHeadCheck() {
 			isHeadBlocked = false;
 			hitOverHeadLeft = false;
 			hitOverHeadRight = false;
@@ -371,31 +397,6 @@ namespace CL03
 					rb.AddForceAtPosition(Vector2.up, new Vector2(headBounce, bodyCollider.size.y), ForceMode2D.Force);
 				}
 			}
-
-			if (!isHoldingSomething) //ObjectBeingHeld)
-			{//attempt a wallgrab because hands are empty
-				WallGrabCheck();
-			}
-		}
-
-		/// <summary>
-        /// Ground Check for character. Casts rays for left and right feet and gives and updated state of character
-        /// </summary>
-        void CharacterStandingOnSurfaceCheck()
-        {
-			//assume not on ground
-			isOnPlatform = false;
-			isOnGround = false;
-			//Cast rays for the left and right foot and parse
-			RaycastHit2D leftFootCheck = Raycast(new Vector2(-footOffset, 0f), Vector2.down, groundDistance);
-			RaycastHit2D rightFootCheck = Raycast(new Vector2(footOffset, 0f), Vector2.down, groundDistance);
-			//If either ray hit the ground, the player is on the ground
-			if (leftFootCheck || rightFootCheck)
-				isOnGround = true;
-		}
-
-        void CharacterUnderSomethingCheck() {
-
 		}
 
 		void HandledObjectsCheck()
@@ -557,7 +558,7 @@ namespace CL03
 		//LOOK AT: this might be extra code, 
 		void BreakOverHead(HoldableObjects holdable)
 		{
-			print("holdable.GetPutDown();");
+			print("Break over Head method   : holdable.GetPutDown();");
 			//holdable.GetPutDown();
 		}
 
@@ -709,7 +710,6 @@ namespace CL03
 		/// </summary>
 		void WallGrabCheck()
 		{
-
 			//(SHOULD HANGING BE BEHIND A BUTTON PRESS? if so should this be called before this check?)
 
 			//WALL GRAB CHECK
@@ -883,31 +883,39 @@ namespace CL03
 		/// </summary>
 		void MidAirMovement()
 		{
-			//If Char currently hanging
+			//If Char currently is in hanging state
 			if (isHanging)
 			{
+				//no longer jumping, we hangin
+				isJumping = !isJumping;
+
 				//DropFromLedge:
 				//If crouch or down (beyond .2f threshold) is pressed...
 				if (input.crouchPressed || input.vertical < -0.2f)
 				{
-					//...let go...
+					//let go
 					isHanging = false;
-					//...set the rigidbody to dynamic and exit
+					//set the rigidbody to dynamic and let gravity do the trick
 					rigidBody.bodyType = RigidbodyType2D.Dynamic;
 					return;
 				}
+
 				//Climb Ledge:
-				//If jump is pressed while hanging...
-				if (input.jumpPressed)
+				//If jump is pressed and no cool down, while hanging
+				if (input.jumpPressed && !jumpCoolingDown)
 				{
 					isOnGround = false;
-					//...let go...
+					//let go of ledge
 					isHanging = false;
-					//...set the rigidbody to dynamic and apply a jump force...
+					//rigidbody goes dynamic and apply a jump force
 					rigidBody.bodyType = RigidbodyType2D.Dynamic;
 					rigidBody.AddForce(new Vector2(0f, hangingJumpForce), ForceMode2D.Impulse);
+					//start jump cool down to prevent double jump
+					StartCoroutine(JumpCoolingDown());
 
-					//...and exit
+					//...and tell the Audio Manager to play the jump audio
+					//				AudioManager.PlayJumpAudio();
+
 					return;
 				}
 			}
@@ -916,19 +924,19 @@ namespace CL03
 			//the player is on the ground or within the coyote time window...
 			if (input.jumpPressed && !jumpCoolingDown && !isJumping && (isOnGround || coyoteTime > Time.time))
 			{
-				//...check to see if crouching AND not blocked. If so...
+				//check to see if crouching AND not blocked. If so
 				if (isCrouching && !isHeadBlocked)
 				{
-					//...stand up and apply a crouching jump boost
+					//stand up and apply a crouching jump boost
 					StandUp();
 					rigidBody.AddForce(new Vector2(0f, crouchJumpBoost), ForceMode2D.Impulse);
 				}
 
-				//...The player is no longer on the groud and is jumping...
+				//charcter is no longer on the groud and is jumping
 				isOnGround = false;
 				isJumping = true;
 
-				//...record the time the player will stop being able to boost their jump...
+				//record the time the player will stop being able to boost their jump...
 				jumpTime = Time.time + jumpHoldDuration;
 
 				//...add the jump force to the rigidbody...
@@ -937,10 +945,11 @@ namespace CL03
 				//...and tell the Audio Manager to play the jump audio
 				//				AudioManager.PlayJumpAudio();
 			}
-			//Otherwise, if currently within the jump time window...
+
+			//Otherwise, if currently within the jump time window
 			else if (isJumping)
 			{
-				//and the jump button is held, apply an incremental force to the rigidbody...
+				//and the jump button is held, apply an incremental force to the rigidbody
 
 				//	if (input.jumpHeld)
 				//		rigidBody.AddForce(new Vector2(0f, jumpHoldForce), ForceMode2D.Impulse);
@@ -969,7 +978,7 @@ namespace CL03
 		}
 
 		/// <summary>
-		/// Crouch - Setting isCrouching state true and 
+		/// Crouch - Setting isCrouching state true and changing collider and offset 
 		/// </summary>
 		void Crouch()
 		{
