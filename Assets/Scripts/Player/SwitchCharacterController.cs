@@ -218,6 +218,7 @@ namespace CL03
             newChar.OnCharacterChange_Start();
             newChar.isSelected = true;
             if (!newChar.isHanging) { newChar.ExitStaticState(); }
+            newChar.ForceUnFreezeConstraints();
 
             newChar.bringFront();
             //       print("remove successful.");
