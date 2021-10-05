@@ -189,6 +189,8 @@ namespace CL03
         private void ChangeChar(GameObject newSelectedChar)
         {
             //            currentChar.transform.position = new Vector3(currentChar.transform.position.x, currentChar.transform.position.y, 2f);
+
+            //clear the input command events.
             input.ClearForCharChange();
 
             //           currentChar.transform.position = new Vector3(currentChar.transform.position.x, currentChar.transform.position.y, 2f);
@@ -201,7 +203,7 @@ namespace CL03
             oldChar.sendBack();
 
             oldChar.isSelected = false;
-            if (!oldChar.isHanging) { oldChar.EnterStaticState(); }
+//           if (!oldChar.isHanging) { oldChar.EnterStaticState(); }
             oldChar.OnCharacterChange_End();
 
             // modified clear input queue for char. version eventually which allows certain states to persist

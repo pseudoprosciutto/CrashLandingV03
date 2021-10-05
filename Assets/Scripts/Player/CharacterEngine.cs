@@ -246,12 +246,13 @@ namespace CL03
 		/// </summary>
 		void FixedUpdate()
 		{
-            /** no need to hold items yet
+
+			/** no need to hold items yet
 			// any object in hands?
 			//HoldingItemsCheck(); 
 			*/
-            //Check the environment to determine status
-            PhysicsCheck();
+			//Check the environment to determine status
+			PhysicsCheck();
 
 			//if player is selected and once physics have been checked then we can continue deciding how to player moves knowing state and environment
 			if (isSelected)
@@ -274,6 +275,8 @@ namespace CL03
 				GroundMovement();
 				MidAirMovement();
 			}
+			//else we arent selected and we have landed on ground so we need to be static
+			else if (!isSelected && isOnGround) EnterStaticState(); 
 		}
         #endregion
 
@@ -737,7 +740,7 @@ namespace CL03
 			  //  && ledgeCheck && wallCheck && !blockedCheck
 			  
 			{
-				//...we have a ledge grab. Record the current position...
+				//we have a ledge grab. Record the current position...
 				Vector3 pos = transform.position;
 				//...move the distance to the wall (minus a small amount)...
 				pos.x += (wallCheck.distance - smallAmount - hangingDistanceFromLedge) * direction;
@@ -829,7 +832,7 @@ namespace CL03
 		public IEnumerator StopMovingToChange()
 		{
 			yield return new WaitForSeconds(.25f);
-			//rigidBody.velocity = new Vector2(0, 0);
+			rigidBody.velocity = new Vector2(0, 0);
 			yield return new WaitForSeconds(.25f);
 
 			yield break;
