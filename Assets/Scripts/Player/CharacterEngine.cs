@@ -185,25 +185,30 @@ namespace CL03
 			isInteracting_Test = false;
 			//********
 
+			canHang = true;
+			changeObjectCoolingDown = false;
+
+			// character doesnt hold something on initialization
 			isHoldingSomething = false;
 			isHoldingSomethingAbove = false;
 
 			//place character in correct z plane
 			transform.position = new Vector3(transform.position.x, transform.position.y, 2f);
 	
+			//objectCollider.enabled = false;
+
+			//the layer masks which are similar properties to the character
+			//walkables meaning what the character can walk on.
 			walkables = groundLayer;
 			walkables |= walkableObject;
 			walkables |= crateLayer;
-
-			//objectCollider.enabled = false;
-
+			//grabables (meaning can be held)
 			grabables = crateLayer;
 			grabables |= itemsLayer;
+			//items the interact key works with
 			interactablesLayer = grabables;
-			interactablesLayer |= staticInteractablesLayer;
-	
-			changeObjectCoolingDown = false;
-			canHang = true;
+			interactablesLayer |= staticInteractablesLayer; //interactables in environment
+			
 		}
 
 		void Start()
@@ -246,11 +251,11 @@ namespace CL03
 		/// </summary>
 		void FixedUpdate()
 		{
-
-			/** no need to hold items yet
-			// any object in hands?
-			//HoldingItemsCheck(); 
-			*/
+			//Before we make any decisions, we need to see if we are holding or near any items
+			
+			//if so lets see if we are interacting
+			if (ItemsCheck()) InteractCheck();
+			
 			//Check the environment to determine status
 			PhysicsCheck();
 
@@ -357,6 +362,7 @@ namespace CL03
 			//If either ray hit the ground, the player is on the ground
 			if (leftFootCheck || rightFootCheck)
 				isOnGround = true;
+			//isOnPlatform = true;
 		}
 
 		/// <summary>
@@ -421,47 +427,53 @@ namespace CL03
 			}
 
 		}
-		#endregion
+        #endregion
 
-		#region Interacting Behaviors, Item control
+        #region Interacting Behaviors, Item control
 
-		/// <summary>
-		/// Check to see if there is an item with in characters I
-		/// Performed in Fixed update.
-		/// </summary>
-		void HoldingItemsCheck()
+        /// <summary>
+        /// Check to see if there is an item with in characters reach,
+        /// and decide what the character will do with that
+        /// Performed in Fixed update.
+        /// </summary>
+        private bool ItemsCheck()
         {
 			// if no object held then then look around for other items in sight. We're all grabby grabby here.
 			if (ObjectBeingHeld == null)
 			{
-				//ensure flag set/ we realize nothing is being held
+				//ensure flag set/ we realize nothing is being held. should be unnecessary
 				isHoldingSomething = false;
+
 				//look to see if there is something close by to interact with (note: using Raycast 2 to show different debug colors (cyan, magenta))
 				RaycastHit2D ObjectCheckLow = Raycast2(new Vector2(footOffset * direction, grabHeightLow), new Vector2(direction, 0f), reachDistance, interactablesLayer);
 				RaycastHit2D ObjectCheckHigh = Raycast2(new Vector2(footOffset * direction, grabHeightHigh), new Vector2(direction, 0f), reachDistance, interactablesLayer);
 
-				//if something close by is found then 
+				//if something close by is found then can (only be one object in front of character)
 				if (ObjectCheckHigh) //up high (priority)
 				{                   //lets cache it until it no longer is in our vicinity
 					WithInArmsReach = ObjectCheckHigh.collider.gameObject;
 					//run a check to see if player has any input to interact with nearby object.
-
-					InteractCheck();
+					//	InteractCheck();
+					return true;
 				}
 				else if (ObjectCheckLow) //or down low
 				{
 					//lets cache it until it no longer is in our vicinity
 					WithInArmsReach = ObjectCheckLow.collider.gameObject;
 					//run a check to see if player has any input to interact with nearby object.
-					InteractCheck();
+					//	InteractCheck();
+					return true;
 				}
-
 				else //nothing found
 				{
 					WithInArmsReach = null;
 					//if (WithInArmsReach) { }
+					
 				}
+
 			}
+			//default false
+					return false;
 		}
 
 		//Interact:
