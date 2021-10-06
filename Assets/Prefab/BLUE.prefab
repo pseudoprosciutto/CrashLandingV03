@@ -223,7 +223,7 @@ MonoBehaviour:
   crouchSpeedDivisor: 3
   coyoteDuration: 0.05
   maxFallSpeed: -25
-  jumpForce: 28
+  jumpForce: 28.5
   jumpCoolDownTime: 0.6
   crouchJumpBoost: 2.5
   hangingJumpForce: 31

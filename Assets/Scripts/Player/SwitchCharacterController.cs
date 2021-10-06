@@ -216,11 +216,11 @@ namespace CL03
             CamControl.ChangeFollow(currentChar);
             var newChar = currentChar.GetComponent<CharacterEngine>();
             newChar.OnCharacterChange_Start();
-            newChar.isSelected = true;
-            if (!newChar.isHanging) { newChar.ExitStaticState(); }
             newChar.ForceUnFreezeConstraints();
+            if (!newChar.isHanging) { newChar.ExitStaticState(); }
 
             newChar.bringFront();
+            newChar.isSelected = true;
             //       print("remove successful.");
             //currentChar.transform.position = new Vector3(currentChar.transform.position.x, currentChar.transform.position.y,0f);
         }

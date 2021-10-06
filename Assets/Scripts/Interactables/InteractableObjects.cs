@@ -16,7 +16,7 @@ namespace CL03
     public class InteractableObjects : MonoBehaviour //ScriptableObject
     {
     // an interactable doesnt always have to be interactable
-    //  public bool isInteractableState {get; protected set;}
+        public bool isInteractableState {get; protected set;}
         public bool isInteractedWith { get; protected set; }
         public bool canBeStored { get; protected set; }
 

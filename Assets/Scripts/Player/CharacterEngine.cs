@@ -58,7 +58,7 @@ namespace CL03
 		public float maxFallSpeed = -25f;       //Max speed player can fall
 
 		[FoldoutGroup("Jump Properties", expanded: false)]
-		public float jumpForce = 28f;           //Initial force of jump
+		public float jumpForce = 28.5f;           //Initial force of jump
 		[FoldoutGroup("Jump Properties")]
 		public float jumpCoolDownTime = 0.6f;   //To prevent spammable jumping
 		[FoldoutGroup("Jump Properties")]
@@ -197,14 +197,17 @@ namespace CL03
 	
 			//objectCollider.enabled = false;
 
-			//the layer masks which are similar properties to the character
+			//the layer masks categorize objects which how to character to interact
+
 			//walkables meaning what the character can walk on.
 			walkables = groundLayer;
 			walkables |= walkableObject;
 			walkables |= crateLayer;
+
 			//grabables (meaning can be held)
 			grabables = crateLayer;
 			grabables |= itemsLayer;
+
 			//items the interact key works with
 			interactablesLayer = grabables;
 			interactablesLayer |= staticInteractablesLayer; //interactables in environment
@@ -493,11 +496,11 @@ namespace CL03
 					//is Interact pressed near InteractableObject while not holding something?
 					if (WithInArmsReach != null && !isHoldingSomething)
 					{
-						print("Get component Interactable Object > Interact(this)");
-						/*
+						
+						print("Empty Hands see an object "+WithInArmsReach.ToString()+" . That object has been interacted with");
 						//look for the interactable object from the game object infront of character and sends this instance as a parameter when invoking interact.
 						WithInArmsReach.GetComponent<InteractableObjects>().Interact(this);
-						*/
+						
 					}
 					else // ^no, then:
 						 //Is interact pressed while holding an object?
