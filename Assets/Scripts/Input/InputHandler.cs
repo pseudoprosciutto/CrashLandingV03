@@ -243,6 +243,8 @@ namespace CL03
                 jumpHeld = false;
                 crouchPressed = false;
                 crouchHeld = false;
+            moveModifyHeld = false;
+            moveModifyPressed = false;
 
                 readyToClear = false;
 
