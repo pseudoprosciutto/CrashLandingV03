@@ -520,7 +520,19 @@ MonoBehaviour:
     m_ActionId: 63c66516-f8e9-4ca2-9b9b-1c945991a22b
     m_ActionName: UI/TrackedDeviceOrientation
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 573176515}
+        m_TargetAssemblyTypeName: CL03.InputHandler, Assembly-CSharp
+        m_MethodName: OnMoveModifier
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 6a65342f-026f-4c27-b33a-43df9cff609c
     m_ActionName: Player/MoveModify[/Keyboard/leftShift]
   - m_PersistentCalls:
@@ -655,6 +667,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: cd62859e-f7f2-4736-83c0-50188a3db044
     m_ActionName: Player/Generic Action1[/Keyboard/x]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 573176511}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: c1b0da34-153d-45e1-8b28-d1bbf6010888
+    m_ActionName: Player/EquipUse[/Keyboard/r]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -695,6 +723,8 @@ MonoBehaviour:
   crouchHeld: 0
   jumpPressed: 0
   jumpHeld: 0
+  moveModifyPressed: 0
+  moveModifyHeld: 0
   horizontal: 0
   vertical: 0
   interactPressed: 0

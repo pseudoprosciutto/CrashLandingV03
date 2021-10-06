@@ -8,10 +8,6 @@ using UnityEngine.InputSystem.Utilities;
 
 namespace CL03
 {
-
-    /// <summary>
-    /// PlayerControls parses raw input and sends it to qualifying events
-    /// </summary>
     public class @PlayerControls : IInputActionCollection, IDisposable
     {
         public InputActionAsset asset { get; }
@@ -164,6 +160,14 @@ namespace CL03
                     ""name"": ""Generic Action1"",
                     ""type"": ""Button"",
                     ""id"": ""cd62859e-f7f2-4736-83c0-50188a3db044"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""EquipUse"",
+                    ""type"": ""Button"",
+                    ""id"": ""c1b0da34-153d-45e1-8b28-d1bbf6010888"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -513,17 +517,6 @@ namespace CL03
                 },
                 {
                     ""name"": """",
-                    ""id"": ""4daed0af-ee17-4938-a340-3313c7087be3"",
-                    ""path"": ""<Keyboard>/r"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""CharInfo"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""2906ad7a-b51f-474d-a187-60a0ff77cdfd"",
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
@@ -536,7 +529,7 @@ namespace CL03
                 {
                     ""name"": """",
                     ""id"": ""e32e7855-e2df-40d8-ad54-7b05ce32106c"",
-                    ""path"": ""<Keyboard>/v"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -552,6 +545,17 @@ namespace CL03
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Generic Action1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f258e1ef-8b89-474c-874c-70b55bfd3a26"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EquipUse"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1147,6 +1151,7 @@ namespace CL03
             m_Player_SwitchInventory = m_Player.FindAction("SwitchInventory", throwIfNotFound: true);
             m_Player_DropObject = m_Player.FindAction("DropObject", throwIfNotFound: true);
             m_Player_GenericAction1 = m_Player.FindAction("Generic Action1", throwIfNotFound: true);
+            m_Player_EquipUse = m_Player.FindAction("EquipUse", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1226,6 +1231,7 @@ namespace CL03
         private readonly InputAction m_Player_SwitchInventory;
         private readonly InputAction m_Player_DropObject;
         private readonly InputAction m_Player_GenericAction1;
+        private readonly InputAction m_Player_EquipUse;
         public struct PlayerActions
         {
             private @PlayerControls m_Wrapper;
@@ -1248,6 +1254,7 @@ namespace CL03
             public InputAction @SwitchInventory => m_Wrapper.m_Player_SwitchInventory;
             public InputAction @DropObject => m_Wrapper.m_Player_DropObject;
             public InputAction @GenericAction1 => m_Wrapper.m_Player_GenericAction1;
+            public InputAction @EquipUse => m_Wrapper.m_Player_EquipUse;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1311,6 +1318,9 @@ namespace CL03
                     @GenericAction1.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGenericAction1;
                     @GenericAction1.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGenericAction1;
                     @GenericAction1.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGenericAction1;
+                    @EquipUse.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipUse;
+                    @EquipUse.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipUse;
+                    @EquipUse.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEquipUse;
                 }
                 m_Wrapper.m_PlayerActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1369,6 +1379,9 @@ namespace CL03
                     @GenericAction1.started += instance.OnGenericAction1;
                     @GenericAction1.performed += instance.OnGenericAction1;
                     @GenericAction1.canceled += instance.OnGenericAction1;
+                    @EquipUse.started += instance.OnEquipUse;
+                    @EquipUse.performed += instance.OnEquipUse;
+                    @EquipUse.canceled += instance.OnEquipUse;
                 }
             }
         }
@@ -1543,6 +1556,7 @@ namespace CL03
             void OnSwitchInventory(InputAction.CallbackContext context);
             void OnDropObject(InputAction.CallbackContext context);
             void OnGenericAction1(InputAction.CallbackContext context);
+            void OnEquipUse(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {

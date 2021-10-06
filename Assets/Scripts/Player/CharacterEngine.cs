@@ -29,6 +29,7 @@ namespace CL03
 		[Space]
 		[BoxGroup("Character State")] public bool isOnGround;                 //Is the player on the ground?
 		[BoxGroup("Character State")] public bool isOnPlatform;
+		[BoxGroup("Character State")] public bool isRunning = false; //we are not automatically running
 		[BoxGroup("Character State")] public bool isJumping;                  //Is player jumping?
 		[BoxGroup("Character State")] public bool isCrouching;                //Is player crouching?
 		[BoxGroup("Character State")] public bool isHeadBlocked;
@@ -50,6 +51,10 @@ namespace CL03
 
 		[FoldoutGroup("Movement Properties", expanded: false)]
 		public float speed = 4.2f;                //Player speed
+		[FoldoutGroup("Movement Properties")]
+		public float walkSpeed = 4.2f;                //Player speed
+		[FoldoutGroup("Movement Properties")]
+		public float runSpeed = 7.2f;                //Player speed
 		[FoldoutGroup("Movement Properties")]
 		public float crouchSpeedDivisor = 3f;   //Speed reduction when crouching
 		[FoldoutGroup("Movement Properties")]
@@ -777,7 +782,10 @@ namespace CL03
 			//If currently hanging, the player can't move to exit
 			if (isHanging)
 				return;
-
+			speed = walkSpeed;
+			//handle run modifier
+			if (input.moveModifyHeld)
+				MoveModify();
 			//Handle crouching input. If holding the crouch button but not crouching, crouch
 			if (input.crouchHeld && !isCrouching && isOnGround)
 				Crouch();
@@ -994,7 +1002,11 @@ namespace CL03
 			//Debug.Log("jump Cooldown passed");
 			yield return null;
 		}
-
+		void MoveModify()
+        {
+			isRunning = true;
+			speed = runSpeed;
+        }
 		/// <summary>
 		/// Crouch - Setting isCrouching state true and changing collider and offset 
 		/// </summary>

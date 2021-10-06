@@ -27,6 +27,8 @@ namespace CL03
             public bool crouchHeld;
             public bool jumpPressed;
             public bool jumpHeld;
+        public bool moveModifyPressed;
+        public bool moveModifyHeld;
             [Header("Move Value")]
             public float horizontal;
             public float vertical;
@@ -60,6 +62,7 @@ namespace CL03
 
             private Vector2 tempMovement;
             private PlayerControls controls;
+
             bool readyToClear;                              //Bool used to keep input in sync
 
             #region -Input events-
@@ -71,7 +74,10 @@ namespace CL03
                 horizontal = tempMovement.x;
                 vertical = tempMovement.y;
             }
-
+        /// <summary>
+		/// crouch event pressed or held?
+		/// </summary>
+		/// <param name="context">input action</param>
             public void OnCrouch(InputAction.CallbackContext context)
             {
                 if (context.interaction is HoldInteraction)
@@ -80,7 +86,10 @@ namespace CL03
                     crouchPressed = context.ReadValueAsButton();
             }
 
-
+        /// <summary>
+		/// jump event pressed or held
+		/// </summary>
+		/// <param name="context">input action</param>
             public void OnJump(InputAction.CallbackContext context)
             {
                 //           jumpPressed = jumpHeld || Keyboard.current.spaceKey.wasPressedThisFrame;
@@ -89,6 +98,18 @@ namespace CL03
                 else
                     jumpPressed = context.ReadValueAsButton();
             }
+
+        /// <summary>
+		/// Move /Modify event pressed or held
+		/// </summary>
+		/// <param name="context">input action</param>
+        public void OnMoveModifier(InputAction.CallbackContext context)
+        {
+            if (context.interaction is HoldInteraction)
+                moveModifyHeld = context.ReadValueAsButton();
+            else
+                moveModifyPressed = context.ReadValueAsButton();
+        }
             #endregion
 
             #region INTERACT AND OBJECT ACTIONS
@@ -115,10 +136,17 @@ namespace CL03
                 else
                     changeObjectPressed = context.ReadValueAsButton();
             }
-            #endregion
+        public void OnEquipUse(InputAction.CallbackContext context)
+        {
+            if (context.interaction is HoldInteraction)
+                changeObjectHeld = context.ReadValueAsButton();
+            else
+                changeObjectPressed = context.ReadValueAsButton();
+        }
+        #endregion
 
-            #region GENERIC ACTIONS
-            public void OnAction1(InputAction.CallbackContext context)
+        #region GENERIC ACTIONS
+        public void OnAction1(InputAction.CallbackContext context)
             {
                 if (context.interaction is HoldInteraction)
                     action1Held = context.ReadValueAsButton();

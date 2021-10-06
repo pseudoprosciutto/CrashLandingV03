@@ -148,6 +148,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "EquipUse",
+                    "type": "Button",
+                    "id": "c1b0da34-153d-45e1-8b28-d1bbf6010888",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -494,17 +502,6 @@
                 },
                 {
                     "name": "",
-                    "id": "4daed0af-ee17-4938-a340-3313c7087be3",
-                    "path": "<Keyboard>/r",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "CharInfo",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "2906ad7a-b51f-474d-a187-60a0ff77cdfd",
                     "path": "<Keyboard>/q",
                     "interactions": "",
@@ -517,7 +514,7 @@
                 {
                     "name": "",
                     "id": "e32e7855-e2df-40d8-ad54-7b05ce32106c",
-                    "path": "<Keyboard>/v",
+                    "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -533,6 +530,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Generic Action1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f258e1ef-8b89-474c-874c-70b55bfd3a26",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "EquipUse",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

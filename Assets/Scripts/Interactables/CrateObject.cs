@@ -54,10 +54,10 @@ namespace CL03
             if (isHeld)
             {
                 
-                rb.bodyType = RigidbodyType2D.Static;
-                rb.mass = 1;
                 if (HeldBy != null)
                 {
+                rb.bodyType = RigidbodyType2D.Static;
+                rb.mass = 0;
                     //make static
 
                     //ensure it is kepts in position
