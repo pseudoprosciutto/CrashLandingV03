@@ -219,11 +219,11 @@ MonoBehaviour:
   hitOverHeadRight: 0
   canHang: 1
   cantHangCoolDownTime: 1.5
-  speed: 4
+  speed: 4.2
   crouchSpeedDivisor: 3
   coyoteDuration: 0.05
   maxFallSpeed: -25
-  jumpForce: 27
+  jumpForce: 28
   jumpCoolDownTime: 0.6
   crouchJumpBoost: 2.5
   hangingJumpForce: 31

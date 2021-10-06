@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Surface
   - Holdable
+  - Item
+  - Environment
   layers:
   - Default
   - TransparentFX
@@ -16,7 +18,7 @@ TagManager:
   - Ground
   - Character
   - Items
-  - 
+  - Crate
   - 
   - 
   - 
@@ -51,4 +53,7 @@ TagManager:
     locked: 0
   - name: Platforms
     uniqueID: 2249742575
+    locked: 0
+  - name: Items
+    uniqueID: 3177034663
     locked: 0

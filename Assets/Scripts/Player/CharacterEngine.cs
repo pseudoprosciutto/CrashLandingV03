@@ -43,13 +43,13 @@ namespace CL03
 		#region hanging properties
 		//can hang
 		public bool canHang = true; // can the character even hang dawg and kick it with the other hanging homies?
-		public float cantHangCoolDownTime = 1.5f;
+		public float cantHangCoolDownTime = .9f;
 		#endregion
 		[Space]
 		#region Move and Jump Modifiers 
 
 		[FoldoutGroup("Movement Properties", expanded: false)]
-		public float speed = 4f;                //Player speed
+		public float speed = 4.2f;                //Player speed
 		[FoldoutGroup("Movement Properties")]
 		public float crouchSpeedDivisor = 3f;   //Speed reduction when crouching
 		[FoldoutGroup("Movement Properties")]
@@ -58,7 +58,7 @@ namespace CL03
 		public float maxFallSpeed = -25f;       //Max speed player can fall
 
 		[FoldoutGroup("Jump Properties", expanded: false)]
-		public float jumpForce = 27f;           //Initial force of jump
+		public float jumpForce = 28f;           //Initial force of jump
 		[FoldoutGroup("Jump Properties")]
 		public float jumpCoolDownTime = 0.6f;   //To prevent spammable jumping
 		[FoldoutGroup("Jump Properties")]
