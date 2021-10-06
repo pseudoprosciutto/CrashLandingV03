@@ -3,20 +3,30 @@ Side scroller puzzle.
 repo created: 09/28/21 
 Made Using Unity 2020.3.x (19 as of 09/28/21) LTS.
 
-3rd or 4th attempt at this game. Reimporting old code and parsing it to get a working engine again.
+this is v03 because of my prior work on other engine vers.
+
+Notion Project Doc (work in progress as prototype develops):
+https://cementfactorypublishing.notion.site/Crash-Landing-6d4e840435074505b1d75c7c6d9ba1fc
+
+Notion Prototype Design and Mechanics Doc:
+https://cementfactorypublishing.notion.site/Game-Mechanics-cd42273f8c394745956d94db5df8f56b
+
+Notion Game Design Doc: 
+(to be created once prototype is fun and at a state where it seems worth continuing project)
 
 
 To Do:
 Reimport old code
 Create a document to manage work flow
-Create a new game design document on Notion
+X Create a new game design document on Notion
 Reintegrate old code.
 
+future thoughts of project goals  :
 
-maybe create a 2d scene and then a 2.5d scene for when i do gradual export. 
-( worse comes to worse i have to change some of the physics around but i dont see it as being difficult to upgrade to 2.5d.
-getting to working order again in 2d is important as thats where i was.)
+learn and get a functional 2d puzzle game i can publish for my portfolio
 
-Create/ find working graphics place holders
+learn mechanics to use on future projects
+
+
 
     
