@@ -207,8 +207,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isSelected: 0
+  needsReviving: 0
   isOnGround: 0
   isOnPlatform: 0
+  isRunning: 0
   isJumping: 0
   isCrouching: 0
   isHeadBlocked: 0
@@ -220,6 +222,8 @@ MonoBehaviour:
   canHang: 1
   cantHangCoolDownTime: 1.5
   speed: 4.2
+  walkSpeed: 4.2
+  runSpeed: 6.2
   crouchSpeedDivisor: 3
   coyoteDuration: 0.05
   maxFallSpeed: -25
@@ -250,7 +254,6 @@ MonoBehaviour:
   ObjectBeingHeld: {fileID: 0}
   holdPoint_Front: {fileID: 7203530896565526311}
   holdPoint_Above: {fileID: 7203530896745214612}
-  canInteract: 0
   WithInArmsReach: {fileID: 0}
   interactCoolDownTime: 0.5
   objectColliderSize: {x: 0, y: 0}
@@ -271,3 +274,4 @@ MonoBehaviour:
   reachDistance: 0.9
   hangingDistanceFromLedge: 0.1
   headBounce: 0.2
+  direction: 1

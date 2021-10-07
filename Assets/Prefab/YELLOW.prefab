@@ -223,7 +223,7 @@ MonoBehaviour:
   cantHangCoolDownTime: 1.5
   speed: 4.2
   walkSpeed: 4.2
-  runSpeed: 0.2
+  runSpeed: 6.2
   crouchSpeedDivisor: 3
   coyoteDuration: 0.05
   maxFallSpeed: -25

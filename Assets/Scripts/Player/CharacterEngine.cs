@@ -55,7 +55,7 @@ namespace CL03
 		[FoldoutGroup("Movement Properties")]
 		public float walkSpeed = 4.2f;                //Player speed
 		[FoldoutGroup("Movement Properties")]
-		public float runSpeed = .2f;                //Player speed
+		public float runSpeed = 6.2f;                //Player speed
 		[FoldoutGroup("Movement Properties")]
 		public float crouchSpeedDivisor = 3f;   //Speed reduction when crouching
 		[FoldoutGroup("Movement Properties")]
