@@ -26,6 +26,7 @@ namespace CL03
 
 		#region Character State bools
 		[BoxGroup("Character State")] public bool isSelected;
+		[BoxGroup("Character State")] public bool needsReviving;
 		[Space]
 		[BoxGroup("Character State")] public bool isOnGround;                 //Is the player on the ground?
 		[BoxGroup("Character State")] public bool isOnPlatform;
@@ -169,7 +170,7 @@ namespace CL03
 		const float smallAmount = .05f;         //A small amount used for hanging position
 		float playerHeight;                     //Height of the player
 		float originalXScale;                   //Original scale on X axis
-		int direction = 1;                      //Direction player is facing
+		public int direction = 1;                      //Direction player is facing
 
 
 		Vector2 colliderStandSize;              //Size of the standing collider
@@ -1057,7 +1058,7 @@ namespace CL03
         /// <param name="rayDirection">direction of ray, Vector2 </param>
         /// <param name="length">length of line, float</param>
         /// <returns> RaycastHit2D</returns>
-		RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length)
+		public RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length)
 		{
 			return Raycast(offset, rayDirection, length, walkables);
 		}
@@ -1073,7 +1074,7 @@ namespace CL03
 		/// <param name="length">length of line, float</param>
 		/// <param name="mask">the layer raycast is looking to hit on, LayerMask</param>
 		/// <returns>RaycastHit2D</returns>
-		RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length, LayerMask mask)
+		public RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length, LayerMask mask)
 		{
 			//Record the player's position
 			Vector2 pos = transform.position;
@@ -1105,7 +1106,7 @@ namespace CL03
 		/// <param name="length">length of line, float</param>
 		/// <param name="mask">the layer raycast is looking to hit on, LayerMask</param>
 		/// <returns>RaycastHit2D</returns>
-		RaycastHit2D Raycast2(Vector2 offset, Vector2 rayDirection, float length, LayerMask mask)
+		public RaycastHit2D Raycast2(Vector2 offset, Vector2 rayDirection, float length, LayerMask mask)
 		{
 			//Record the player's position
 			Vector2 pos = transform.position;
