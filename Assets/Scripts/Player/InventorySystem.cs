@@ -1,21 +1,18 @@
+/* Code by: Matthew Sheehan */
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace CL03
 {
+    /// <summary>
+	/// Inventory holds an object and allows storing and moving of objects
+	/// </summary>
     public class InventorySystem : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
-        {
-        
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
+        CharacterEngine Engine;
+        GameObject objectStored;
+        GameObject tempObject;
     }
 }
