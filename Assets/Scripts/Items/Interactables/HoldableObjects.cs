@@ -10,11 +10,11 @@ namespace CL03
     /// 
     /// Holdable Objects properties:
     /// isHeld state, - Can be held by character;
-    /// know who is holding it if any character;
+    /// heldby know who is holding it if any character;
     /// cooldown useage;
     /// isThrowable;
     /// isOnGround;
-    /// isPushable; (maybe will be under heavycrate specific?)
+    /// (maybe?) isPushable; (maybe will be under heavycrate specific?)
     /// PushorPull state; (maybe will be under heavycrate specific
     /// </summary>
     public class HoldableObjects : InteractableObjects
