@@ -183,7 +183,7 @@ namespace CL03
             //put down object infront of character for now regardless of where
             Transform temp = HeldBy_Engine.holdPoint_Front.transform;
 
-            //  rb.WakeUp();
+            rb.bodyType = RigidbodyType2D.Dynamic;
             rb.gravityScale = 12;
             rb.mass = 100;
 
@@ -206,8 +206,8 @@ namespace CL03
 
             rb.gravityScale = gravity;
             yield return new WaitForSeconds(.1f);
-            //       rb.transform.position = temp.position;
-            //rb.isKinematic = true;
+            rb.transform.position = temp.position;
+            rb.isKinematic = true;
             //take out any velocity by hard positioning (not sure effective)
             //remove all constrains and let object fall as it might
             rb.constraints = RigidbodyConstraints2D.None;
@@ -215,8 +215,8 @@ namespace CL03
             yield return new WaitForSeconds(.2f);
             rb.mass = objectMass;
 
-            //       rb.freezeRotation = false;
-            //rb.isKinematic = false;
+                 rb.freezeRotation = false;
+            rb.isKinematic = false;
         }
         #region OnCollision Event
         private void OnCollisionStay2D(Collision2D collision)
@@ -323,6 +323,9 @@ namespace CL03
         // SHOULD this be at the character engine level instead?
         public void Throw()
         {
+
+            //HeldBy = null;
+            //HeldBy_Engine = null;
             Debug.Log("Throw Object.");
             GetPutDown();
         }

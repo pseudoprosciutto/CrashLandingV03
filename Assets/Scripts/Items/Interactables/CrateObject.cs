@@ -100,6 +100,7 @@ namespace CL03
             //if is held and is throwable and the character is holding this object
             if (isHeld && isThrowable && HeldBy.Equals(character.gameObject))
             {
+                //change body type
                 rb.bodyType = RigidbodyType2D.Dynamic;
                 //add force to this object to throw it
 

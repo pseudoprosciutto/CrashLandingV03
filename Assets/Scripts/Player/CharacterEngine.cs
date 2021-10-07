@@ -112,7 +112,6 @@ namespace CL03
 		public Transform holdPoint_Above;  //the above location for generic object being held
 		protected Transform activeHoldPosition;
 
-		public bool canInteract;                //Can player interact with an object its facing?
 		[GUIColor(0.8f, 0.3f, 0.3f, .2f)]
 		[PreviewField]
 		public GameObject WithInArmsReach; // { get; set{ if (!isHoldingSomething) return WithInReach(); } }
@@ -275,6 +274,7 @@ namespace CL03
 				//if selected and object held. press up or down the object being held changes position
 				if (ObjectBeingHeld != null)
 				{
+					//change position of object in hand
 					if (input.vertical > .2f) { isHoldingSomethingAbove = true; }
 					if (input.vertical < -.2f) { isHoldingSomethingAbove = false; }
 				}
@@ -451,7 +451,7 @@ namespace CL03
 			{
 				//ensure flag set/ we realize nothing is being held. should be unnecessary
 				isHoldingSomething = false;
-
+				  
 				//look to see if there is something close by to interact with (note: using Raycast 2 to show different debug colors (cyan, magenta))
 				RaycastHit2D ObjectCheckLow = Raycast2(new Vector2(footOffset * direction, grabHeightLow), new Vector2(direction, 0f), reachDistance, interactablesLayer);
 				RaycastHit2D ObjectCheckHigh = Raycast2(new Vector2(footOffset * direction, grabHeightHigh), new Vector2(direction, 0f), reachDistance, interactablesLayer);
@@ -498,7 +498,7 @@ namespace CL03
 					//Begin cooldown
 					StartCoroutine(InteractCoolingDown());
 
-					//is Interact pressed near InteractableObject while not holding something?
+					//object within arms reach while not holding something?
 					if (WithInArmsReach != null && !isHoldingSomething)
 					{
 						
@@ -507,15 +507,16 @@ namespace CL03
 						WithInArmsReach.GetComponent<InteractableObjects>().Interact(this);
 						
 					}
-					else // ^no, then:
-						 //Is interact pressed while holding an object?
-					 if (isHoldingSomething && ObjectBeingHeld != null)
+					// ^no, then:
+					//Is interact pressed while holding an object?
+
+					else if (isHoldingSomething && ObjectBeingHeld != null)
 					{
 						print("Get component Holdable Object > Interact(this)");
-/*
+
 						//interact with object in hands
 						ObjectBeingHeld.GetComponent<HoldableObjects>().Interact(this);
-*/
+
 					}
 				}
 			}
