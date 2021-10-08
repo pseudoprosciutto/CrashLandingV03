@@ -12,7 +12,7 @@ using System;
 namespace CL03
 {
     /// <summary>
-    /// Character Script handles character properties and states, movement, and core character update loop
+    /// Character Script handles character properties and states, movement, and core character functions for other components to reference.
     /// </summary>
     public class CharacterEngine : MonoBehaviour
     {
@@ -21,6 +21,7 @@ namespace CL03
         BoxCollider2D bodyCollider;             //The collider component
 		Rigidbody2D rigidBody;                  //The rigidbody component
 		InputHandler input;                     //The current inputs for the player
+		InventorySystem inventory;				//inventory system
 		#endregion
 
 		#region Character State bools
@@ -34,8 +35,8 @@ namespace CL03
 		[BoxGroup("Character State")] public bool isCrouching;                //Is player crouching?
 		[BoxGroup("Character State")] public bool isHeadBlocked;
 		[BoxGroup("Character State")] public bool isHanging;                  //Is player hanging?
-		[BoxGroup("Character State")] public bool isHoldingSomething;
-		[BoxGroup("Character State")] public bool isHoldingSomethingAbove;
+		//[BoxGroup("Character State")] public bool isHoldingSomething;
+		//[BoxGroup("Character State")] public bool isHoldingSomethingAbove;
 		[BoxGroup("Character State")] public bool hitOverHeadLeft;
 		[BoxGroup("Character State")] public bool hitOverHeadRight;
 		#endregion
@@ -78,7 +79,6 @@ namespace CL03
 
 		#region Layer Masks
 		[Header("Walkable Object Layers")]
-
 		//Layer of the ground
 		protected LayerMask walkables;
 		//Layer of objects to grab
@@ -94,38 +94,38 @@ namespace CL03
 		#endregion
 
 		#region Interactable Object Properties
-		public bool inSwitchItemProcess = false;
-		public float switchItemCoolDownTime = 1.7f;
-		//   [Title("Inventory Item", "if null then nothing is stored for this character.",TitleAlignments.Centered)]
-		//  [BoxGroup()]
-		[GUIColor(0.3f, 0.8f, 0.8f, .2f)]
-		[PreviewField]
-		public GameObject InventoryItem;
+		//public bool inSwitchItemProcess = false;
+		//public float switchItemCoolDownTime = 1.7f;
+		////   [Title("Inventory Item", "if null then nothing is stored for this character.",TitleAlignments.Centered)]
+		////  [BoxGroup()]
+		//[GUIColor(0.3f, 0.8f, 0.8f, .2f)]
+		//[PreviewField]
+		//public GameObject InventoryItem;
 
-		[GUIColor(0.3f, 0.3f, 0.8f, .2f)]
-		[PreviewField]
-		public GameObject ObjectBeingHeld; // { get; set { if(isHoldingSomething)return } }
-		[Required]
-		[ChildGameObjectsOnly]
-		public Transform holdPoint_Front;  //the front location for generic object being held (maybe will need to change pivot point of object depending on sizes)
-		[Required]
-		[ChildGameObjectsOnly]
-		public Transform holdPoint_Above;  //the above location for generic object being held
-		protected Transform activeHoldPosition;
+		//[GUIColor(0.3f, 0.3f, 0.8f, .2f)]
+		//[PreviewField]
+		//public GameObject ObjectBeingHeld; // { get; set { if(isHoldingSomething)return } }
+		//[Required]
+		//[ChildGameObjectsOnly]
+		//public Transform holdPoint_Front;  //the front location for generic object being held (maybe will need to change pivot point of object depending on sizes)
+		//[Required]
+		//[ChildGameObjectsOnly]
+		//public Transform holdPoint_Above;  //the above location for generic object being held
+		//protected Transform activeHoldPosition;
 
-		[GUIColor(0.8f, 0.3f, 0.3f, .2f)]
-		[PreviewField]
-		public GameObject WithInArmsReach; // { get; set{ if (!isHoldingSomething) return WithInReach(); } }
+		//[GUIColor(0.8f, 0.3f, 0.3f, .2f)]
+		//[PreviewField]
+		//public GameObject WithInArmsReach; // { get; set{ if (!isHoldingSomething) return WithInReach(); } }
 
-		public float interactCoolDownTime = 0.5f;      //prevent spamming interaction It takes time to lift objects or interact with something
+		//public float interactCoolDownTime = 0.5f;      //prevent spamming interaction It takes time to lift objects or interact with something
 
-		Collider2D objectCollider;              //recognized object
-		HoldableObjects objectScript;			//recognized object's script
+		//Collider2D objectCollider;              //recognized object
+		//HoldableObjects objectScript;			//recognized object's script
 
-		public Vector2 objectColliderSize;
-		public bool isInteracting_Test;    //test bool
-		public bool changeObjectCoolingDown;  //is object cooling down?
-		public float changeObjectCoolDownTime = 1.2f;
+		//public Vector2 objectColliderSize;
+		//public bool isInteracting_Test;    //test bool
+		//public bool changeObjectCoolingDown;  //is object cooling down?
+		//public float changeObjectCoolDownTime = 1.2f;
 		#endregion
 
 
@@ -183,15 +183,15 @@ namespace CL03
 		private void Awake()
 		{
 			//*tests:*
-			isInteracting_Test = false;
+			//isInteracting_Test = false;
 			//********
 
 			canHang = true;
 
 
-			// character doesnt hold something on initialization
-			isHoldingSomething = false;
-			isHoldingSomethingAbove = false;
+			//// character doesnt hold something on initialization
+			//isHoldingSomething = false;
+			//isHoldingSomethingAbove = false;
 
 			//place character in correct z plane
 			transform.position = new Vector3(transform.position.x, transform.position.y, 2f);
@@ -221,6 +221,7 @@ namespace CL03
 			input = GetComponentInParent<InputHandler>();
 			rigidBody = GetComponent<Rigidbody2D>();
 			bodyCollider = GetComponent<BoxCollider2D>();
+			inventory = GetComponent<InventorySystem>();
 
 			//assuming we are deselected to start
 			//EnterStaticState();
@@ -261,21 +262,21 @@ namespace CL03
 			//if player is selected and once physics have been checked then we can continue deciding how to player moves knowing state and environment
 			if (isSelected)
 			{
-		//		HandledObjectsCheck();
-				//ROTATE OBJECTS IN POSSESSION
-				//if selected and object held. press up or down the object being held changes position
-				if (ObjectBeingHeld != null)
-				{
-					//change position of object in hand
-					if (input.vertical > .2f) { isHoldingSomethingAbove = true; }
-					if (input.vertical < -.2f) { isHoldingSomethingAbove = false; }
-				}
+		////		HandledObjectsCheck();
+		//		//ROTATE OBJECTS IN POSSESSION
+		//		//if selected and object held. press up or down the object being held changes position
+		//		if (ObjectBeingHeld != null)
+		//		{
+		//			//change position of object in hand
+		//			if (input.vertical > .2f) { isHoldingSomethingAbove = true; }
+		//			if (input.vertical < -.2f) { isHoldingSomethingAbove = false; }
+		//		}
 
-				//should this be after held? instead of pressed
-				if (input.changeObjectPressed && !changeObjectCoolingDown)
-				{
-					Debug.Log("Change object button pressed and change object cooling down is false.");
-				}
+		//		//should this be after held? instead of pressed
+		//		if (input.changeObjectPressed && !changeObjectCoolingDown)
+		//		{
+		//			Debug.Log("Change object button pressed and change object cooling down is false.");
+		//		}
 				//Process ground and air movements
 				GroundMovement();
 				MidAirMovement();
@@ -342,7 +343,7 @@ namespace CL03
 			CharacterHeadCheck();
 			
 
-			if (!isHoldingSomething) //ObjectBeingHeld)
+			if (!inventory.isHoldingSomething) //ObjectBeingHeld)
 			{//attempt a wallgrab because hands are empty
 				WallGrabCheck();
 			}
@@ -399,7 +400,7 @@ namespace CL03
 				isHeadBlocked = true;
 				//something bonks the head, it will no longer get stuck there because we are flat headed and smooth brained.
 				//if (!headCheck.collider.CompareTag("Environment") && !headCheck.collider.CompareTag("Surface") && !headCheck.collider.Equals(ObjectBeingHeld))
-				if (!headCheck.collider.CompareTag("Surface") && !headCheck.collider.Equals(ObjectBeingHeld))
+				if (!headCheck.collider.CompareTag("Surface") && !headCheck.collider.Equals(inventory.ObjectBeingHeld))
 				{
 					//slight backwards force added to prevent objects from staying on head. things should just roll off
 					Rigidbody2D rb = headCheck.collider.GetComponent<Rigidbody2D>();
@@ -437,7 +438,7 @@ namespace CL03
 			//found a ledge AND found a wall AND the grab is NOT blocked
 			//and is not holding something in hands...
 			if (!isOnGround && !isHanging && rigidBody.velocity.y < 0f
-				 && !isHoldingSomething && canHang
+				 && !inventory.isHoldingSomething && canHang
 				 && ledgeCheck && wallCheck && !blockedCheck)
 			  //|| (!isOnGround && !isHanging /* &&  rigidBody.velocity.y < 0f */
 			  //&&

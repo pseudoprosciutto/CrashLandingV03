@@ -25,7 +25,7 @@ namespace CL03
         {
             //this script wont show unless using this class as a test.
             Debug.Log("Object recognizes - interact test");
-            character.isInteracting_Test = true;
+//            character.isInteracting_Test = true;
         }
     }
 }

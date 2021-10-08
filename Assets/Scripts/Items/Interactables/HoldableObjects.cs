@@ -26,26 +26,29 @@ namespace CL03
         [SerializeField]
         protected GameObject HeldBy;
         protected CharacterEngine HeldBy_Engine;
+        protected InventorySystem HeldBy_Inventory;
+        protected Rigidbody2D rb;
+        protected Collider2D objectCollider;
+
         protected bool canBeHeld;
         protected bool justGotLetGo;
-        protected Collider2D objectCollider;
         //held properties
-        public float gravity = 1f;
         protected bool _freezeRotation = false;
-        protected Rigidbody2D rb;
-        public float objectMass;
-
-        public bool isStaticCoolingDown = false;
-        public float staticCoolDownTime = .1f;
 
         protected bool isOnGround;
 
         protected bool isThrowable;
 
+        public float gravity = 1f;
+        public float objectMass;
+        public bool isStaticCoolingDown = false;
+        public float staticCoolDownTime = .1f;
+
 
         public bool isPushable;
         public bool inPushOrPullState;
         bool delayBegan = false;
+
         /// <summary>
         /// awake - called when loaded
         /// </summary>
@@ -70,11 +73,11 @@ namespace CL03
                     //ensure it is kepts in position
                     //				ObjectBeingHeld.transform.position = activeHoldPosition.position; //for when I can say elsewhere what is activeHoldPosition
 
-                    if (HeldBy_Engine.isHoldingSomethingAbove) //held above so stay above
-                        this.gameObject.transform.position = HeldBy_Engine.holdPoint_Above.position;
+                    if (HeldBy_Inventory.isHoldingSomethingAbove) //held above so stay above
+                        this.gameObject.transform.position = HeldBy_Inventory.holdPoint_Above.position;
 
-                    else if (!HeldBy_Engine.isHoldingSomethingAbove) //held front so stay front
-                        this.gameObject.transform.position = HeldBy_Engine.holdPoint_Front.position;
+                    else if (!HeldBy_Inventory.isHoldingSomethingAbove) //held front so stay front
+                        this.gameObject.transform.position = HeldBy_Inventory.holdPoint_Front.position;
                     /** creates overflow error
                     //Cast the ray to check above the player's head
                     RaycastHit2D headCheck = Raycast(new Vector2(0f, boxCollider.size.y), Vector2.up, .2f);
@@ -83,8 +86,7 @@ namespace CL03
                     if (headCheck.collider.gameObject.CompareTag("Surface"))
                     {
                         HeldBy_Engine.isHeadBlocked = true;
-                    }
-    */
+                    } */
                 }
                 else
                 {
@@ -132,56 +134,55 @@ namespace CL03
         {
             canBeHeld = true;
         }
+
         /// <summary>
         /// Main 
         /// </summary>
         /// <param name="character"></param>
         public override void Interact(CharacterEngine character)
         {
-            print("interacting with object- object side");
-            ////Pick up object:
-            ////if object is not held
-            //if (!isHeld)
-            //{
-            //    GetPickedUp(character);
-            //    isOnGround = false;
-            //}
+            print(character.ToString()+"interacting with holdable object- object side");
 
-            //if (isHeld && HeldBy.Equals(character.gameObject))
-            //{
-            //    Debug.Log("Interacting with holdable object while being held.");
-            //}
-        }
-
-        //Interact action for the crate when near it and not holding it.
-        public virtual void GetPickedUp(CharacterEngine character)
-        {
-            if (canBeHeld)
+            //Pick up object:
+            //if object is not held
+            if (!isHeld)
             {
-                Debug.Log("Object was picked up.");
-                MakeXMoveState();
+                GetPickedUp(character);
+                isOnGround = false;
+            }
 
-                //disregard any physics which defies being picked up.
-
-                //change state
-//                character.PickUpAndHoldItem(this.gameObject);
-                HeldBy = character.gameObject;
-                HeldBy_Engine = HeldBy.GetComponent<CharacterEngine>();
-                isInteractedWith = true;
-                canBeHeld = false;
-                isHeld = true;
-                rb.gravityScale = 0f;
-                rb.freezeRotation = true;
-                //  rb.Sleep();
-                _freezeRotation = true;
+            if (isHeld && HeldBy.Equals(character.gameObject))
+            {
+                Debug.Log("Interacting with holdable object while being held.");
             }
         }
+
+        //Interact action for the holdable object when near it and not holding it.
+        /// <summary>
+        /// pick up object and hold in inventorysystem script. assign is held states and send message to held by inventory to pick up object
+        /// </summary>
+        /// <param name="character"></param>
+        public virtual void GetPickedUp(CharacterEngine character)
+        {
+            isHeld = true;
+            HeldBy = character.gameObject;
+            HeldBy_Engine = character;
+            HeldBy_Inventory = HeldBy.GetComponent<InventorySystem>();
+
+            HeldBy_Inventory.PickUpItem(this.gameObject);
+            print("object should be picked up here by "+character.ToString());
+                
+
+            
+        }
         //Interact action for the object when putting down object
+
+
         public virtual void GetPutDown()
         {
 
             //put down object infront of character for now regardless of where
-            Transform temp = HeldBy_Engine.holdPoint_Front.transform;
+            Transform temp = HeldBy_Inventory.holdPoint_Front.transform;
 
             rb.bodyType = RigidbodyType2D.Dynamic;
             rb.gravityScale = 12;
@@ -191,6 +192,7 @@ namespace CL03
 
             Debug.Log("Object was put down - object side");
         }
+
 
         IEnumerator DropObject(Transform temp)
         {
@@ -324,7 +326,6 @@ namespace CL03
         // SHOULD this be at the character engine level instead?
         public void Throw()
         {
-
             //HeldBy = null;
             //HeldBy_Engine = null;
             Debug.Log("Throw Object.");

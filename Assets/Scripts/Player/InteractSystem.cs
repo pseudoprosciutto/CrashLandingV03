@@ -29,6 +29,9 @@ namespace CL03
 		//Interactable classified layers
 		protected LayerMask interactablesLayer;
 
+		[GUIColor(0.8f, 0.3f, 0.3f, .2f)]
+		[PreviewField]
+		public GameObject WithInArmsReach; // { get; set{ if (!isHoldingSomething) return WithInReach(); } }
 
 		public float interactCoolDownTime = 0.5f;      //prevent spamming interaction It takes time to lift objects or interact with something
 
@@ -52,6 +55,8 @@ namespace CL03
 			inventory = GetComponent<InventorySystem>();
 
 
+			//layers that can be interacted with:
+			
 			//grabables (meaning can be held)
 			grabables = engine.crateLayer;
 			grabables |= engine.itemsLayer;
@@ -77,11 +82,11 @@ namespace CL03
 				HandledObjectsCheck();
 				//ROTATE OBJECTS IN POSSESSION
 				//if selected and object held. press up or down the object being held changes position
-				if (engine.ObjectBeingHeld != null)
+				if (inventory.ObjectBeingHeld != null)
 				{
 					//change position of object in hand
-					if (input.vertical > .2f) { engine.isHoldingSomethingAbove = true; }
-					if (input.vertical < -.2f) { engine.isHoldingSomethingAbove = false; }
+					if (input.vertical > .2f) { inventory.isHoldingSomethingAbove = true; }
+					if (input.vertical < -.2f) { inventory.isHoldingSomethingAbove = false; }
 				}
 
 				//should this be after held? instead of pressed
@@ -91,20 +96,20 @@ namespace CL03
 				}
 			}
 
-			/// <summary>
-			/// Interact cool down coroutine
-			/// </summary>
-			/// <returns>jumpCollingDown = false</returns>
-			IEnumerator InteractCoolingDown()
-			{
-				interactCoolingDown = true;
-				yield return new WaitForSeconds(interactCoolDownTime);
-				interactCoolingDown = false;
-				Debug.Log("interact Cooldown passed");
-				yield return null;
-			}
 		}
 
+			///// <summary>
+			///// Interact cool down coroutine
+			///// </summary>
+			///// <returns>jumpCollingDown = false</returns>
+			//IEnumerator InteractCoolingDown()
+			//{
+			//	interactCoolingDown = true;
+			//	yield return new WaitForSeconds(interactCoolDownTime);
+			//	interactCoolingDown = false;
+			//	Debug.Log("interact Cooldown passed");
+			//	yield return null;
+			//}
 
 
 		void HandledObjectsCheck()
@@ -113,15 +118,15 @@ namespace CL03
 			//DROP OBJECT
 			if (input.dropObjectPressed)
 			{
-				if (engine.ObjectBeingHeld)
+				if (inventory.ObjectBeingHeld)
 				{
-					DropItem(engine.ObjectBeingHeld);
+					DropItem(inventory.ObjectBeingHeld);
 				}
 			}
 			//SWITCH TO INVENTORY
 			if (input.changeObjectPressed)
 			{
-				if (!engine.inSwitchItemProcess)
+				if (!inventory.inSwitchItemProcess)
 					print("ChangeItem() needs to go here.");
 		//			ChangeItem();
 			}
@@ -139,10 +144,10 @@ namespace CL03
 		private bool ItemsCheck()
 		{
 			// if no object held then then look around for other items in sight. We're all grabby grabby here.
-			if (engine.ObjectBeingHeld == null)
+			if (inventory.ObjectBeingHeld == null)
 			{
 				//ensure flag set/ we realize nothing is being held. should be unnecessary
-				engine.isHoldingSomething = false;
+				inventory.isHoldingSomething = false;
 
 				//look to see if there is something close by to interact with (note: using Raycast 2 to show different debug colors (cyan, magenta))
 				RaycastHit2D ObjectCheckLow = Raycast2(new Vector2(engine.footOffset * engine.direction, grabHeightLow), new Vector2(engine.direction, 0f), reachDistance, interactablesLayer);
@@ -151,7 +156,7 @@ namespace CL03
 				//if something close by is found then can (only be one object in front of character)
 				if (ObjectCheckHigh) //up high (priority)
 				{                   //lets cache it until it no longer is in our vicinity
-					engine.WithInArmsReach = ObjectCheckHigh.collider.gameObject;
+					WithInArmsReach = ObjectCheckHigh.collider.gameObject;
 					//run a check to see if player has any input to interact with nearby object.
 					//	InteractCheck();
 					return true;
@@ -159,14 +164,14 @@ namespace CL03
 				else if (ObjectCheckLow) //or down low
 				{
 					//lets cache it until it no longer is in our vicinity
-					engine.WithInArmsReach = ObjectCheckLow.collider.gameObject;
+					WithInArmsReach = ObjectCheckLow.collider.gameObject;
 					//run a check to see if player has any input to interact with nearby object.
 					//	InteractCheck();
 					return true;
 				}
 				else //nothing found
 				{
-					engine.WithInArmsReach = null;
+					WithInArmsReach = null;
 					//if (WithInArmsReach) { }
 
 				}
@@ -191,32 +196,33 @@ namespace CL03
 					StartCoroutine(InteractCoolingDown());
 
 					//object within arms reach while not holding something?
-					if (engine.WithInArmsReach != null && !engine.isHoldingSomething)
+					if (WithInArmsReach != null && !inventory.isHoldingSomething)
 					{
-						print("Empty Hands see an object " + engine.WithInArmsReach.ToString() + " . That object has been interacted with");
+						print("Empty Hands see an object " + WithInArmsReach.ToString() + " . That object has been interacted with");
 						//look for the interactable object from the game object infront of character and sends this instance as a parameter when invoking interact.
-						engine.WithInArmsReach.GetComponent<InteractableObjects>().Interact(engine);
+						WithInArmsReach.GetComponent<InteractableObjects>().Interact(engine);
 
 					}
 					// ^no, then:
 					//Is interact pressed while holding an object?
 
-					else if (engine.isHoldingSomething && engine.ObjectBeingHeld != null)
+					else if (inventory.isHoldingSomething && inventory.ObjectBeingHeld != null)
 					{
 						print("Get component Holdable Object > Interact(this)");
 
 						//interact with object in hands
-						engine.ObjectBeingHeld.GetComponent<HoldableObjects>().Interact(engine);
+						inventory.ObjectBeingHeld.GetComponent<HoldableObjects>().Interact(engine);
 
 					}
 				}
 			}
 		}
-		/// <summary>
-		/// Interact cool down coroutine
-		/// </summary>
-		/// <returns>jumpCollingDown = false</returns>
-		IEnumerator InteractCoolingDown()
+
+        /// <summary>
+        /// Interact cool down coroutine
+        /// </summary>
+        /// <returns>jumpCollingDown = false</returns>
+        private IEnumerator InteractCoolingDown()
 		{
 			interactCoolingDown = true;
 			yield return new WaitForSeconds(interactCoolDownTime);
@@ -234,16 +240,16 @@ namespace CL03
 		/// <param name="ItemInFrontToPickUp">sent as "this.gameObject" - the item to be picked up by character</param>
 		public void PickUpAndHoldItem(GameObject ItemInFrontToPickUp)
 		{
-			if (engine.ObjectBeingHeld != null)
+			if (inventory.ObjectBeingHeld != null)
 			{
-				Debug.Log("Engine Error PickUpHoldItem: Item being held: " + engine.ObjectBeingHeld.ToString());
+				Debug.Log("Engine Error PickUpHoldItem: Item being held: " + inventory.ObjectBeingHeld.ToString());
 				return; //should not be allowed to finish 
 			}
-			engine.ObjectBeingHeld = ItemInFrontToPickUp;
-			objectCollider = engine.ObjectBeingHeld.GetComponent<Collider2D>();
-			objectScript = engine.ObjectBeingHeld.GetComponent<HoldableObjects>();
-			engine.isHoldingSomething = true;
-			engine.WithInArmsReach = null;
+			inventory.ObjectBeingHeld = ItemInFrontToPickUp;
+			objectCollider = inventory.ObjectBeingHeld.GetComponent<Collider2D>();
+			objectScript = inventory.ObjectBeingHeld.GetComponent<HoldableObjects>();
+			inventory.isHoldingSomething = true;
+			WithInArmsReach = null;
 
 			//objectCollider.enabled = true;
 			//objectCollider.size = ObjectBeingHeld.GetComponent<BoxCollider2D>().size;
@@ -255,17 +261,17 @@ namespace CL03
 		/// </summary>
 		public void DropItem(GameObject _ObjectBeingHeld)
 		{
-			engine.isHoldingSomethingAbove = false;
+			inventory.isHoldingSomethingAbove = false;
 			//Transform tempTrans = objectCollider.transform;
 			//	objectCollider.transform.SetParent(null);
 			//objectCollider.transform.position = tempTrans.position;
 			objectScript = _ObjectBeingHeld.GetComponent<HoldableObjects>();
 			print("objectScript.GetPutDown();");
 			// objectScript.GetPutDown();
-			engine.isHoldingSomething = false;
+			inventory.isHoldingSomething = false;
 			objectCollider = null;
 			objectScript = null;
-			engine.ObjectBeingHeld = null;
+			inventory.ObjectBeingHeld = null;
 			StartCoroutine(DroppingItemCoolDown());
 			Debug.Log("Object Dropped - Engine Side");
 		}
@@ -324,317 +330,3 @@ namespace CL03
 		}
 	}
 }
-
-
-
-
-/**
- * 		void HandledObjectsCheck()
-		{
-
-			//DROP OBJECT
-			if (input.dropObjectPressed)
-			{
-				if (ObjectBeingHeld)
-				{
-					DropItem(ObjectBeingHeld);
-				}
-			}
-			//SWITCH TO INVENTORY
-			if (input.changeObjectPressed)
-			{
-				if (!inSwitchItemProcess)
-					ChangeItem();
-			}
-
-		}
-        #endregion
-
-        #region Interacting Behaviors, Item control
-
-        /// <summary>
-        /// Check to see if there is an item with in characters reach,
-        /// and decide what the character will do with that
-        /// Performed in Fixed update.
-        /// </summary>
-        private bool ItemsCheck()
-        {
-			// if no object held then then look around for other items in sight. We're all grabby grabby here.
-			if (ObjectBeingHeld == null)
-			{
-				//ensure flag set/ we realize nothing is being held. should be unnecessary
-				isHoldingSomething = false;
-				  
-				//look to see if there is something close by to interact with (note: using Raycast 2 to show different debug colors (cyan, magenta))
-				RaycastHit2D ObjectCheckLow = Raycast2(new Vector2(footOffset * direction, grabHeightLow), new Vector2(direction, 0f), reachDistance, interactablesLayer);
-				RaycastHit2D ObjectCheckHigh = Raycast2(new Vector2(footOffset * direction, grabHeightHigh), new Vector2(direction, 0f), reachDistance, interactablesLayer);
-
-				//if something close by is found then can (only be one object in front of character)
-				if (ObjectCheckHigh) //up high (priority)
-				{                   //lets cache it until it no longer is in our vicinity
-					WithInArmsReach = ObjectCheckHigh.collider.gameObject;
-					//run a check to see if player has any input to interact with nearby object.
-					//	InteractCheck();
-					return true;
-				}
-				else if (ObjectCheckLow) //or down low
-				{
-					//lets cache it until it no longer is in our vicinity
-					WithInArmsReach = ObjectCheckLow.collider.gameObject;
-					//run a check to see if player has any input to interact with nearby object.
-					//	InteractCheck();
-					return true;
-				}
-				else //nothing found
-				{
-					WithInArmsReach = null;
-					//if (WithInArmsReach) { }
-					
-				}
-
-			}
-			//default false
-					return false;
-		}
-
-		//Interact:
-		//here we go through all the possibilities of interaction provided the character is selected.
-		void InteractCheck()
-		{
-			//interact not cooling down
-			//double checking character is selected to prevent unneeded processing (probably redundant)
-			if (isSelected && !interactCoolingDown)
-			{
-				//interact pressed
-				if (input.interactPressed)
-				{
-					//Begin cooldown
-					StartCoroutine(InteractCoolingDown());
-
-					//object within arms reach while not holding something?
-					if (WithInArmsReach != null && !isHoldingSomething)
-					{
-						
-						print("Empty Hands see an object "+WithInArmsReach.ToString()+" . That object has been interacted with");
-						//look for the interactable object from the game object infront of character and sends this instance as a parameter when invoking interact.
-						WithInArmsReach.GetComponent<InteractableObjects>().Interact(this);
-						
-					}
-					// ^no, then:
-					//Is interact pressed while holding an object?
-
-					else if (isHoldingSomething && ObjectBeingHeld != null)
-					{
-						print("Get component Holdable Object > Interact(this)");
-
-						//interact with object in hands
-						ObjectBeingHeld.GetComponent<HoldableObjects>().Interact(this);
-
-					}
-				}
-			}
-		}
-		/// <summary>
-		/// Interact cool down coroutine
-		/// </summary>
-		/// <returns>jumpCollingDown = false</returns>
-		IEnumerator InteractCoolingDown()
-		{
-			interactCoolingDown = true;
-			yield return new WaitForSeconds(interactCoolDownTime);
-			interactCoolingDown = false;
-			Debug.Log("interact Cooldown passed");
-			yield return null;
-		}
-		#endregion
-
-		#region Handling Objects
-		//This is commanded from an action of the interactable object.
-		/// <summary>
-		/// action: Picks up and holds 
-		/// </summary>
-		/// <param name="ItemInFrontToPickUp">sent as "this.gameObject" - the item to be picked up by character</param>
-		public void PickUpAndHoldItem(GameObject ItemInFrontToPickUp)
-		{
-			if (ObjectBeingHeld != null)
-			{
-				Debug.Log("Engine Error PickUpHoldItem: Item being held: " + ObjectBeingHeld.ToString());
-				return; //should not be allowed to finish 
-			}
-			ObjectBeingHeld = ItemInFrontToPickUp;
-			objectCollider = ObjectBeingHeld.GetComponent<Collider2D>();
-			objectScript = ObjectBeingHeld.GetComponent<HoldableObjects>();
-			isHoldingSomething = true;
-			WithInArmsReach = null;
-
-			//objectCollider.enabled = true;
-			//objectCollider.size = ObjectBeingHeld.GetComponent<BoxCollider2D>().size;
-			//objectCollider.transform.position = ObjectBeingHeld.GetComponent<BoxCollider2D>().transform.position;
-			//			objectCollider.transform.SetParent(holdPoint_Front);
-		}
-		/// <summary>
-		/// action: Drops Item that is active in hands
-		/// </summary>
-		public void DropItem(GameObject _ObjectBeingHeld)
-		{
-			isHoldingSomethingAbove = false;
-			//Transform tempTrans = objectCollider.transform;
-			//	objectCollider.transform.SetParent(null);
-			//objectCollider.transform.position = tempTrans.position;
-			objectScript = _ObjectBeingHeld.GetComponent<HoldableObjects>();
-			print("objectScript.GetPutDown();");
-			// objectScript.GetPutDown();
-			isHoldingSomething = false;
-			objectCollider = null;
-			objectScript = null;
-			ObjectBeingHeld = null;
-			StartCoroutine(DroppingItemCoolDown());
-			Debug.Log("Object Dropped - Engine Side");
-		}
-
-		//LOOK AT: this might be extra code, 
-		void BreakOverHead(HoldableObjects holdable)
-		{
-			print("Break over Head method   : holdable.GetPutDown();");
-			//holdable.GetPutDown();
-		}
-
-		/// <summary>
-		/// Delayed actions for after the character is deselected.
-		/// </summary>
-		/// <returns></returns>
-		public IEnumerator DroppingItemCoolDown()
-		{
-			canHang = false;
-			yield return new WaitForSeconds(cantHangCoolDownTime);
-			canHang = true;
-			Debug.Log("Can Hang test " + cantHangCoolDownTime + " sec");
-			yield break;
-		}
-		#endregion
-
-		#region Inventory Control
-		/// <summary>
-		/// The process of changing whats in character hand with what is in character inventory
-		/// Execution Order: 
-		/// -objectBeingHeld? 
-		///     {yes:} keep its position as if held || 
-		/// 
-		///     {no:} identify interactables in line of sight 
-		/// -PhysicsCheck() - process and check engine states. 
-		/// -isSelected? 
-		///    {yes:} GroundMovement(); MidAirMovement() || 
-		///    {no:} 
-		/// -end 
-		/// </summary>
-		public void ChangeItem()
-		{
-			GameObject tempItem = null;
-			Debug.Log("launch Change Item Process:");
-			//first lets check if we are holding any items 
-			// if so are they are storeable objects?
-
-			//begin switch item process bool
-			//		inSwitchItemProcess = true;
-			//if storeable item in hand looking for component then lets cache it temporarily deactivate
-			if (isHoldingSomething && ObjectBeingHeld.TryGetComponent(typeof(StoreableObjects), out Component component))
-			{
-				//YES: get component,
-				//then remove from above head if they are
-				isHoldingSomethingAbove = false;
-				//Cache the storeableObject of component
-				StoreableObjects inHandStoreable = component.GetComponent<StoreableObjects>();
-				//acknowledge
-				Debug.Log("We found a type storeable Object on hand: " + inHandStoreable.ToString());
-
-				//tell object in hand it is now in inventory
-				print("inHandStoreable.PutInInventory();");
-				//inHandStoreable.PutInInventory();
-
-				//the item from hand goes to temp cache
-				//assign to tempItem
-				tempItem = inHandStoreable.gameObject;
-				//lets deactivate 
-				tempItem.SetActive(false);
-				//InventoryItem.SetActive(false);
-				//and state so
-				isHoldingSomething = false;
-			}
-
-			//Overwrite Held Item with Inventory Item
-			//always bring inventory object to hand no matter what when changing.
-			ObjectBeingHeld = InventoryItem;
-
-			Debug.Log("storeable object being held that came from inventory " + ObjectBeingHeld.ToString());
-
-			//if an object in inventory overwrote object being held
-			if (ObjectBeingHeld)
-			{
-				objectScript = ObjectBeingHeld.GetComponent<HoldableObjects>();
-				Debug.Log("New object being held here, replaced from inventory " + ObjectBeingHeld.ToString());
-				//activate
-				ObjectBeingHeld.SetActive(true);
-				//state
-				isHoldingSomething = true;
-				//locate / place
-				ObjectBeingHeld.transform.position = holdPoint_Front.position;
-				//tell new object that it is no longer in inventory
-				print("ObjectBeingHeld.GetComponent<StoreableObjects>().RemoveFromInventory();");
-				//ObjectBeingHeld.GetComponent<StoreableObjects>().RemoveFromInventory();
-			}
-			//replace inventory item with the game object of storeable in hand
-
-			//not holding anything but there is something in inventory (should not happen)
-			if (!isHoldingSomething && InventoryItem != null)
-			{
-				isHoldingSomethingAbove = false; //just in case
-
-				Debug.Log("ERROR: There is no item in hands but in the inventory after trying to move");
-				ObjectBeingHeld = InventoryItem; // retry
-			}
-			//now that the inventory item was migrated we can make it whatever the temp item was.
-			InventoryItem = tempItem;
-			//run cool down before we can run this process again
-
-			StartCoroutine(InventorySwapCoolDown());
-
-			//logic:
-			// if so are they storeable objects?
-			//YES: , then remove from above head if they are
-			//cache storeable to tempVariable to store in inventory afterwards
-			//Disable visibility and deactivate scripts during store_item animation
-			//ELSE NO: if that item is not storeable we can either drop the item or ignore request. (for now we drop) and
-			//next grab item in inventory and move it to the object being held variable,
-			// replace inventory with temp storable object if one was being held
-			// make item being held visible with animation to show it being removed from inventory
-			//ELSE if there is no inventory object
-			// change isHeld state to false and ObjectBeingHeld to null
-			// replace inventory with temp storable object if one was being held.
-
-			//Play animation and shit
-		}
-
-		/// <summary>
-		/// count down timer to allow  in switch item process = false after switchItemcoolDownTime.
-		/// </summary>
-		/// <returns></returns>
-		IEnumerator InventorySwapCoolDown()
-		{
-			yield return new WaitForSeconds(switchItemCoolDownTime);
-			inSwitchItemProcess = false;
-			yield break;
-		}
-
-		/// <summary>
-		/// Delayed actions for after the character is deselected.
-		/// </summary>
-		/// <returns></returns>
-		public IEnumerator ChangingInventoryObjects()
-		{
-			changeObjectCoolingDown = true;
-			yield return new WaitForSeconds(changeObjectCoolDownTime);
-			changeObjectCoolingDown = false;
-			Debug.Log("Object change cool down complete test");
-			yield break;
-		}
-*/

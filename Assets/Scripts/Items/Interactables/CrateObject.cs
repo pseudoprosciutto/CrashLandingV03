@@ -63,11 +63,11 @@ namespace CL03
                     //ensure it is kepts in position
                     //				ObjectBeingHeld.transform.position = activeHoldPosition.position; //for when I can say elsewhere what is activeHoldPosition
 
-                    if (HeldBy_Engine.isHoldingSomethingAbove) //held above so stay above
-                        this.gameObject.transform.position = HeldBy_Engine.holdPoint_Above.position;
+                    if (HeldBy_Inventory.isHoldingSomethingAbove) //held above so stay above
+                        this.gameObject.transform.position = HeldBy_Inventory.holdPoint_Above.position;
 
-                    else if (!HeldBy_Engine.isHoldingSomethingAbove) //held front so stay front
-                        this.gameObject.transform.position = HeldBy_Engine.holdPoint_Front.position;
+                    else if (!HeldBy_Inventory.isHoldingSomethingAbove) //held front so stay front
+                        this.gameObject.transform.position = HeldBy_Inventory.holdPoint_Front.position;
                     /** creates overflow error
                     //Cast the ray to check above the player's head
                     RaycastHit2D headCheck = Raycast(new Vector2(0f, boxCollider.size.y), Vector2.up, .2f);

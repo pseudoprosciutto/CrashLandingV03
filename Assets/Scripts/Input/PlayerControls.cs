@@ -529,7 +529,7 @@ namespace CL03
                 {
                     ""name"": """",
                     ""id"": ""e32e7855-e2df-40d8-ad54-7b05ce32106c"",
-                    ""path"": ""<Keyboard>/f"",
+                    ""path"": ""<Keyboard>/t"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
