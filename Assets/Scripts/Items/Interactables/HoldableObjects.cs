@@ -83,7 +83,6 @@ namespace CL03
                     if (headCheck.collider.gameObject.CompareTag("Surface"))
                     {
                         HeldBy_Engine.isHeadBlocked = true;
-
                     }
     */
                 }
@@ -139,18 +138,19 @@ namespace CL03
         /// <param name="character"></param>
         public override void Interact(CharacterEngine character)
         {
-            //Pick up object:
-            //if object is not held
-            if (!isHeld)
-            {
-                GetPickedUp(character);
-                isOnGround = false;
-            }
+            print("interacting with object- object side");
+            ////Pick up object:
+            ////if object is not held
+            //if (!isHeld)
+            //{
+            //    GetPickedUp(character);
+            //    isOnGround = false;
+            //}
 
-            if (isHeld && HeldBy.Equals(character.gameObject))
-            {
-                Debug.Log("Interacting with holdable object while being held.");
-            }
+            //if (isHeld && HeldBy.Equals(character.gameObject))
+            //{
+            //    Debug.Log("Interacting with holdable object while being held.");
+            //}
         }
 
         //Interact action for the crate when near it and not holding it.
@@ -164,7 +164,7 @@ namespace CL03
                 //disregard any physics which defies being picked up.
 
                 //change state
-                character.PickUpAndHoldItem(this.gameObject);
+//                character.PickUpAndHoldItem(this.gameObject);
                 HeldBy = character.gameObject;
                 HeldBy_Engine = HeldBy.GetComponent<CharacterEngine>();
                 isInteractedWith = true;
@@ -218,6 +218,7 @@ namespace CL03
                  rb.freezeRotation = false;
             rb.isKinematic = false;
         }
+
         #region OnCollision Event
         private void OnCollisionStay2D(Collision2D collision)
         {
