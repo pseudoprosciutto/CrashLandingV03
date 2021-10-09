@@ -14,7 +14,7 @@ namespace CL03
     {
         CharacterEngine engine;
         GameObject objectStored; //container for object stored in inventory
-        GameObject objectInHand; //container for object picked up and held in hand
+        public GameObject objectInHand; //container for object picked up and held in hand
         GameObject tempObject; //container to hold temporary object
 		BoxCollider2D bodyCollider;
 		InputHandler input;
@@ -47,8 +47,8 @@ namespace CL03
 
 		public float interactCoolDownTime = 0.5f;      //prevent spamming interaction It takes time to lift objects or interact with something
 
-		BoxCollider2D objectCollider;              //recognized object
-		HoldableObjects objectScript;           //recognized object's script
+		public BoxCollider2D objectCollider;              //recognized object
+		public HoldableObjects objectScript;           //recognized object's script
 
 		public Vector2 objectColliderSize;
 		public bool isInteracting_Test;    //test bool
@@ -80,7 +80,7 @@ namespace CL03
         {
 			print("inventory registers being picked up");
 			isHoldingSomething = true;
-			ObjectBeingHeld = Item;
+			ObjectBeingHeld = Item;			
 			objectScript = Item.GetComponent<HoldableObjects>();
 			objectCollider = Item.GetComponent<BoxCollider2D>();
 
@@ -90,13 +90,14 @@ namespace CL03
 		{//null item sent to drop item should be an bug
 			if (Item == null) { print("null item drop sent to Inventory.DropItem(GameObject Item)"); return; }
 			if (isDroppingItemCoolDown) return;
+			
+			StartCoroutine(DroppingItemCoolDown());
 			isHoldingSomethingAbove = false;
 			isHoldingSomething = false;
-			objectScript.GetPutDown();
 			objectInHand = null;
-			StartCoroutine(DroppingItemCoolDown());
 			ObjectBeingHeld = null;
 			objectCollider = null;
+			objectScript.GetPutDown();
 			objectScript = null;
 		}
 
@@ -124,8 +125,10 @@ namespace CL03
 			if (ObjectBeingHeld != null)
 			{
 				//change position of object in hand if commanded and send change message to engine
-				if (input.vertical > .2f) { isHoldingSomethingAbove = true; engine.ChangeCollider(objectCollider.size,true); }
-				if (input.vertical < -.2f) { isHoldingSomethingAbove = false; engine.ChangeCollider(objectCollider.size,false); }
+				if (input.vertical > .2f && !engine.isHeadBlocked) { isHoldingSomethingAbove = true; }
+				//engine.ChangeCollider(objectCollider.size,true); }
+				if (input.vertical < -.2f) { isHoldingSomethingAbove = false; }
+					//engine.ChangeCollider(objectCollider.size,false); }
 			}
 			HandledObjectsCheck();
 			//should this be after held? instead of pressed

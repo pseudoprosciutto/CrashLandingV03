@@ -44,7 +44,7 @@ namespace CL03
         public bool isStaticCoolingDown = false;
         public float staticCoolDownTime = .1f;
 
-
+        public bool isColliding;
         public bool isPushable;
         public bool inPushOrPullState;
         bool delayBegan = false;
@@ -63,35 +63,8 @@ namespace CL03
         public virtual void Update()
         {
             //Being held and object is found / not null
-            if (isHeld && HeldBy != null)
-                {
-                rb.mass = 1;
 
-                    //make static
-
-                    //ensure it is kepts in position
-                    //				ObjectBeingHeld.transform.position = activeHoldPosition.position; //for when I can say elsewhere what is activeHoldPosition
-
-                    if (HeldBy_Inventory.isHoldingSomethingAbove) //held above so stay above
-                        this.gameObject.transform.position = HeldBy_Inventory.holdPoint_Above.position;
-
-                    else if (!HeldBy_Inventory.isHoldingSomethingAbove) //held front so stay front
-                        this.gameObject.transform.position = HeldBy_Inventory.holdPoint_Front.position;
-                    /** creates overflow error
-                    //Cast the ray to check above the player's head
-                    RaycastHit2D headCheck = Raycast(new Vector2(0f, boxCollider.size.y), Vector2.up, .2f);
-
-                    //If that ray hits, the player's head is blocked
-                    if (headCheck.collider.gameObject.CompareTag("Surface"))
-                    {
-                        HeldBy_Engine.isHeadBlocked = true;
-                    } */
-                
-                else
-                {
-                    rb.mass = objectMass;
-                }
-            }
+          
         }
         /// <summary>
         /// physics check
@@ -99,6 +72,41 @@ namespace CL03
         public virtual void FixedUpdate()
         {
             PhysicsCheck();
+            IsHeldPositionCheck();
+            
+        }
+
+        public virtual void IsHeldPositionCheck()
+        {
+            if (isHeld && HeldBy != null)
+            {
+                rb.mass = 1;
+
+                //make static
+
+                //ensure it is kepts in position
+                //				ObjectBeingHeld.transform.position = activeHoldPosition.position; //for when I can say elsewhere what is activeHoldPosition
+
+                if (HeldBy_Inventory.isHoldingSomethingAbove) //held above so stay above
+                    this.gameObject.transform.position = HeldBy_Inventory.holdPoint_Above.position;
+
+                else if (!HeldBy_Inventory.isHoldingSomethingAbove) //held front so stay front
+                    this.gameObject.transform.position = HeldBy_Inventory.holdPoint_Front.position;
+                /** creates overflow error
+                //Cast the ray to check above the player's head
+                RaycastHit2D headCheck = Raycast(new Vector2(0f, boxCollider.size.y), Vector2.up, .2f);
+
+                //If that ray hits, the player's head is blocked
+                if (headCheck.collider.gameObject.CompareTag("Surface"))
+                {
+                    HeldBy_Engine.isHeadBlocked = true;
+                } */
+
+                else
+                {
+                    rb.mass = objectMass;
+                }
+            }
         }
 
         /// <summary>
@@ -166,6 +174,7 @@ namespace CL03
         {
             isHeld = true;
             rb.freezeRotation = true;
+            rb.bodyType = RigidbodyType2D.Kinematic;
             HeldBy = character.gameObject;
             HeldBy_Engine = character;
             HeldBy_Inventory = HeldBy.GetComponent<InventorySystem>();
@@ -183,6 +192,8 @@ namespace CL03
         {
 
             //put down object infront of character for now regardless of where
+            isHeld = false;
+            HeldBy = null;
             Transform temp = HeldBy_Inventory.holdPoint_Front.transform;
             rb.freezeRotation = false;
             rb.bodyType = RigidbodyType2D.Dynamic;
@@ -237,23 +248,38 @@ namespace CL03
                     {
                         isOnGround = true;
                         //MakeXStillState();
-                        //add delat before making still
+                        //add delay before making still
                         if (!delayBegan)
                             StartCoroutine(DelayStillState());
                     }
                 }
             }
         }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            //no need to process this if the person holding object colldes with object
+            if (collision.gameObject == HeldBy) return;
+            if (isHeld) { HeldBy_Engine.isObjectColliding = true; }
+            isColliding = true;
+            
+        }
+
         private void OnCollisionExit2D(Collision2D collision)
         {
+            if(collision.gameObject == HeldBy) return;
             if (collision.gameObject.CompareTag("Surface"))
             {
                 isOnGround = false;
                 delayBegan = false;
             }
+            if (isHeld) { HeldBy_Engine.isObjectColliding = false; }
+            isColliding = false;
+
 
         }
         #endregion
+        #region Move State commands
         /// <summary>
         /// Delayed still state for after the object is on ground.
         /// </summary>
@@ -299,28 +325,9 @@ namespace CL03
             if (rb.constraints == RigidbodyConstraints2D.FreezePositionX) MakeXMoveState();
         }
 
-
         IEnumerator StaticCoolDown()
         {
             yield return new WaitForSeconds(staticCoolDownTime);
-        }
-
-
-        //Interact action for when push pressed not holding item and it is not too heavy. this may be used with a seperate button or in a seperate object.
-        public virtual void PushAndPull()
-        {
-            if (!isPushable) { return; }
-
-            if (isOnGround)
-            {
-                inPushOrPullState = true;
-                MakeXMoveState();
-            }
-        }
-
-        IEnumerator PushPullCoolDown()
-        {
-            yield return new WaitForSeconds(.2f);
         }
 
         //Interact action when crate is being held by selected character.
@@ -329,8 +336,28 @@ namespace CL03
         {
             //HeldBy = null;
             //HeldBy_Engine = null;
+
+            //add force
             Debug.Log("Throw Object.");
             GetPutDown();
         }
+        #endregion
     }
 }
+
+        ////Interact action for when push pressed not holding item and it is not too heavy. this may be used with a seperate button or in a seperate object.
+        //public virtual void PushAndPull()
+        //{
+        //    if (!isPushable) { return; }
+
+        //    if (isOnGround)
+        //    {
+        //        inPushOrPullState = true;
+        //        MakeXMoveState();
+        //    }
+        //}
+
+        //IEnumerator PushPullCoolDown()
+        //{
+        //    yield return new WaitForSeconds(.2f);
+        //}

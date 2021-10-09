@@ -95,6 +95,7 @@ namespace CL03
 		#endregion
 
 		#region Interactable Object Properties
+		public bool isObjectColliding = false;
 		//public bool inSwitchItemProcess = false;
 		//public float switchItemCoolDownTime = 1.7f;
 		////   [Title("Inventory Item", "if null then nothing is stored for this character.",TitleAlignments.Centered)]
@@ -174,7 +175,7 @@ namespace CL03
 		float originalXScale;                   //Original scale on X axis
 		public int direction = 1;                      //Direction player is facing
 
-		Vector2 colliderItemSize;
+		Collider2D colliderItem;
 
 		Vector2 colliderStandSize;              //Size of the standing collider
 		Vector2 colliderOrigStandSize;
@@ -272,21 +273,6 @@ namespace CL03
 			//if player is selected and once physics have been checked then we can continue deciding how to player moves knowing state and environment
 			if (isSelected)
 			{
-				////		HandledObjectsCheck();
-				//		//ROTATE OBJECTS IN POSSESSION
-				//		//if selected and object held. press up or down the object being held changes position
-				//		if (ObjectBeingHeld != null)
-				//		{
-				//			//change position of object in hand
-				//			if (input.vertical > .2f) { isHoldingSomethingAbove = true; }
-				//			if (input.vertical < -.2f) { isHoldingSomethingAbove = false; }
-				//		}
-
-				//		//should this be after held? instead of pressed
-				//		if (input.changeObjectPressed && !changeObjectCoolingDown)
-				//		{
-				//			Debug.Log("Change object button pressed and change object cooling down is false.");
-				//		}
 				//Process ground and air movements
 				GroundMovement();
 				MidAirMovement();
@@ -360,7 +346,8 @@ namespace CL03
 			}
             else
 			{
-				colliderItemSize = inventory.objectColliderSize;
+				colliderItem = inventory.objectCollider;
+				
 			}
 		}
 
@@ -409,8 +396,8 @@ namespace CL03
 			hitOverHeadRight = false;
 
 			//HEAD CHECK
-			RaycastHit2D fullHeadCheck = Raycast(new Vector2(Math.Abs(direction) - 1.5f, playerHeight), Vector2.right, 1f, walkables);
-			if (fullHeadCheck) Debug.Log("object hit head test");
+			RaycastHit2D fullHeadCheck = Raycast2(new Vector2(Math.Abs(direction) - 1.5f, playerHeight), Vector2.right, 1f, walkables);
+			if (fullHeadCheck) { isHeadBlocked = true; }
 
 			//this loc checks are to eventually push object a certain way to fall off head and not stick.
 			RaycastHit2D leftHeadCheck = Raycast(new Vector2(-headOffset, bodyCollider.size.y), Vector2.up, breakOverHeadDistance);
@@ -425,12 +412,13 @@ namespace CL03
 
 
 			//Cast the ray to check above the player's head
-			RaycastHit2D headCheck = Raycast(new Vector2(0f, bodyCollider.size.y), Vector2.up, headClearance);
+			RaycastHit2D headCheck = Raycast2(new Vector2(0f, bodyCollider.size.y), Vector2.up, headClearance,walkables);
 
 			//If that ray hits, the player's head is blocked
 			if (headCheck)
 			{
 				isHeadBlocked = true;
+				Debug.Log("object hit head test");
 				//something bonks the head, it will no longer get stuck there because we are flat headed and smooth brained.
 				//if (!headCheck.collider.CompareTag("Environment") && !headCheck.collider.CompareTag("Surface") && !headCheck.collider.Equals(ObjectBeingHeld))
 				if (!headCheck.collider.CompareTag("Surface") && !headCheck.collider.Equals(inventory.ObjectBeingHeld))
@@ -524,15 +512,15 @@ namespace CL03
 			//If the sign of the velocity and direction don't match, flip the character
 			if (xVelocity * direction < 0f)
 				FlipCharacterDirection();
-
+			
 			//If the player is crouching, reduce the velocity
 			if (isCrouching)
 				xVelocity /= crouchSpeedDivisor;
 			//if object above head hit then we dont move
-			if (!objectAboveHeadHit)
-				//Apply the desired velocity 
+			if (!objectAboveHeadHit && !isObjectColliding)
+				//Apply the desired velocity othewise
 				rigidBody.velocity = new Vector2(xVelocity, rigidBody.velocity.y);
-			else
+			else //stop moving because we hit head
 				rigidBody.velocity = new Vector2(0,0);
 			//If the player is on the ground, extend the coyote time window
 			if (isOnGround)
@@ -847,7 +835,7 @@ namespace CL03
 			return hit;
 		}
 		#endregion
-
+		/*
 		public void ChangeCollider() {
 			bodyCollider.size = colliderOrigStandSize;
 			colliderStandSize = colliderOrigStandSize;
@@ -867,6 +855,7 @@ namespace CL03
 				colliderStandSize = new Vector2(colliderStandSize.x + addedCollider.x + .1f, colliderOrigStandSize.y );
 			}
 		}
+		*/
 	}
 	#endregion
 }
