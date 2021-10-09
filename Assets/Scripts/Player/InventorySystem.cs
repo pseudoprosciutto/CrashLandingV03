@@ -22,8 +22,8 @@ namespace CL03
 		#region Interactable Object Properties
 		public bool inSwitchItemProcess = false;
 		public float switchItemCoolDownTime = 1.7f;
-
-
+		public float dropItemCoolDownTime = 1f;
+		public bool isDroppingItemCoolDown;
 		public bool isHoldingSomething;
 		public bool isHoldingSomethingAbove;
 
@@ -43,14 +43,11 @@ namespace CL03
 		[ChildGameObjectsOnly]
 		public Transform holdPoint_Above;  //the above location for generic object being held
 
-
 		protected Transform activeHoldPosition;
-
-
 
 		public float interactCoolDownTime = 0.5f;      //prevent spamming interaction It takes time to lift objects or interact with something
 
-		Collider2D objectCollider;              //recognized object
+		BoxCollider2D objectCollider;              //recognized object
 		HoldableObjects objectScript;           //recognized object's script
 
 		public Vector2 objectColliderSize;
@@ -73,7 +70,6 @@ namespace CL03
 			input = GetComponentInParent<InputHandler>();
 			engine = GetComponent<CharacterEngine>();
 			bodyCollider = GetComponent<BoxCollider2D>();
-
 		}
 
 		/// <summary>
@@ -83,28 +79,93 @@ namespace CL03
         public void PickUpItem(GameObject Item)
         {
 			print("inventory registers being picked up");
-			objectInHand = Item;
+			isHoldingSomething = true;
+			ObjectBeingHeld = Item;
 			objectScript = Item.GetComponent<HoldableObjects>();
-			objectCollider = Item.GetComponent<Collider2D>();
-        }
+			objectCollider = Item.GetComponent<BoxCollider2D>();
 
-        private void FixedUpdate()
+		}
+
+		public void DropItem(GameObject Item)
+		{//null item sent to drop item should be an bug
+			if (Item == null) { print("null item drop sent to Inventory.DropItem(GameObject Item)"); return; }
+			if (isDroppingItemCoolDown) return;
+			isHoldingSomethingAbove = false;
+			isHoldingSomething = false;
+			objectScript.GetPutDown();
+			objectInHand = null;
+			StartCoroutine(DroppingItemCoolDown());
+			ObjectBeingHeld = null;
+			objectCollider = null;
+			objectScript = null;
+		}
+
+		/// <summary>
+		/// action: Drops Item that is active in hands
+		/// </summary>
+		public void a_DropItem(GameObject _ObjectBeingHeld)
+		{
+			//inventory.
+			//Transform tempTrans = objectCollider.transform;
+			//	objectCollider.transform.SetParent(null);
+			//objectCollider.transform.position = tempTrans.position;
+			objectScript = _ObjectBeingHeld.GetComponent<HoldableObjects>();
+			print("objectScript.GetPutDown();");
+			// objectScript.GetPutDown();
+			StartCoroutine(DroppingItemCoolDown());
+			Debug.Log("Object Dropped - Engine Side");
+		}
+
+		private void FixedUpdate()
         {
 			//HandledObjectsCheck();
 			//ROTATE OBJECTS IN POSSESSION
 			//if selected and object held. press up or down the object being held changes position
 			if (ObjectBeingHeld != null)
 			{
-				//change position of object in hand if commanded
-				if (input.vertical > .2f) { isHoldingSomethingAbove = true; }
-				if (input.vertical < -.2f) { isHoldingSomethingAbove = false; }
+				//change position of object in hand if commanded and send change message to engine
+				if (input.vertical > .2f) { isHoldingSomethingAbove = true; engine.ChangeCollider(objectCollider.size,true); }
+				if (input.vertical < -.2f) { isHoldingSomethingAbove = false; engine.ChangeCollider(objectCollider.size,false); }
 			}
-
+			HandledObjectsCheck();
 			//should this be after held? instead of pressed
+		}
+
+		void HandledObjectsCheck()
+		{
+
+			//DROP OBJECT
+			if (input.dropObjectPressed)
+			{
+				if (ObjectBeingHeld)
+				{
+					DropItem(ObjectBeingHeld);
+				}
+			}
+			//SWITCH TO INVENTORY
 			if (input.changeObjectPressed && !changeObjectCoolingDown)
 			{
 				Debug.Log("Change object button pressed and change object cooling down is false.");
+			
+			if (!inSwitchItemProcess)
+					print("ChangeItem() needs to go here.");
+				//			ChangeItem();
 			}
+
 		}
-    }
+
+		/// <summary>
+		/// Dropping Items cant be spammed
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerator DroppingItemCoolDown()
+		{
+			isDroppingItemCoolDown = true;
+			yield return new WaitForSeconds(dropItemCoolDownTime);
+			isDroppingItemCoolDown = false;
+			Debug.Log("Can Drop Items again");
+			yield break;
+		}
+
+	}
 }

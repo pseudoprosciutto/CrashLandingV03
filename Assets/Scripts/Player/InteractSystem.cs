@@ -76,26 +76,6 @@ namespace CL03
 			//if items check detects items, then look for keyboard interaction 
 			if (ItemsCheck()) InteractCheck();
 
-			//if selected
-			if (engine.isSelected)
-			{
-				HandledObjectsCheck();
-				//ROTATE OBJECTS IN POSSESSION
-				//if selected and object held. press up or down the object being held changes position
-				if (inventory.ObjectBeingHeld != null)
-				{
-					//change position of object in hand
-					if (input.vertical > .2f) { inventory.isHoldingSomethingAbove = true; }
-					if (input.vertical < -.2f) { inventory.isHoldingSomethingAbove = false; }
-				}
-
-				//should this be after held? instead of pressed
-				if (input.changeObjectPressed && !inventory.changeObjectCoolingDown)
-				{
-					Debug.Log("Change object button pressed and change object cooling down is false.");
-				}
-			}
-
 		}
 
 			///// <summary>
@@ -112,26 +92,7 @@ namespace CL03
 			//}
 
 
-		void HandledObjectsCheck()
-		{
 
-			//DROP OBJECT
-			if (input.dropObjectPressed)
-			{
-				if (inventory.ObjectBeingHeld)
-				{
-					DropItem(inventory.ObjectBeingHeld);
-				}
-			}
-			//SWITCH TO INVENTORY
-			if (input.changeObjectPressed)
-			{
-				if (!inventory.inSwitchItemProcess)
-					print("ChangeItem() needs to go here.");
-		//			ChangeItem();
-			}
-
-		}
 
 
 		#region Interacting Behaviors, Item control
@@ -256,25 +217,7 @@ namespace CL03
 			//objectCollider.transform.position = ObjectBeingHeld.GetComponent<BoxCollider2D>().transform.position;
 			//			objectCollider.transform.SetParent(holdPoint_Front);
 		}
-		/// <summary>
-		/// action: Drops Item that is active in hands
-		/// </summary>
-		public void DropItem(GameObject _ObjectBeingHeld)
-		{
-			inventory.isHoldingSomethingAbove = false;
-			//Transform tempTrans = objectCollider.transform;
-			//	objectCollider.transform.SetParent(null);
-			//objectCollider.transform.position = tempTrans.position;
-			objectScript = _ObjectBeingHeld.GetComponent<HoldableObjects>();
-			print("objectScript.GetPutDown();");
-			// objectScript.GetPutDown();
-			inventory.isHoldingSomething = false;
-			objectCollider = null;
-			objectScript = null;
-			inventory.ObjectBeingHeld = null;
-			StartCoroutine(DroppingItemCoolDown());
-			Debug.Log("Object Dropped - Engine Side");
-		}
+
 
 		//LOOK AT: this might be extra code, 
 		void BreakOverHead(HoldableObjects holdable)
@@ -283,18 +226,6 @@ namespace CL03
 			//holdable.GetPutDown();
 		}
 
-		/// <summary>
-		/// Delayed actions for after the character is deselected.
-		/// </summary>
-		/// <returns></returns>
-		public IEnumerator DroppingItemCoolDown()
-		{
-			engine.canHang = false;
-			yield return new WaitForSeconds(engine.cantHangCoolDownTime);
-			engine.canHang = true;
-			Debug.Log("Can Hang test " + engine.cantHangCoolDownTime + " sec");
-			yield break;
-		}
 		#endregion
 
 		/// <summary>

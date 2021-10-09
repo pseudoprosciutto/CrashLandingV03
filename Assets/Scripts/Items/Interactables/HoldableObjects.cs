@@ -62,12 +62,11 @@ namespace CL03
         }
         public virtual void Update()
         {
-            //Being held
-            if (isHeld)
-            {
-                rb.mass = 1;
-                if (HeldBy != null)
+            //Being held and object is found / not null
+            if (isHeld && HeldBy != null)
                 {
+                rb.mass = 1;
+
                     //make static
 
                     //ensure it is kepts in position
@@ -87,7 +86,7 @@ namespace CL03
                     {
                         HeldBy_Engine.isHeadBlocked = true;
                     } */
-                }
+                
                 else
                 {
                     rb.mass = objectMass;
@@ -159,12 +158,14 @@ namespace CL03
 
         //Interact action for the holdable object when near it and not holding it.
         /// <summary>
-        /// pick up object and hold in inventorysystem script. assign is held states and send message to held by inventory to pick up object
+        /// pick up object and hold in inventorysystem script. assign is held states and
+        /// send message to held by inventory to pick up object
         /// </summary>
         /// <param name="character"></param>
         public virtual void GetPickedUp(CharacterEngine character)
         {
             isHeld = true;
+            rb.freezeRotation = true;
             HeldBy = character.gameObject;
             HeldBy_Engine = character;
             HeldBy_Inventory = HeldBy.GetComponent<InventorySystem>();
@@ -183,7 +184,7 @@ namespace CL03
 
             //put down object infront of character for now regardless of where
             Transform temp = HeldBy_Inventory.holdPoint_Front.transform;
-
+            rb.freezeRotation = false;
             rb.bodyType = RigidbodyType2D.Dynamic;
             rb.gravityScale = 12;
             rb.mass = 100;

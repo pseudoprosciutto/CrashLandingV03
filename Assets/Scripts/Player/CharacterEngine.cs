@@ -5,23 +5,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using System;
+using Cinemachine;
 
 /// <summary>
 /// CrashLanding v03 
 /// </summary>
 namespace CL03
 {
-    /// <summary>
-    /// Character Script handles character properties and states, movement, and core character functions for other components to reference.
-    /// </summary>
-    public class CharacterEngine : MonoBehaviour
-    {
-        #region FIELDS
-        #region Component References: Rigidbody, BoxCollider, Input Handler
-        BoxCollider2D bodyCollider;             //The collider component
+	/// <summary>
+	/// Character Script handles character properties and states, movement, and core character functions for other components to reference.
+	/// </summary>
+	public class CharacterEngine : MonoBehaviour
+	{
+		#region FIELDS
+		#region Component References: Rigidbody, BoxCollider, Input Handler
+		public BoxCollider2D bodyCollider;             //The collider component
 		Rigidbody2D rigidBody;                  //The rigidbody component
 		InputHandler input;                     //The current inputs for the player
-		InventorySystem inventory;				//inventory system
+		InventorySystem inventory;              //inventory system
 		#endregion
 
 		#region Character State bools
@@ -35,8 +36,8 @@ namespace CL03
 		[BoxGroup("Character State")] public bool isCrouching;                //Is player crouching?
 		[BoxGroup("Character State")] public bool isHeadBlocked;
 		[BoxGroup("Character State")] public bool isHanging;                  //Is player hanging?
-		//[BoxGroup("Character State")] public bool isHoldingSomething;
-		//[BoxGroup("Character State")] public bool isHoldingSomethingAbove;
+																			  //[BoxGroup("Character State")] public bool isHoldingSomething;
+		[BoxGroup("Character State")] public bool objectAboveHeadHit;										  //[BoxGroup("Character State")] public bool isHoldingSomethingAbove;
 		[BoxGroup("Character State")] public bool hitOverHeadLeft;
 		[BoxGroup("Character State")] public bool hitOverHeadRight;
 		#endregion
@@ -139,7 +140,12 @@ namespace CL03
 		public float footOffset = .25f;          //X Offset of feet raycast
 		[FoldoutGroup("Environment Check Properties")]
 		public float eyeHeight = 1.5f;          //Height of wall checks
-
+		[FoldoutGroup("Environment Check Properties")]
+		public float objectJumpCheckHeight = 2.7f;
+		[FoldoutGroup("Environment Check Properties")]
+		public float objectAboveHeadForwardOffset = 1f; //Object checks forward Above head to prevent clipping object through walls
+		[FoldoutGroup("Environment Check Properties")]
+		public float objectAboveHeadUpwardOffset = 1f; //Object checks upward Above head to prevent clipping object through walls
 		[FoldoutGroup("Environment Check Properties")]
 		public float reachOffset = .7f;         //X offset for wall grabbing
 		[FoldoutGroup("Environment Check Properties")]
@@ -168,9 +174,11 @@ namespace CL03
 		float originalXScale;                   //Original scale on X axis
 		public int direction = 1;                      //Direction player is facing
 
+		Vector2 colliderItemSize;
 
 		Vector2 colliderStandSize;              //Size of the standing collider
-
+		Vector2 colliderOrigStandSize;
+		Vector2 colliderOrigCrouchSize;
 		Vector2 colliderStandOffset;            //Offset of the standing collider
 		Vector2 colliderCrouchSize;             //Size of the crouching collider
 		Vector2 colliderCrouchOffset;           //Offset of the crouching collider
@@ -188,14 +196,14 @@ namespace CL03
 
 			canHang = true;
 
-
+			objectAboveHeadHit = false;
 			//// character doesnt hold something on initialization
 			//isHoldingSomething = false;
 			//isHoldingSomethingAbove = false;
 
 			//place character in correct z plane
 			transform.position = new Vector3(transform.position.x, transform.position.y, 2f);
-	
+
 			//objectCollider.enabled = false;
 
 			//the layer masks categorize objects which how to character to interact
@@ -233,11 +241,13 @@ namespace CL03
 			playerHeight = bodyCollider.size.y;
 
 			//Record initial collider size and offset
-			colliderStandSize = bodyCollider.size;
+			colliderOrigStandSize = bodyCollider.size;
+			colliderStandSize = colliderOrigStandSize;
 			colliderStandOffset = bodyCollider.offset;
 
 			//Calculate crouching collider size and offset
-			colliderCrouchSize = new Vector2(bodyCollider.size.x, bodyCollider.size.y / 2f);
+			colliderOrigCrouchSize = new Vector2(bodyCollider.size.x, bodyCollider.size.y / 2f);
+			colliderCrouchSize = colliderOrigCrouchSize;
 			colliderCrouchOffset = new Vector2(bodyCollider.offset.x, bodyCollider.offset.y / 2f);
 		}
 		#endregion
@@ -254,7 +264,7 @@ namespace CL03
 		///    {no:} 
 		/// -end 
 		/// </summary>
-		void FixedUpdate() { 
+		void FixedUpdate() {
 
 			//Check the environment to determine status
 			PhysicsCheck();
@@ -262,36 +272,36 @@ namespace CL03
 			//if player is selected and once physics have been checked then we can continue deciding how to player moves knowing state and environment
 			if (isSelected)
 			{
-		////		HandledObjectsCheck();
-		//		//ROTATE OBJECTS IN POSSESSION
-		//		//if selected and object held. press up or down the object being held changes position
-		//		if (ObjectBeingHeld != null)
-		//		{
-		//			//change position of object in hand
-		//			if (input.vertical > .2f) { isHoldingSomethingAbove = true; }
-		//			if (input.vertical < -.2f) { isHoldingSomethingAbove = false; }
-		//		}
+				////		HandledObjectsCheck();
+				//		//ROTATE OBJECTS IN POSSESSION
+				//		//if selected and object held. press up or down the object being held changes position
+				//		if (ObjectBeingHeld != null)
+				//		{
+				//			//change position of object in hand
+				//			if (input.vertical > .2f) { isHoldingSomethingAbove = true; }
+				//			if (input.vertical < -.2f) { isHoldingSomethingAbove = false; }
+				//		}
 
-		//		//should this be after held? instead of pressed
-		//		if (input.changeObjectPressed && !changeObjectCoolingDown)
-		//		{
-		//			Debug.Log("Change object button pressed and change object cooling down is false.");
-		//		}
+				//		//should this be after held? instead of pressed
+				//		if (input.changeObjectPressed && !changeObjectCoolingDown)
+				//		{
+				//			Debug.Log("Change object button pressed and change object cooling down is false.");
+				//		}
 				//Process ground and air movements
 				GroundMovement();
 				MidAirMovement();
 			}
 			//else we arent selected and we have landed on ground so we need to be static
-			else if (!isSelected && isOnGround) EnterStaticState(); 
+			else if (!isSelected && isOnGround) EnterStaticState();
 		}
-        #endregion
+		#endregion
 
-        #region Selection for Player Control
-        // OnCharacterChange scripts arranged as public messages to engine
-        /// <summary>
-        /// the initial state changes and functions launch on character change. 
-        /// </summary>
-        public void OnCharacterChange_Start()
+		#region Selection for Player Control
+		// OnCharacterChange scripts arranged as public messages to engine
+		/// <summary>
+		/// the initial state changes and functions launch on character change. 
+		/// </summary>
+		public void OnCharacterChange_Start()
 		{
 			ForceUnFreezeConstraints();
 			Debug.Log("Character was just selected"); //make sure this doesnt double
@@ -336,24 +346,29 @@ namespace CL03
 		/// </summary>
 		void PhysicsCheck()
 		{
+		
 			//set location of selected character so that they wont get stuck behind others.
 			if (isSelected) { bringFront(); } else { sendBack(); };
 			//Start by assuming the character isn't on the ground and the head isn't blocked
 			CharacterStandingOnSurfaceCheck();
 			CharacterHeadCheck();
-			
+
 
 			if (!inventory.isHoldingSomething) //ObjectBeingHeld)
 			{//attempt a wallgrab because hands are empty
 				WallGrabCheck();
 			}
+            else
+			{
+				colliderItemSize = inventory.objectColliderSize;
+			}
 		}
 
 		/// <summary>
-        /// Ground Check for character. Casts rays for left and right feet and gives and updated state of character
-        /// </summary>
-        void CharacterStandingOnSurfaceCheck()
-        {
+		/// Ground Check for character. Casts rays for left and right feet and gives and updated state of character
+		/// </summary>
+		void CharacterStandingOnSurfaceCheck()
+		{
 			//assume not on ground
 			isOnPlatform = false;
 			isOnGround = false;
@@ -365,18 +380,36 @@ namespace CL03
 				isOnGround = true;
 			//isOnPlatform = true;
 		}
-
+		/// <summary>
+        /// Check around object above head
+        /// </summary>
+		public void ObjectAboveHeadCheck() {
+			objectAboveHeadHit = false;
+					RaycastHit2D hitCheckObjectClearance = Raycast2(new Vector2(footOffset * direction, 2.5f), new Vector2(direction, 0f), reachOffset, walkables);
+				if (hitCheckObjectClearance)
+				{
+					Debug.Log("object hit above head");
+				objectAboveHeadHit = true;
+				}
+				
+			
+		}
 		/// <summary>
         /// Head check. (aka Lets not put our head through things.)
         /// sends out raycasthits and lets you know how large head trauma bill will be.
         /// </summary>
         void CharacterHeadCheck() {
 			isHeadBlocked = false;
+		//	if (inventory.isHoldingSomethingAbove)
+		//	{
+		//		ObjectAboveHeadCheck();
+		//		isHeadBlocked = true;
+		//	}
 			hitOverHeadLeft = false;
 			hitOverHeadRight = false;
 
 			//HEAD CHECK
-			RaycastHit2D fullHeadCheck = Raycast(new Vector2(Math.Abs(direction) - 1.5f, playerHeight), Vector2.right, 1f, grabables);
+			RaycastHit2D fullHeadCheck = Raycast(new Vector2(Math.Abs(direction) - 1.5f, playerHeight), Vector2.right, 1f, walkables);
 			if (fullHeadCheck) Debug.Log("object hit head test");
 
 			//this loc checks are to eventually push object a certain way to fall off head and not stick.
@@ -449,15 +482,15 @@ namespace CL03
 			{
 				//we have a ledge grab. Record the current position...
 				Vector3 pos = transform.position;
-				//...move the distance to the wall (minus a small amount)...
+				//move the distance to the wall (minus a small amount)...
 				pos.x += (wallCheck.distance - smallAmount - hangingDistanceFromLedge) * direction;
-				//...move the player down to grab onto the ledge...
+				//move the player down to grab onto the ledge...
 				pos.y -= ledgeCheck.distance;
-				//...apply this position to the platform...
+				//apply this position to the platform...
 				transform.position = pos;
-				//...set the rigidbody to static...
+				//set the rigidbody to static...
 				rigidBody.bodyType = RigidbodyType2D.Static;
-				//...finally, set isHanging to true
+				//finally, set isHanging to true
 				isHanging = true;
 			}
 		}
@@ -495,10 +528,12 @@ namespace CL03
 			//If the player is crouching, reduce the velocity
 			if (isCrouching)
 				xVelocity /= crouchSpeedDivisor;
-
-			//Apply the desired velocity 
-			rigidBody.velocity = new Vector2(xVelocity, rigidBody.velocity.y);
-
+			//if object above head hit then we dont move
+			if (!objectAboveHeadHit)
+				//Apply the desired velocity 
+				rigidBody.velocity = new Vector2(xVelocity, rigidBody.velocity.y);
+			else
+				rigidBody.velocity = new Vector2(0,0);
 			//If the player is on the ground, extend the coyote time window
 			if (isOnGround)
 				//CoyoteTime is time that keeps you extended and gives player a
@@ -780,8 +815,58 @@ namespace CL03
 			return hit;
 		}
 
+		/// <summary>
+		/// Cyan. hit: Magenta; - alternate Color Raycast method - 
+		/// Specified hits with layer mask
+		/// Returns RaycastHit2D
+		/// and Creates visual line in editor scene if drawDebugRaycasts
+		/// </summary>
+		/// <param name="offset">offset to char, Vector2 </param>
+		/// <param name="rayDirection">direction of ray, Vector2 </param>
+		/// <param name="length">length of line, float</param>
+		/// <param name="mask">the layer raycast is looking to hit on, LayerMask</param>
+		/// <returns>RaycastHit2D</returns>
+		public RaycastHit2D Raycast2(Vector2 offset, Vector2 rayDirection, float length, LayerMask mask)
+		{
+			//Record the player's position
+			Vector2 pos = transform.position;
 
-        #endregion
-    }
-        #endregion
+			//Send out the desired raycast and record the result
+			RaycastHit2D hit = Physics2D.Raycast(pos + offset, rayDirection, length, mask);
+
+			//If we want to show debug raycasts in the scene...
+			if (drawDebugRaycasts)
+			{
+				//...determine the color based on if the raycast hit...
+				Color color = hit ? Color.magenta : Color.cyan;
+				//...and draw the ray in the scene view
+				Debug.DrawRay(pos + offset, rayDirection * length, color);
+			}
+
+			//Return the results of the raycast
+			return hit;
+		}
+		#endregion
+
+		public void ChangeCollider() {
+			bodyCollider.size = colliderOrigStandSize;
+			colliderStandSize = colliderOrigStandSize;
+			colliderCrouchSize = colliderOrigCrouchSize;
+		}
+		public void ChangeCollider(Vector2 addedCollider, bool aboveHead)
+		{
+		//	colliderTempStandSize = bodyCollider.size;
+		//	colliderTempCrouchSize = colliderCrouchSize;
+			if (aboveHead) {
+				bodyCollider.size = new Vector2(colliderOrigStandSize.x, colliderStandSize.y + addedCollider.y + .1f);
+				colliderStandSize = new Vector2(colliderOrigStandSize.x, colliderStandSize.y + addedCollider.y + .1f);
+			}
+            else
+            {
+				bodyCollider.size = new Vector2(colliderStandSize.x + addedCollider.x + .1f, colliderOrigStandSize.y );
+				colliderStandSize = new Vector2(colliderStandSize.x + addedCollider.x + .1f, colliderOrigStandSize.y );
+			}
+		}
+	}
+	#endregion
 }
