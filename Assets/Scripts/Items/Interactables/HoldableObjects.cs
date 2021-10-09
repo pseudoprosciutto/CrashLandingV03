@@ -208,6 +208,7 @@ namespace CL03
 
         IEnumerator DropObject(Transform temp)
         {
+            rb.transform.position = temp.position;
             HeldBy = null;
             HeldBy_Engine = null;
             isInteractedWith = false;
@@ -219,14 +220,12 @@ namespace CL03
             rb.constraints = RigidbodyConstraints2D.FreezePositionX;
 
             rb.gravityScale = gravity;
-            yield return new WaitForSeconds(.1f);
-            rb.transform.position = temp.position;
             rb.isKinematic = true;
-            //take out any velocity by hard positioning (not sure effective)
+            yield return new WaitForSeconds(.1f);
             //remove all constrains and let object fall as it might
             rb.constraints = RigidbodyConstraints2D.None;
 
-            yield return new WaitForSeconds(.2f);
+           
             rb.mass = objectMass;
 
                  rb.freezeRotation = false;
