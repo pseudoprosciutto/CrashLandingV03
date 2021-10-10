@@ -1,5 +1,6 @@
 /* Code by: Matthew Sheehan */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
@@ -15,17 +16,25 @@ namespace CL03
         CharacterEngine engine;
         GameObject objectStored; //container for object stored in inventory
         public GameObject objectInHand; //container for object picked up and held in hand
-        GameObject tempObject; //container to hold temporary object
 		BoxCollider2D bodyCollider;
 		InputHandler input;
 
+		//maybe we should store inventory items in an array. 
+		HoldableObjects[] possessions;
+
+        StoreableObjects tempObject; //container to hold temporary storeable object
+		StoreableObjects storeableInHand;
+
 		#region Interactable Object Properties
-		public bool inSwitchItemProcess = false;
-		public float switchItemCoolDownTime = 1.7f;
+
 		public float dropItemCoolDownTime = 1f;
 		public bool isDroppingItemCoolDown;
+
 		public bool isHoldingSomething;
 		public bool isHoldingSomethingAbove;
+		public float changeItemCoolDownTime = 1.2f;
+		public bool changeObjectCoolingDown;  //is object cooling down?
+
 
 		//   [Title("Inventory Item", "if null then nothing is stored for this character.",TitleAlignments.Centered)]
 		//  [BoxGroup()]
@@ -52,8 +61,7 @@ namespace CL03
 
 		public Vector2 objectColliderSize;
 		public bool isInteracting_Test;    //test bool
-		public bool changeObjectCoolingDown;  //is object cooling down?
-		public float changeObjectCoolDownTime = 1.2f;
+
         #endregion
 
 
@@ -63,6 +71,7 @@ namespace CL03
 			// character doesnt hold something on initialization
 			isHoldingSomething = false;
 			isHoldingSomethingAbove = false;
+			isDroppingItemCoolDown = false;
 		}
 
 		void Start()
@@ -101,21 +110,6 @@ namespace CL03
 			objectScript = null;
 		}
 
-		/// <summary>
-		/// action: Drops Item that is active in hands
-		/// </summary>
-		public void a_DropItem(GameObject _ObjectBeingHeld)
-		{
-			//inventory.
-			//Transform tempTrans = objectCollider.transform;
-			//	objectCollider.transform.SetParent(null);
-			//objectCollider.transform.position = tempTrans.position;
-			objectScript = _ObjectBeingHeld.GetComponent<HoldableObjects>();
-			print("objectScript.GetPutDown();");
-			// objectScript.GetPutDown();
-			StartCoroutine(DroppingItemCoolDown());
-			Debug.Log("Object Dropped - Engine Side");
-		}
 
 		private void FixedUpdate()
         {
@@ -124,17 +118,22 @@ namespace CL03
 			//if selected and object held. press up or down the object being held changes position
 			if (ObjectBeingHeld != null)
 			{
-				//change position of object in hand if commanded and send change message to engine
-				if (input.vertical > .2f && !engine.isHeadBlocked) { isHoldingSomethingAbove = true; }
-				//engine.ChangeCollider(objectCollider.size,true); }
-				if (input.vertical < -.2f) { isHoldingSomethingAbove = false; }
+				PositionOfItemInHands();
 					//engine.ChangeCollider(objectCollider.size,false); }
 			}
 			HandledObjectsCheck();
 			//should this be after held? instead of pressed
 		}
 
-		void HandledObjectsCheck()
+        private void PositionOfItemInHands()
+        {
+			//change position of object in hand if commanded and send change message to engine
+			if (input.vertical > .2f && !engine.isHeadBlocked) { isHoldingSomethingAbove = true; }
+			//engine.ChangeCollider(objectCollider.size,true); }
+			if (input.vertical < -.2f) { isHoldingSomethingAbove = false; }
+		}
+
+        void HandledObjectsCheck()
 		{
 
 			//DROP OBJECT
@@ -146,22 +145,51 @@ namespace CL03
 				}
 			}
 			//SWITCH TO INVENTORY
-			if (input.changeObjectPressed && !changeObjectCoolingDown)
-			{
-				Debug.Log("Change object button pressed and change object cooling down is false.");
-			
-			if (!inSwitchItemProcess)
-					print("ChangeItem() needs to go here.");
-				//			ChangeItem();
+			if (input.changeObjectPressed )// && (InventoryItem != null || ObjectBeingHeld != null)  && !changeObjectCoolingDown)
+				{
+					Debug.Log("Change object button pressed and change object cooling down is false.");
+
+					ChangeItem();
+				}
 			}
-
-		}
-
+		
 		/// <summary>
-		/// Dropping Items cant be spammed
-		/// </summary>
-		/// <returns></returns>
-		public IEnumerator DroppingItemCoolDown()
+        /// as long as an item is held a change item method will run when called.
+        /// </summary>
+        private void ChangeItem()
+        {
+			//if there is an inventory item
+            if(InventoryItem != null)
+            {
+				if(objectScript)
+				{
+					print("object being held is storeable");
+				}
+				//if there is an object being held and an inventory item we switch them
+				if (ObjectBeingHeld.TryGetComponent<StoreableObjects>(out tempObject))
+				{
+					print("This tempObject try get Storeable");
+				}
+
+            }
+        }
+
+		public IEnumerator ChangingItemCoolDown()
+        {
+			changeObjectCoolingDown = true;
+			yield return new WaitForSeconds(changeItemCoolDownTime);
+			changeObjectCoolingDown = false;
+			Debug.Log("Can Change Items again");
+			yield break;
+        }
+
+
+
+        /// <summary>
+        /// Dropping Items cant be spammed
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator DroppingItemCoolDown()
 		{
 			isDroppingItemCoolDown = true;
 			yield return new WaitForSeconds(dropItemCoolDownTime);
@@ -172,3 +200,18 @@ namespace CL03
 
 	}
 }
+		///// <summary>
+		///// action: Drops Item that is active in hands
+		///// </summary>
+		//public void a_DropItem(GameObject _ObjectBeingHeld)
+		//{
+		//	//inventory.
+		//	//Transform tempTrans = objectCollider.transform;
+		//	//	objectCollider.transform.SetParent(null);
+		//	//objectCollider.transform.position = tempTrans.position;
+		//	objectScript = _ObjectBeingHeld.GetComponent<HoldableObjects>();
+		//	print("objectScript.GetPutDown();");
+		//	// objectScript.GetPutDown();
+		//	StartCoroutine(DroppingItemCoolDown());
+		//	Debug.Log("Object Dropped - Engine Side");
+		//}

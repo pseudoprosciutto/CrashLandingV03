@@ -30,7 +30,10 @@ namespace CL03
         protected Rigidbody2D rb;
         protected Collider2D objectCollider;
 
+        //protect set because we dont want outside changing this.
+        public bool canBeStored { get; protected set; }
         protected bool canBeHeld;
+
         protected bool justGotLetGo;
         //held properties
         protected bool _freezeRotation = false;
@@ -59,6 +62,7 @@ namespace CL03
             //made this collider find generic
             objectCollider = GetComponent<Collider2D>();
             objectMass = rb.mass;
+            canBeStored = false;
         }
         public virtual void Update()
         {

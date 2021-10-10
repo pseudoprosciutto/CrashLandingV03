@@ -91,10 +91,6 @@ namespace CL03
 			//	yield return null;
 			//}
 
-
-
-
-
 		#region Interacting Behaviors, Item control
 
 		/// <summary>
@@ -223,7 +219,7 @@ namespace CL03
 		void BreakOverHead(HoldableObjects holdable)
 		{
 			print("Break over Head method   : holdable.GetPutDown();");
-			//holdable.GetPutDown();
+			holdable.GetPutDown();
 		}
 
 		#endregion
