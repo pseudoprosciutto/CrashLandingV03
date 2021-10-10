@@ -20,12 +20,12 @@ namespace CL03
 	
 		[GUIColor(0.3f, 0.3f, 0.8f, .2f)]
 		[PreviewField]
-		public GameObject objectBeingHeld; // { get; set { if(isHoldingSomething)return } }
+		public GameObject objectBeingHeld=null; // { get; set { if(isHoldingSomething)return } }
 
 		[Title("Inventory Item", "if null then nothing is stored for this character.",TitleAlignments.Centered)]
 		[GUIColor(0.3f, 0.8f, 0.8f, .2f)]
 		[PreviewField]
-		public GameObject inventoryItem;
+		public GameObject inventoryItem = null;
 
 		[Required]
 		[ChildGameObjectsOnly]
@@ -89,7 +89,7 @@ namespace CL03
         /// <param name="Item"></param>
         public void PickUpItem(GameObject Item)
         {
-			print("inventory registers being picked up");
+			
 			isHoldingSomething = true;
 			objectBeingHeld = Item;			
 			objectScript = Item.GetComponent<HoldableObjects>();
@@ -105,7 +105,6 @@ namespace CL03
 			StartCoroutine(DroppingItemCoolDown());
 			isHoldingSomethingAbove = false;
 			isHoldingSomething = false;
-			Item = null;
 			objectBeingHeld = null;
 			objectCollider = null;
 			objectScript.GetPutDown();
@@ -147,7 +146,7 @@ namespace CL03
 				}
 			}
 			//SWITCH TO INVENTORY
-			if (input.changeObjectPressed )// && (InventoryItem != null || ObjectBeingHeld != null)  && !changeObjectCoolingDown)
+			if (input.changeObjectPressed  && (inventoryItem != null || objectBeingHeld != null)  && !changeObjectCoolingDown)
 				{
 				
 					Debug.Log("Change object button pressed and change object cooling down is false. Inventory Swap()");
@@ -161,17 +160,10 @@ namespace CL03
         /// </summary>
         private void InventorySwap()
         {
-			//if there is an inventory item we force it out of inventoy and put whatever is in hands in its place.
-            if(inventoryItem != null)
-            {
-				tempObject = inventoryItem;
-				//we need to store the inventory item and put the item in hands there.
-
-				//object can be stored so must be storeable or a forced store holdable.
-				if(objectBeingHeld == null || objectScript.canBeStored)
+			//if held is null but inventory has an item, or object held exists then a swap can happen. this should cover all cases
+				if((objectBeingHeld == null && inventoryItem !=null) || objectScript.canBeStored)
 				{
-					print("object being held is storeable or doesnt exist");
-					Store(objectBeingHeld);
+					SwapItems(objectBeingHeld);
 				}
 				//if there is an object being held and an inventory item we switch them
 				//if (objectBeingHeld.TryGetComponent<StoreableObjects>(out tempObject))
@@ -179,19 +171,27 @@ namespace CL03
 					//print("This tempObject try get Storeable");
 				//}
 
-            }
-            //There is no inventory item so we put whatever is in our hands there provided it can Be Stored.
-            else { }
+                        //There is no inventory item so we put whatever is in our hands there provided it can Be Stored.
+            else{ print("Didn't Swap"); }
         }
 
-        void Store(GameObject storeableObject)
+        void SwapItems(GameObject storeableObject)
         {
-			tempObject = storeableObject;
-			
-			objectBeingHeld = inventoryItem;
+			if (inventoryItem != null) tempObject = inventoryItem;
+			else tempObject = null;
+			//tell objects to store state
+			if (objectScript != null) objectScript.StoreInInventory();
+			//put inventory item in hands
+			if (storeableObject != null) inventoryItem = storeableObject;
+			else inventoryItem = null;
+
+			objectBeingHeld = tempObject;
 			//get script if not its null
-			objectScript = objectBeingHeld?.GetComponent<HoldableObjects>();
+			objectBeingHeld.TryGetComponent<HoldableObjects>(out objectScript);
+			//tell object to take out store state
+			if (objectScript != null) objectScript.TakeOutOfInventory(); ;
 			inventoryItem = tempObject;
+			print("Swap Complete");
 			
         }
 

@@ -191,6 +191,7 @@ namespace CL03
         public virtual void GetPickedUp(CharacterEngine character)
         {
             isHeld = true;
+            isInHands = true;
             rb.freezeRotation = true;
             rb.bodyType = RigidbodyType2D.Kinematic;
             HeldBy = character.gameObject;
@@ -211,6 +212,7 @@ namespace CL03
 
             //put down object infront of character for now regardless of where
             isHeld = false;
+            isInHands = false;
             HeldBy = null;
             Transform temp = HeldBy_Inventory.holdPoint_Front.transform;
             rb.freezeRotation = false;
@@ -231,6 +233,7 @@ namespace CL03
             HeldBy_Engine = null;
             isInteractedWith = false;
             isHeld = false;
+            isInHands = false;
             canBeHeld = true;
 
             //stop horizontal move to drop down.
