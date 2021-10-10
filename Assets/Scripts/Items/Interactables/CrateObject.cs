@@ -33,6 +33,7 @@ namespace CL03
             CanBeHeld_On();
             rb.mass = 6;
             objectMass = rb.mass;
+            canBeStored = false;
         }
         private void OnEnable()
         {
@@ -48,7 +49,7 @@ namespace CL03
             CanBeHeld_Off();
         }
         //Update State
-        private void Update()
+        public override void IsHeldPositionCheck()
         {
             //Being held
             if (isHeld)

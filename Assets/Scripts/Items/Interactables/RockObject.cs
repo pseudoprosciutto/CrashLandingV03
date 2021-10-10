@@ -6,8 +6,8 @@ using UnityEngine;
 
 namespace CL03
 {
-    public class RockObject : StoreableObjects
-    {
+    public class RockObject : HoldableObjects
+    { 
 
     }
 }

@@ -31,6 +31,7 @@ namespace CL03
         InputHandler input;
         // [SerializeField]  public GameObject[] CharIcons;
         // [SerializeField]    GameObject CharSelectCursor;
+
         private void Awake()
         {
             input = GetComponent<InputHandler>();
@@ -44,23 +45,13 @@ namespace CL03
                 else
                     _charControl.GetComponent<CharacterEngine>().enabled = false;
 
-                //GameObject Icon = ShipIcons[i].gameObject;
+                //GameObject Icon = CharIcons[i].gameObject;
             }
             selectedCharNumber = 0; //this will adjust accordingly
                                     // CharSelectCursor = CharIcons[selectedCharNumber];
                                     // CharIcons[selectedCharNumber].SendMessage("showSelector");
+        }
 
-        }
-        private void OnEnable()
-        {
-            canLookForInput = true;
-
-        }
-        private void OnDisable()
-        {
-            canLookForInput = false;
-        }
-        // Start is called before the first frame update
         void Start()
         {
             currentChar = Characters[0]; //first loaded
@@ -76,6 +67,18 @@ namespace CL03
 
             LookForInputToChangeChar(); //specific input to find ship
         }
+
+        private void OnEnable()
+        {
+            canLookForInput = true;
+
+        }
+        private void OnDisable()
+        {
+            canLookForInput = false;
+        }
+        // Start is called before the first frame update
+
 
         #region Character Change Input
         /** A TEST USING EVENT CALLS

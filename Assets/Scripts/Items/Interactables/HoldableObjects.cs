@@ -20,6 +20,13 @@ namespace CL03
     public class HoldableObjects : InteractableObjects
     {
 
+        //held properties
+        [SerializeField]
+        [ReadOnly]
+        protected bool canBeHeld;
+       
+        public bool canBeStored = false; //default false
+
         [SerializeField]
         [ReadOnly]
         protected bool isHeld;
@@ -27,30 +34,38 @@ namespace CL03
         protected GameObject HeldBy;
         protected CharacterEngine HeldBy_Engine;
         protected InventorySystem HeldBy_Inventory;
+        [Space]
+        protected bool isThrowable;
+        //inventory propertes
+        [SerializeField]
+        [ReadOnly]
+        public bool isInHands { get; protected set; } = false; //default false
+
+        
+        [SerializeField]
+        [ReadOnly]
+        protected bool isInInventory;
+
+        [Space]
         protected Rigidbody2D rb;
         protected Collider2D objectCollider;
 
         //protect set because we dont want outside changing this.
-        public bool canBeStored { get; protected set; }
-        protected bool canBeHeld;
 
-        protected bool justGotLetGo;
-        //held properties
         protected bool _freezeRotation = false;
-
-        protected bool isOnGround;
-
-        protected bool isThrowable;
-
         public float gravity = 1f;
         public float objectMass;
+        protected bool justGotLetGo;
         public bool isStaticCoolingDown = false;
         public float staticCoolDownTime = .1f;
 
+        protected bool isOnGround;
         public bool isColliding;
         public bool isPushable;
         public bool inPushOrPullState;
         bool delayBegan = false;
+
+
 
         /// <summary>
         /// awake - called when loaded
@@ -62,14 +77,10 @@ namespace CL03
             //made this collider find generic
             objectCollider = GetComponent<Collider2D>();
             objectMass = rb.mass;
-            canBeStored = false;
-        }
-        public virtual void Update()
-        {
-            //Being held and object is found / not null
 
-          
+
         }
+        
         /// <summary>
         /// physics check
         /// </summary>
@@ -82,8 +93,9 @@ namespace CL03
 
         public virtual void IsHeldPositionCheck()
         {
-            if (isHeld && HeldBy != null)
+            if (isHeld && HeldBy != null && isInHands)
             {
+                
                 rb.mass = 1;
 
                 //make static
@@ -145,6 +157,8 @@ namespace CL03
         {
             canBeHeld = true;
         }
+
+
 
         /// <summary>
         /// Main 
@@ -234,6 +248,43 @@ namespace CL03
 
                  rb.freezeRotation = false;
             rb.isKinematic = false;
+        }
+
+        #region Inventory States
+
+        /// <summary>
+        /// Change state to store object in inventory
+        /// </summary>
+        public void StoreInInventory()
+        {
+            isInHands = false;
+            isInInventory = true;
+            this.enabled = false;
+            this.gameObject.SetActive(false);
+        }
+
+
+
+        public void TakeOutOfInventory()
+        {
+            this.gameObject.SetActive(true);
+            this.enabled = true;
+            isInHands = true;
+            isInInventory = false;
+        }
+        #endregion
+
+
+        //Interact action when crate is being held by selected character.
+        // SHOULD this be at the character engine level instead?
+        public void Throw()
+        {
+            HeldBy = null;
+            HeldBy_Engine = null;
+
+            //add force
+            Debug.Log("Throw Object.");
+            GetPutDown();
         }
 
         #region OnCollision Event
@@ -333,17 +384,6 @@ namespace CL03
             yield return new WaitForSeconds(staticCoolDownTime);
         }
 
-        //Interact action when crate is being held by selected character.
-        // SHOULD this be at the character engine level instead?
-        public void Throw()
-        {
-            //HeldBy = null;
-            //HeldBy_Engine = null;
-
-            //add force
-            Debug.Log("Throw Object.");
-            GetPutDown();
-        }
         #endregion
     }
 }

@@ -18,7 +18,7 @@ namespace CL03
     // an interactable doesnt always have to be interactable
         public bool isInteractableState {get; protected set;}
         public bool isInteractedWith { get; protected set; }
-        public bool canBeStored { get; protected set; }
+ 
 
         //to be overwritten
         public virtual void Interact(CharacterEngine character)

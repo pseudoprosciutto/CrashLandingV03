@@ -101,7 +101,7 @@ namespace CL03
 		private bool ItemsCheck()
 		{
 			// if no object held then then look around for other items in sight. We're all grabby grabby here.
-			if (inventory.ObjectBeingHeld == null)
+			if (inventory.objectBeingHeld == null)
 			{
 				//ensure flag set/ we realize nothing is being held. should be unnecessary
 				inventory.isHoldingSomething = false;
@@ -163,12 +163,12 @@ namespace CL03
 					// ^no, then:
 					//Is interact pressed while holding an object?
 
-					else if (inventory.isHoldingSomething && inventory.ObjectBeingHeld != null)
+					else if (inventory.isHoldingSomething && inventory.objectBeingHeld != null)
 					{
 						print("Get component Holdable Object > Interact(this)");
 
 						//interact with object in hands
-						inventory.ObjectBeingHeld.GetComponent<HoldableObjects>().Interact(engine);
+						inventory.objectBeingHeld.GetComponent<HoldableObjects>().Interact(engine);
 
 					}
 				}
@@ -197,14 +197,14 @@ namespace CL03
 		/// <param name="ItemInFrontToPickUp">sent as "this.gameObject" - the item to be picked up by character</param>
 		public void PickUpAndHoldItem(GameObject ItemInFrontToPickUp)
 		{
-			if (inventory.ObjectBeingHeld != null)
+			if (inventory.objectBeingHeld != null)
 			{
-				Debug.Log("Engine Error PickUpHoldItem: Item being held: " + inventory.ObjectBeingHeld.ToString());
+				Debug.Log("Engine Error PickUpHoldItem: Item being held: " + inventory.objectBeingHeld.ToString());
 				return; //should not be allowed to finish 
 			}
-			inventory.ObjectBeingHeld = ItemInFrontToPickUp;
-			objectCollider = inventory.ObjectBeingHeld.GetComponent<Collider2D>();
-			objectScript = inventory.ObjectBeingHeld.GetComponent<HoldableObjects>();
+			inventory.objectBeingHeld = ItemInFrontToPickUp;
+			objectCollider = inventory.objectBeingHeld.GetComponent<Collider2D>();
+			objectScript = inventory.objectBeingHeld.GetComponent<HoldableObjects>();
 			inventory.isHoldingSomething = true;
 			WithInArmsReach = null;
 

@@ -14,16 +14,34 @@ namespace CL03
     public class InventorySystem : MonoBehaviour
     {
         CharacterEngine engine;
-        GameObject objectStored; //container for object stored in inventory
-        public GameObject objectInHand; //container for object picked up and held in hand
 		BoxCollider2D bodyCollider;
 		InputHandler input;
+
+	
+		[GUIColor(0.3f, 0.3f, 0.8f, .2f)]
+		[PreviewField]
+		public GameObject objectBeingHeld; // { get; set { if(isHoldingSomething)return } }
+
+		[Title("Inventory Item", "if null then nothing is stored for this character.",TitleAlignments.Centered)]
+		[GUIColor(0.3f, 0.8f, 0.8f, .2f)]
+		[PreviewField]
+		public GameObject inventoryItem;
+
+		[Required]
+		[ChildGameObjectsOnly]
+		public Transform holdPoint_Front;  //the front location for generic object being held (maybe will need to change pivot point of object depending on sizes)
+		[Required]
+		[ChildGameObjectsOnly]
+		public Transform holdPoint_Above;  //the above location for generic object being held
+
 
 		//maybe we should store inventory items in an array. 
 		HoldableObjects[] possessions;
 
-        StoreableObjects tempObject; //container to hold temporary storeable object
-		StoreableObjects storeableInHand;
+        GameObject tempObject; //container to hold temporary "storeable" object
+		GameObject tempObject2; //container to hold temporary "storeable" object
+		HoldableObjects tempObject_Script; // container to access holdable object script
+		HoldableObjects storeableInHand;
 
 		#region Interactable Object Properties
 
@@ -35,22 +53,6 @@ namespace CL03
 		public float changeItemCoolDownTime = 1.2f;
 		public bool changeObjectCoolingDown;  //is object cooling down?
 
-
-		//   [Title("Inventory Item", "if null then nothing is stored for this character.",TitleAlignments.Centered)]
-		//  [BoxGroup()]
-		[GUIColor(0.3f, 0.8f, 0.8f, .2f)]
-		[PreviewField]
-		public GameObject InventoryItem;
-
-		[GUIColor(0.3f, 0.3f, 0.8f, .2f)]
-		[PreviewField]
-		public GameObject ObjectBeingHeld; // { get; set { if(isHoldingSomething)return } }
-		[Required]
-		[ChildGameObjectsOnly]
-		public Transform holdPoint_Front;  //the front location for generic object being held (maybe will need to change pivot point of object depending on sizes)
-		[Required]
-		[ChildGameObjectsOnly]
-		public Transform holdPoint_Above;  //the above location for generic object being held
 
 		protected Transform activeHoldPosition;
 
@@ -89,7 +91,7 @@ namespace CL03
         {
 			print("inventory registers being picked up");
 			isHoldingSomething = true;
-			ObjectBeingHeld = Item;			
+			objectBeingHeld = Item;			
 			objectScript = Item.GetComponent<HoldableObjects>();
 			objectCollider = Item.GetComponent<BoxCollider2D>();
 
@@ -103,8 +105,8 @@ namespace CL03
 			StartCoroutine(DroppingItemCoolDown());
 			isHoldingSomethingAbove = false;
 			isHoldingSomething = false;
-			objectInHand = null;
-			ObjectBeingHeld = null;
+			Item = null;
+			objectBeingHeld = null;
 			objectCollider = null;
 			objectScript.GetPutDown();
 			objectScript = null;
@@ -116,7 +118,7 @@ namespace CL03
 			//HandledObjectsCheck();
 			//ROTATE OBJECTS IN POSSESSION
 			//if selected and object held. press up or down the object being held changes position
-			if (ObjectBeingHeld != null)
+			if (objectBeingHeld != null)
 			{
 				PositionOfItemInHands();
 					//engine.ChangeCollider(objectCollider.size,false); }
@@ -139,39 +141,58 @@ namespace CL03
 			//DROP OBJECT
 			if (input.dropObjectPressed)
 			{
-				if (ObjectBeingHeld)
+				if (objectBeingHeld)
 				{
-					DropItem(ObjectBeingHeld);
+					DropItem(objectBeingHeld);
 				}
 			}
 			//SWITCH TO INVENTORY
 			if (input.changeObjectPressed )// && (InventoryItem != null || ObjectBeingHeld != null)  && !changeObjectCoolingDown)
 				{
-					Debug.Log("Change object button pressed and change object cooling down is false.");
+				
+					Debug.Log("Change object button pressed and change object cooling down is false. Inventory Swap()");
 
-					ChangeItem();
+					InventorySwap();
 				}
 			}
-		
+/*******/
 		/// <summary>
         /// as long as an item is held a change item method will run when called.
         /// </summary>
-        private void ChangeItem()
+        private void InventorySwap()
         {
-			//if there is an inventory item
-            if(InventoryItem != null)
+			//if there is an inventory item we force it out of inventoy and put whatever is in hands in its place.
+            if(inventoryItem != null)
             {
-				if(objectScript)
+				tempObject = inventoryItem;
+				//we need to store the inventory item and put the item in hands there.
+
+				//object can be stored so must be storeable or a forced store holdable.
+				if(objectBeingHeld == null || objectScript.canBeStored)
 				{
-					print("object being held is storeable");
+					print("object being held is storeable or doesnt exist");
+					Store(objectBeingHeld);
 				}
 				//if there is an object being held and an inventory item we switch them
-				if (ObjectBeingHeld.TryGetComponent<StoreableObjects>(out tempObject))
-				{
-					print("This tempObject try get Storeable");
-				}
+				//if (objectBeingHeld.TryGetComponent<StoreableObjects>(out tempObject))
+				//{
+					//print("This tempObject try get Storeable");
+				//}
 
             }
+            //There is no inventory item so we put whatever is in our hands there provided it can Be Stored.
+            else { }
+        }
+
+        void Store(GameObject storeableObject)
+        {
+			tempObject = storeableObject;
+			
+			objectBeingHeld = inventoryItem;
+			//get script if not its null
+			objectScript = objectBeingHeld?.GetComponent<HoldableObjects>();
+			inventoryItem = tempObject;
+			
         }
 
 		public IEnumerator ChangingItemCoolDown()

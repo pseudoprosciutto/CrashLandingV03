@@ -256,14 +256,14 @@ namespace CL03
 		#region Character Update Loops; Fixed update
 		/// <summary>
 		/// Fixed update Execution Order: 
-		/// -objectBeingHeld? 
-		///     {no:} look for and identify interactables in line of sight 
-		///     {yes:} keep its position as if held || 
 		/// -PhysicsCheck() - process and check engine states. 
 		/// -isSelected? 
 		///    {yes:} GroundMovement(); MidAirMovement() || 
-		///    {no:} 
-		/// -end 
+		///    {no but isOnGround:} EnterStaticState();
+        ///    else we let the character fall until it can't
+        ///    TO BE IMPLEMENTED
+        ///    {else:} drop character below map, character respawns somewhere it does have a ground to land on
+        ///    (safety clause will eventually be added here) 
 		/// </summary>
 		void FixedUpdate() {
 
@@ -387,6 +387,7 @@ namespace CL03
         /// </summary>
         void CharacterHeadCheck() {
 			isHeadBlocked = false;
+/***********/
 		//	if (inventory.isHoldingSomethingAbove)
 		//	{
 		//		ObjectAboveHeadCheck();
@@ -421,7 +422,7 @@ namespace CL03
 				Debug.Log("object hit head test");
 				//something bonks the head, it will no longer get stuck there because we are flat headed and smooth brained.
 				//if (!headCheck.collider.CompareTag("Environment") && !headCheck.collider.CompareTag("Surface") && !headCheck.collider.Equals(ObjectBeingHeld))
-				if (!headCheck.collider.CompareTag("Surface") && !headCheck.collider.Equals(inventory.ObjectBeingHeld))
+				if (!headCheck.collider.CompareTag("Surface") && !headCheck.collider.Equals(inventory.objectBeingHeld))
 				{
 					//slight backwards force added to prevent objects from staying on head. things should just roll off
 					Rigidbody2D rb = headCheck.collider.GetComponent<Rigidbody2D>();
@@ -468,17 +469,17 @@ namespace CL03
 			  //  && ledgeCheck && wallCheck && !blockedCheck
 			  
 			{
-				//we have a ledge grab. Record the current position...
+				//we have a ledge grab. Record the current position
 				Vector3 pos = transform.position;
-				//move the distance to the wall (minus a small amount)...
+				//move the distance to the wall (minus a small amount)
 				pos.x += (wallCheck.distance - smallAmount - hangingDistanceFromLedge) * direction;
-				//move the player down to grab onto the ledge...
+				//move the player down to grab onto the ledge
 				pos.y -= ledgeCheck.distance;
-				//apply this position to the platform...
+				//apply this position to the platform
 				transform.position = pos;
-				//set the rigidbody to static...
+				//rigidbody to static
 				rigidBody.bodyType = RigidbodyType2D.Static;
-				//finally, set isHanging to true
+				//set isHanging to true
 				isHanging = true;
 			}
 		}
@@ -557,7 +558,6 @@ namespace CL03
 				//remove momentum by setting a finite position (dont know if this actually works)
 				transform.position = new Vector3(transform.position.x, transform.position.y, 2f);
 			}
-
 		}
 
 		/// <summary>
@@ -569,7 +569,6 @@ namespace CL03
 			yield return new WaitForSeconds(.25f);
 			rigidBody.velocity = new Vector2(0, 0);
 			yield return new WaitForSeconds(.25f);
-
 			yield break;
 		}
 		#endregion
@@ -835,27 +834,7 @@ namespace CL03
 			return hit;
 		}
 		#endregion
-		/*
-		public void ChangeCollider() {
-			bodyCollider.size = colliderOrigStandSize;
-			colliderStandSize = colliderOrigStandSize;
-			colliderCrouchSize = colliderOrigCrouchSize;
-		}
-		public void ChangeCollider(Vector2 addedCollider, bool aboveHead)
-		{
-		//	colliderTempStandSize = bodyCollider.size;
-		//	colliderTempCrouchSize = colliderCrouchSize;
-			if (aboveHead) {
-				bodyCollider.size = new Vector2(colliderOrigStandSize.x, colliderStandSize.y + addedCollider.y + .1f);
-				colliderStandSize = new Vector2(colliderOrigStandSize.x, colliderStandSize.y + addedCollider.y + .1f);
-			}
-            else
-            {
-				bodyCollider.size = new Vector2(colliderStandSize.x + addedCollider.x + .1f, colliderOrigStandSize.y );
-				colliderStandSize = new Vector2(colliderStandSize.x + addedCollider.x + .1f, colliderOrigStandSize.y );
-			}
-		}
-		*/
+
 	}
 	#endregion
 }
