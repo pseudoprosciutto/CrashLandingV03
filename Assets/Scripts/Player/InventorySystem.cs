@@ -36,7 +36,8 @@ namespace CL03
 
 
 		//maybe we should store inventory items in an array. 
-		HoldableObjects[] possessions;
+		public HoldableObjects[] Possessions;
+		int possessionsCursor;
 
         GameObject tempObject; //container to hold temporary "storeable" object
 		GameObject tempObject2; //container to hold temporary "storeable" object
@@ -74,7 +75,9 @@ namespace CL03
 			isHoldingSomething = false;
 			isHoldingSomethingAbove = false;
 			isDroppingItemCoolDown = false;
-		}
+            Possessions = new HoldableObjects[2];
+			possessionsCursor = 0; 
+        }
 
 		void Start()
         {
@@ -90,7 +93,9 @@ namespace CL03
         public void PickUpItem(GameObject Item)
         {
 			
+			//Possessions[possesionsCursor] = Item;
 			isHoldingSomething = true;
+			
 			objectBeingHeld = Item;			
 			objectScript = Item.GetComponent<HoldableObjects>();
 			objectCollider = Item.GetComponent<BoxCollider2D>();
@@ -101,7 +106,7 @@ namespace CL03
 		{//null item sent to drop item should be an bug
 			if (Item == null) { print("null item drop sent to Inventory.DropItem(GameObject Item)"); return; }
 			if (isDroppingItemCoolDown) return;
-			
+			//Possessions[possesionsCursor] = Null;
 			StartCoroutine(DroppingItemCoolDown());
 			isHoldingSomethingAbove = false;
 			isHoldingSomething = false;
@@ -163,7 +168,7 @@ namespace CL03
 			//if held is null but inventory has an item, or object held exists then a swap can happen. this should cover all cases
 				if((objectBeingHeld == null && inventoryItem !=null) || objectScript.canBeStored)
 				{
-					SwapItems(objectBeingHeld);
+				SwapItems();
 				}
 				//if there is an object being held and an inventory item we switch them
 				//if (objectBeingHeld.TryGetComponent<StoreableObjects>(out tempObject))
@@ -175,19 +180,22 @@ namespace CL03
             else{ print("Didn't Swap"); }
         }
 
-        void SwapItems(GameObject storeableObject)
+        void SwapItems()
         {
 			if (inventoryItem != null) tempObject = inventoryItem;
 			else tempObject = null;
 			//tell objects to store state
+			objectScript = objectBeingHeld.GetComponent<HoldableObjects>();
 			if (objectScript != null) objectScript.StoreInInventory();
 			//put inventory item in hands
-			if (storeableObject != null) inventoryItem = storeableObject;
+			if (objectBeingHeld != null) inventoryItem = objectBeingHeld;
 			else inventoryItem = null;
-
+			possessionsCursor++;
+			if(possessionsCursor==2) possessionsCursor =0;
 			objectBeingHeld = tempObject;
 			//get script if not its null
-			objectBeingHeld.TryGetComponent<HoldableObjects>(out objectScript);
+			if(objectBeingHeld !=null)
+			objectScript= objectBeingHeld.GetComponent<HoldableObjects>();
 			//tell object to take out store state
 			if (objectScript != null) objectScript.TakeOutOfInventory(); ;
 			inventoryItem = tempObject;

@@ -246,10 +246,10 @@ namespace CL03
             //remove all constrains and let object fall as it might
             rb.constraints = RigidbodyConstraints2D.None;
 
-           
+
             rb.mass = objectMass;
 
-                 rb.freezeRotation = false;
+            rb.freezeRotation = false;
             rb.isKinematic = false;
         }
 
@@ -262,8 +262,8 @@ namespace CL03
         {
             isInHands = false;
             isInInventory = true;
-            this.enabled = false;
             this.gameObject.SetActive(false);
+            this.enabled = false;
         }
 
 
