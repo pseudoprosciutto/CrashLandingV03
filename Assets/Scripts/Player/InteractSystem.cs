@@ -74,22 +74,14 @@ namespace CL03
 		private void FixedUpdate()
 		{
 			//if items check detects items, then look for keyboard interaction 
-			if (ItemsCheck()) InteractCheck();
-
+			if (ItemsCheck())
+			{
+				if (engine.isSelected && !interactCoolingDown && input.interactPressed)
+				{
+					InteractCheck();
+				}
+			}
 		}
-
-			///// <summary>
-			///// Interact cool down coroutine
-			///// </summary>
-			///// <returns>jumpCollingDown = false</returns>
-			//IEnumerator InteractCoolingDown()
-			//{
-			//	interactCoolingDown = true;
-			//	yield return new WaitForSeconds(interactCoolDownTime);
-			//	interactCoolingDown = false;
-			//	Debug.Log("interact Cooldown passed");
-			//	yield return null;
-			//}
 
 		#region Interacting Behaviors, Item control
 
@@ -138,41 +130,34 @@ namespace CL03
 			return false;
 		}
 
-		//Interact:
-		//here we go through all the possibilities of interaction provided the character is selected.
+
+		
+		/// <summary>
+        /// Interaction:
+		/// We check to see how we are going to interact with object.
+        /// </summary>
 		void InteractCheck()
 		{
-			//interact not cooling down
-			//double checking character is selected to prevent unneeded processing (probably redundant)
-			if (engine.isSelected && !interactCoolingDown)
+			//Begin cooldown
+			StartCoroutine(InteractCoolingDown());
+
+			if (inventory.isHoldingSomething && inventory.objectBeingHeld != null)
 			{
-				//interact pressed
-				if (input.interactPressed)
-				{
-					//Begin cooldown
-					StartCoroutine(InteractCoolingDown());
+				StartCoroutine(InteractCoolingDown());
+				print("interacting with whats in hands, command side.");
 
-					//object within arms reach while not holding something?
-					if (WithInArmsReach != null && !inventory.isHoldingSomething)
-					{
-						print("Empty Hands see an object " + WithInArmsReach.ToString() + " . That object has been interacted with");
-						//look for the interactable object from the game object infront of character and sends this instance as a parameter when invoking interact.
-						WithInArmsReach.GetComponent<InteractableObjects>().Interact(engine);
-
-					}
-					// ^no, then:
-					//Is interact pressed while holding an object?
-
-					else if (inventory.isHoldingSomething && inventory.objectBeingHeld != null)
-					{
-						print("Get component Holdable Object > Interact(this)");
-
-						//interact with object in hands
-						inventory.objectBeingHeld.GetComponent<HoldableObjects>().Interact(engine);
-
-					}
-				}
+				//interact with object in hands
+				inventory.objectBeingHeld.GetComponent<HoldableObjects>().Interact(engine);
 			}
+			//Free hands to interact with something not being held.
+			else if (WithInArmsReach != null && !inventory.isHoldingSomething)
+			{
+				StartCoroutine(InteractCoolingDown());
+				WithInArmsReach.GetComponent<InteractableObjects>().Interact(engine);
+			}
+			
+			//Hands full interact with whats in hands.
+            else { print("there is an interaction going on but nothing is in hands or seen to interact with"); }
 		}
 
         /// <summary>
@@ -257,3 +242,16 @@ namespace CL03
 		}
 	}
 }
+
+			///// <summary>
+			///// Interact cool down coroutine
+			///// </summary>
+			///// <returns>jumpCollingDown = false</returns>
+			//IEnumerator InteractCoolingDown()
+			//{
+			//	interactCoolingDown = true;
+			//	yield return new WaitForSeconds(interactCoolDownTime);
+			//	interactCoolingDown = false;
+			//	Debug.Log("interact Cooldown passed");
+			//	yield return null;
+			//}

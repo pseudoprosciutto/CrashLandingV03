@@ -12,7 +12,7 @@ GameObject:
   m_Layer: 7
   m_Name: HoldPointFront
   m_TagString: Untagged
-  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -42,7 +42,7 @@ GameObject:
   m_Layer: 7
   m_Name: HoldPointAbove
   m_TagString: Untagged
-  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -73,9 +73,11 @@ GameObject:
   - component: {fileID: 7203530896771738680}
   - component: {fileID: 7203530896771738681}
   - component: {fileID: 7203530896771738682}
+  - component: {fileID: 317936104}
+  - component: {fileID: 317936105}
   m_Layer: 7
   m_Name: BLUE
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -87,7 +89,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7203530896771738685}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.65, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -206,6 +208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da39a2b1487294ddf879c1c608285e74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bodyCollider: {fileID: 0}
   isSelected: 0
   needsReviving: 0
   isOnGround: 0
@@ -215,8 +218,7 @@ MonoBehaviour:
   isCrouching: 0
   isHeadBlocked: 0
   isHanging: 0
-  isHoldingSomething: 0
-  isHoldingSomethingAbove: 0
+  objectAboveHeadHit: 0
   hitOverHeadLeft: 0
   hitOverHeadRight: 0
   canHang: 1
@@ -235,43 +237,80 @@ MonoBehaviour:
   jumpHoldDuration: 0.1
   groundLayer:
     serializedVersion: 2
-    m_Bits: 0
-  itemsLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  staticInteractablesLayer:
+    m_Bits: 64
+  walkableObject:
     serializedVersion: 2
     m_Bits: 0
   crateLayer:
     serializedVersion: 2
-    m_Bits: 0
-  walkableObject:
+    m_Bits: 512
+  itemsLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  staticInteractablesLayer:
     serializedVersion: 2
     m_Bits: 0
-  inSwitchItemProcess: 0
-  switchItemCoolDownTime: 1.7
-  InventoryItem: {fileID: 0}
-  ObjectBeingHeld: {fileID: 0}
-  holdPoint_Front: {fileID: 7203530896565526311}
-  holdPoint_Above: {fileID: 7203530896745214612}
-  WithInArmsReach: {fileID: 0}
-  interactCoolDownTime: 0.5
-  objectColliderSize: {x: 0, y: 0}
-  isInteracting_Test: 0
-  changeObjectCoolingDown: 0
-  changeObjectCoolDownTime: 1.2
+  isObjectColliding: 0
   drawDebugRaycasts: 1
   headOffset: 0.35
   footOffset: 0.25
   eyeHeight: 1.5
-  grabHeightLow: 0.5
-  grabHeightHigh: 1
+  objectJumpCheckHeight: 2.7
+  objectAboveHeadForwardOffset: 1
+  objectAboveHeadUpwardOffset: 1
   reachOffset: 0.7
   headClearance: 0.5
   breakOverHeadDistance: 0.1
   groundDistance: 0.1
   grabDistance: 0.4
-  reachDistance: 0.9
   hangingDistanceFromLedge: 0.1
   headBounce: 0.2
   direction: 1
+--- !u!114 &317936104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7203530896771738685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb22bc30d254e46d3bdf301c98b41280, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drawDebugRaycasts: 1
+  WithInArmsReach: {fileID: 0}
+  interactCoolDownTime: 0.5
+  objectColliderSize: {x: 0, y: 0}
+  isInteracting_Test: 0
+  reachDistance: 0.9
+  grabHeightLow: 0.5
+  grabHeightHigh: 1
+--- !u!114 &317936105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7203530896771738685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2742322d5edb3423f9e3a1ae4a44e093, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectBeingHeld: {fileID: 0}
+  inventoryItem: {fileID: 0}
+  holdPoint_Front: {fileID: 7203530896565526311}
+  holdPoint_Above: {fileID: 7203530896745214612}
+  Possessions: []
+  dropItemCoolDownTime: 1
+  isDroppingItemCoolDown: 0
+  isHoldingSomething: 0
+  isHoldingSomethingAbove: 0
+  changeItemCoolDownTime: 1.2
+  changeObjectCoolingDown: 0
+  interactCoolDownTime: 0.5
+  objectCollider: {fileID: 0}
+  objectScript: {fileID: 0}
+  objectColliderSize: {x: 0, y: 0}
+  isInteracting_Test: 0

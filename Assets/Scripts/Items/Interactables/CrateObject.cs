@@ -25,7 +25,7 @@ namespace CL03
         #region Awake, Enable, Disable functions
         public override void Awake()
         {
-            inPushOrPullState = false;
+//            inPushOrPullState = false;
             objectCollider = GetComponent<Collider2D>();
             isThrowable = true;
             boxCollider = GetComponent<BoxCollider2D>();

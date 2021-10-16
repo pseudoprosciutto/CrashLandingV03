@@ -191,37 +191,22 @@ namespace CL03
 		#region Initialization; Awake() and Start()
 		private void Awake()
 		{
-			//*tests:*
-			//isInteracting_Test = false;
-			//********
 
 			canHang = true;
 
 			objectAboveHeadHit = false;
-			//// character doesnt hold something on initialization
-			//isHoldingSomething = false;
-			//isHoldingSomethingAbove = false;
 
 			//place character in correct z plane
 			transform.position = new Vector3(transform.position.x, transform.position.y, 2f);
 
 			//objectCollider.enabled = false;
 
-			//the layer masks categorize objects which how to character to interact
 
-			//walkables meaning what the character can walk on.
+			//walkables meaning what layer masks the character can walk on.
 			walkables = groundLayer;
 			walkables |= walkableObject;
 			walkables |= crateLayer;
-			/**
-			//grabables (meaning can be held)
-			grabables = crateLayer;
-			grabables |= itemsLayer;
-
-			//items the interact key works with
-			interactablesLayer = grabables;
-			interactablesLayer |= staticInteractablesLayer; //interactables in environment
-			*/
+	
 		}
 
 		void Start()
@@ -231,9 +216,6 @@ namespace CL03
 			rigidBody = GetComponent<Rigidbody2D>();
 			bodyCollider = GetComponent<BoxCollider2D>();
 			inventory = GetComponent<InventorySystem>();
-
-			//assuming we are deselected to start
-			//EnterStaticState();
 
 			//Record the original x scale of the player
 			originalXScale = transform.localScale.x;
@@ -339,15 +321,13 @@ namespace CL03
 			CharacterStandingOnSurfaceCheck();
 			CharacterHeadCheck();
 
-
+			//if hands are empty than we can attempt a wallgrab check.
 			if (!inventory.isHoldingSomething) //ObjectBeingHeld)
-			{//attempt a wallgrab because hands are empty
+			{
 				WallGrabCheck();
 			}
             else
 			{
-				colliderItem = inventory.objectCollider;
-				
 			}
 		}
 
@@ -367,6 +347,7 @@ namespace CL03
 				isOnGround = true;
 			//isOnPlatform = true;
 		}
+
 		/// <summary>
         /// Check around object above head
         /// </summary>
@@ -450,9 +431,7 @@ namespace CL03
 
 			//Cast three rays to look for a wall grab
 			RaycastHit2D blockedCheck = Raycast(new Vector2(footOffset * direction, playerHeight), grabDir, grabDistance);
-
 			RaycastHit2D ledgeCheck = Raycast(new Vector2(reachOffset * direction, playerHeight), Vector2.down, grabDistance);
-
 			RaycastHit2D wallCheck = Raycast(new Vector2(footOffset * direction, eyeHeight), grabDir, grabDistance);
 
 			//HANGING:
@@ -517,6 +496,7 @@ namespace CL03
 			//If the player is crouching, reduce the velocity
 			if (isCrouching)
 				xVelocity /= crouchSpeedDivisor;
+
 			//if object above head hit then we dont move
 			if (!objectAboveHeadHit && !isObjectColliding)
 				//Apply the desired velocity othewise

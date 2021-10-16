@@ -22,7 +22,6 @@ namespace CL03
 
         //held properties
         [SerializeField]
-        [ReadOnly]
         protected bool canBeHeld;
        
         public bool canBeStored = false; //default false
@@ -30,12 +29,16 @@ namespace CL03
         [SerializeField]
         [ReadOnly]
         protected bool isHeld;
+
         [SerializeField]
-        protected GameObject HeldBy;
-        protected CharacterEngine HeldBy_Engine;
-        protected InventorySystem HeldBy_Inventory;
+        protected GameObject HeldBy; //who is holding this object?
+
+        protected CharacterEngine HeldBy_Engine; //engine of object being held
+        protected InventorySystem HeldBy_Inventory; //inventory of object being held.
+
         [Space]
         protected bool isThrowable;
+
         //inventory propertes
         [SerializeField]
         [ReadOnly]
@@ -52,17 +55,19 @@ namespace CL03
 
         //protect set because we dont want outside changing this.
 
-        protected bool _freezeRotation = false;
+        protected bool _freezeRotation = false; //when held object must be still.
+
         public float gravity = 1f;
         public float objectMass;
-        protected bool justGotLetGo;
+
         public bool isStaticCoolingDown = false;
         public float staticCoolDownTime = .1f;
 
-        protected bool isOnGround;
+        protected bool isOnGround; //where is this object?
+
         public bool isColliding;
-        public bool isPushable;
-        public bool inPushOrPullState;
+        //public bool isPushable;
+        //public bool inPushOrPullState;
         bool delayBegan = false;
 
 
@@ -74,6 +79,7 @@ namespace CL03
         {
             //realized this worked before initializeng this here but just in case...
             rb = GetComponent<Rigidbody2D>();
+
             //made this collider find generic
             objectCollider = GetComponent<Collider2D>();
             objectMass = rb.mass;
@@ -91,32 +97,19 @@ namespace CL03
             
         }
 
+        /// <summary>
+        /// Holdable items can be held above head or below.
+        /// </summary>
         public virtual void IsHeldPositionCheck()
         {
             if (isHeld && HeldBy != null && isInHands)
             {
                 
-                rb.mass = 1;
-
-                //make static
-
-                //ensure it is kepts in position
-                //				ObjectBeingHeld.transform.position = activeHoldPosition.position; //for when I can say elsewhere what is activeHoldPosition
-
                 if (HeldBy_Inventory.isHoldingSomethingAbove) //held above so stay above
                     this.gameObject.transform.position = HeldBy_Inventory.holdPoint_Above.position;
 
                 else if (!HeldBy_Inventory.isHoldingSomethingAbove) //held front so stay front
                     this.gameObject.transform.position = HeldBy_Inventory.holdPoint_Front.position;
-                /** creates overflow error
-                //Cast the ray to check above the player's head
-                RaycastHit2D headCheck = Raycast(new Vector2(0f, boxCollider.size.y), Vector2.up, .2f);
-
-                //If that ray hits, the player's head is blocked
-                if (headCheck.collider.gameObject.CompareTag("Surface"))
-                {
-                    HeldBy_Engine.isHeadBlocked = true;
-                } */
 
                 else
                 {
@@ -162,37 +155,44 @@ namespace CL03
 
         /// <summary>
         /// Main 
+        /// Pick up object if interact 
         /// </summary>
         /// <param name="character"></param>
         public override void Interact(CharacterEngine character)
         {
-            print(character.ToString()+"interacting with holdable object- object side");
+           // print(character.ToString()+"interacting with holdable object- object side");
 
-            //Pick up object:
             //if object is not held
             if (!isHeld)
             {
                 GetPickedUp(character);
-                isOnGround = false;
+ //               isOnGround = false;  //do i need to know if object is on ground?
             }
 
             if (isHeld && HeldBy.Equals(character.gameObject))
             {
+                Throw();
                 Debug.Log("Interacting with holdable object while being held.");
             }
         }
 
-        //Interact action for the holdable object when near it and not holding it.
+
         /// <summary>
-        /// pick up object and hold in inventorysystem script. assign is held states and
-        /// send message to held by inventory to pick up object
+        /// 
+        /// Interact action for the holdable object when near it and not holding it.
+        /// pick up object and hold in hands ->inventory system script.
+        /// is held and in hands, but not in inventory.
+        /// freeze rotation.
+        /// change to kinematic to prevent physics changes.
+        /// 
         /// </summary>
-        /// <param name="character"></param>
+        /// <param name="character"> CharacterEngine who is interacting with object</param>
         public virtual void GetPickedUp(CharacterEngine character)
         {
             isHeld = true;
             isInHands = true;
-            rb.freezeRotation = true;
+            isInInventory= false; //cant be in inventory if just picked up.
+            rb.freezeRotation = true; //
             rb.bodyType = RigidbodyType2D.Kinematic;
             HeldBy = character.gameObject;
             HeldBy_Engine = character;
@@ -282,10 +282,12 @@ namespace CL03
         // SHOULD this be at the character engine level instead?
         public void Throw()
         {
-            HeldBy = null;
-            HeldBy_Engine = null;
+            Transform temp = HeldBy_Inventory.holdPoint_Front.transform;
 
-            //add force
+
+            StartCoroutine(DropObject(temp));
+            rb.AddForce(new Vector2(30, 1));
+
             Debug.Log("Throw Object.");
             GetPutDown();
         }
@@ -325,6 +327,7 @@ namespace CL03
         private void OnCollisionExit2D(Collision2D collision)
         {
             if(collision.gameObject == HeldBy) return;
+
             if (collision.gameObject.CompareTag("Surface"))
             {
                 isOnGround = false;
@@ -344,12 +347,13 @@ namespace CL03
         public IEnumerator DelayStillState()
         {
             delayBegan = true;
-            yield return new WaitForSeconds(.1f);
+            yield return new WaitForSeconds(.05f);
             if (!isHeld)
             {
                 MakeXStillState();
                 Debug.Log("DelayedStillState");
             }
+            delayBegan = false;
             yield break;
         }
         /// <summary>
