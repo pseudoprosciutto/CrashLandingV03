@@ -7,11 +7,14 @@ using UnityEngine;
 
 namespace CL03
 {
+	/// <summary>
+    /// Singleton instance which manages game states.
+    /// </summary>
 	public class GameManager : MonoBehaviour
 	{
 		//Game manager singleton design pattern. Other
 		//scripts access this one through its public static methods
-		static GameManager current;
+		static public GameManager GM;
 
 //		public float deathSequenceDuration = 1.5f;  //How long player death takes before restarting
 
@@ -24,21 +27,20 @@ namespace CL03
 		bool isGameOver;                            //Is the game currently over?
 
 
+		/// <summary>
+        /// Game Manager Awake: Create self instance and establish game states.
+        /// </summary>
 		void Awake()
 		{
-			//If a Game Manager exists and this isn't it...
-			if (current != null && current != this)
+			if (GM != null && GM != this)
 			{
-				//...destroy this and exit. There can only be one Game Manager
+				//There can only be one Game Manager
 				Destroy(gameObject);
 				return;
 			}
-
 			//Set this as the current game manager
-			current = this;
-
-
-			//Persis this object between scene reloads
+			GM = this;
+			//Persist this object between scene loads
 			DontDestroyOnLoad(gameObject);
 		}
 
@@ -58,11 +60,11 @@ namespace CL03
 		public static bool IsGameOver()
 		{
 			//If there is no current Game Manager, return false
-			if (current == null)
+			if (GM == null)
 				return false;
 
 			//Return the state of the game
-			return current.isGameOver;
+			return GM.isGameOver;
 		}
 
 		//public static void RegisterSceneFader(SceneFader fader)
@@ -141,11 +143,11 @@ namespace CL03
 		public static void PlayerWon()
 		{
 			//If there is no current Game Manager, exit
-			if (current == null)
+			if (GM == null)
 				return;
 
 			//The game is now over
-			current.isGameOver = true;
+			GM.isGameOver = true;
 
 			//Tell UI Manager to show the game over text and tell the Audio Manager to play
 			//game over audio
