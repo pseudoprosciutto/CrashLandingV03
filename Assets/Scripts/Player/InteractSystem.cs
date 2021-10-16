@@ -8,43 +8,46 @@ using UnityEngine;
 namespace CL03
 {
 	/// <summary>
-	/// not currently implemented. meant to clean up character engine code
-	///
 	/// interact can happen at any time and does not need to wait for an order in engine
 	/// 
 	/// This system handles character interaction with interactables.
 	/// </summary>
 	public class InteractSystem : MonoBehaviour
 	{
-		InputHandler input;                     //The current inputs for the player
+		//reference to read inputs
+		InputHandler input;
+		//reference to manage states
 		CharacterEngine engine;             //engine on character to grab and set states
+		//reference to inventory to invoke storing and possesions
 		InventorySystem inventory;
-
-		bool interactCoolingDown = false;
-
 		//default these badboys to be true so we can see where we reaching
 		public bool drawDebugRaycasts= true;
-
-		protected LayerMask grabables;
-		//Interactable classified layers
-		protected LayerMask interactablesLayer;
-
-		[GUIColor(0.8f, 0.3f, 0.3f, .2f)]
-		[PreviewField]
-		public GameObject WithInArmsReach; // { get; set{ if (!isHoldingSomething) return WithInReach(); } }
-
-		public float interactCoolDownTime = 0.5f;      //prevent spamming interaction It takes time to lift objects or interact with something
-
-		Collider2D objectCollider;              //recognized object
-		HoldableObjects objectScript;           //recognized object's script
-
-		public Vector2 objectColliderSize;
-		public bool isInteracting_Test;    //test bool
-
+		[Space]
 		[Title("Interact Distances")]
 		public float reachDistance = .9f;       //The reach distance for object grabs
 		public float grabHeightLow = .5f;          //Height of grab checks
 		public float grabHeightHigh = 1f;          //Height of grab checks
+
+		//cool down to not spam interact
+		bool interactCoolingDown = false;
+		public float interactCoolDownTime = 0.5f;      //prevent spamming interaction It takes time to lift objects or interact with something
+
+
+		//the layer for items that can be interacted with
+		protected LayerMask interactablesLayer;
+		protected LayerMask grabables;
+
+		// item which is found to be interacted with
+		[GUIColor(0.8f, 0.3f, 0.3f, .2f)]
+		[PreviewField]
+		public GameObject WithInArmsReach; // { get; set{ if (!isHoldingSomething) return WithInReach(); } }
+
+		//object property containers
+		Collider2D objectCollider;              //recognized object
+		HoldableObjects objectScript;           //recognized object's script
+		public Vector2 objectColliderSize;
+
+		//public bool isInteracting_Test;    //test bool
 
 
 		void Awake()
