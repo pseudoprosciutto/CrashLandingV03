@@ -37,7 +37,7 @@ namespace CL03
 		[BoxGroup("Character State")] public bool isHeadBlocked;
 		[BoxGroup("Character State")] public bool isHanging;                  //Is player hanging?
 																			  //[BoxGroup("Character State")] public bool isHoldingSomething;
-		[BoxGroup("Character State")] public bool objectAboveHeadHit;										  //[BoxGroup("Character State")] public bool isHoldingSomethingAbove;
+		[BoxGroup("Character State")] public bool objectHitCheck;										  //[BoxGroup("Character State")] public bool isHoldingSomethingAbove;
 		[BoxGroup("Character State")] public bool hitOverHeadLeft;
 		[BoxGroup("Character State")] public bool hitOverHeadRight;
 		#endregion
@@ -94,45 +94,8 @@ namespace CL03
 		public LayerMask staticInteractablesLayer;
 		#endregion
 
-		#region Interactable Object Properties
-		public bool isObjectColliding = false;
-		//public bool inSwitchItemProcess = false;
-		//public float switchItemCoolDownTime = 1.7f;
-		////   [Title("Inventory Item", "if null then nothing is stored for this character.",TitleAlignments.Centered)]
-		////  [BoxGroup()]
-		//[GUIColor(0.3f, 0.8f, 0.8f, .2f)]
-		//[PreviewField]
-		//public GameObject InventoryItem;
-
-		//[GUIColor(0.3f, 0.3f, 0.8f, .2f)]
-		//[PreviewField]
-		//public GameObject ObjectBeingHeld; // { get; set { if(isHoldingSomething)return } }
-		//[Required]
-		//[ChildGameObjectsOnly]
-		//public Transform holdPoint_Front;  //the front location for generic object being held (maybe will need to change pivot point of object depending on sizes)
-		//[Required]
-		//[ChildGameObjectsOnly]
-		//public Transform holdPoint_Above;  //the above location for generic object being held
-		//protected Transform activeHoldPosition;
-
-		//[GUIColor(0.8f, 0.3f, 0.3f, .2f)]
-		//[PreviewField]
-		//public GameObject WithInArmsReach; // { get; set{ if (!isHoldingSomething) return WithInReach(); } }
-
-		//public float interactCoolDownTime = 0.5f;      //prevent spamming interaction It takes time to lift objects or interact with something
-
-		//Collider2D objectCollider;              //recognized object
-		//HoldableObjects objectScript;			//recognized object's script
-
-		//public Vector2 objectColliderSize;
-		//public bool isInteracting_Test;    //test bool
-		//public bool changeObjectCoolingDown;  //is object cooling down?
-		//public float changeObjectCoolDownTime = 1.2f;
-		#endregion
-
 
 		#region Debug RayCasting Properties
-
 		[Header("Debug and Raycasting Values:")]
 		public bool drawDebugRaycasts = true;   //Should the environment checks be visualized
 		[FoldoutGroup("Environment Check Properties", expanded: false)]
@@ -194,7 +157,7 @@ namespace CL03
 
 			canHang = true;
 
-			objectAboveHeadHit = false;
+			objectHitCheck = false;
 
 			//place character in correct z plane
 			transform.position = new Vector3(transform.position.x, transform.position.y, 2f);
@@ -349,31 +312,56 @@ namespace CL03
 		}
 
 		/// <summary>
-        /// Check around object above head
+        /// Check around object above head.
+        /// if the object above head is not going to clear then character is stuck from moving any further
         /// </summary>
 		public void ObjectAboveHeadCheck() {
-			objectAboveHeadHit = false;
-					RaycastHit2D hitCheckObjectClearance = Raycast2(new Vector2(footOffset * direction, 2.5f), new Vector2(direction, 0f), reachOffset, walkables);
+			objectHitCheck = false;
+					RaycastHit2D hitCheckObjectClearance = Raycast2(new Vector2(footOffset * direction, 2.5f), new Vector2(direction, 0f), 0.2f, walkables);
 				if (hitCheckObjectClearance)
 				{
-					Debug.Log("object hit above head");
-				objectAboveHeadHit = true;
+					Debug.Log("object above head hit check");
+				objectHitCheck = true;
 				}
 				
 			
 		}
 		/// <summary>
-        /// Head check. (aka Lets not put our head through things.)
-        /// sends out raycasthits and lets you know how large head trauma bill will be.
-        /// </summary>
-        void CharacterHeadCheck() {
+		/// Check around object above head.
+		/// if the object above head is not going to clear then character is stuck from moving any further
+		/// </summary>
+		public void ObjectInFrontCheck()
+		{
+			objectHitCheck = false;
+			RaycastHit2D hitCheckObjectClearance1 = Raycast2(new Vector2((footOffset+reachOffset+.2f )* direction, 1.25f), new Vector2(direction, 0f), 0.2f, walkables);
+			RaycastHit2D hitCheckObjectClearance2 = Raycast2(new Vector2((footOffset + reachOffset + .2f) * direction, 1.25f), new Vector2(0, 1f), .7f, walkables);
+
+			if (hitCheckObjectClearance1 || hitCheckObjectClearance2)
+			{
+				Debug.Log("object in front of body hit check");
+				//bounce off wall slightly
+				rigidBody.AddForce(new Vector2(-8f*direction,0f), ForceMode2D.Impulse);
+				objectHitCheck = true;
+			}
+
+
+		}
+		/// <summary>
+		/// Head check. (aka Lets not put our head through things.)
+		/// sends out raycasthits and lets you know how large head trauma bill will be.
+		/// </summary>
+		void CharacterHeadCheck() {
 			isHeadBlocked = false;
 /***********/
-		//	if (inventory.isHoldingSomethingAbove)
-		//	{
-		//		ObjectAboveHeadCheck();
-		//		isHeadBlocked = true;
-		//	}
+		if (inventory.isHoldingSomethingAbove)
+			{
+				ObjectAboveHeadCheck();
+				isHeadBlocked = true;
+			} else if(inventory.isHoldingSomething)
+			{
+				ObjectInFrontCheck();
+			}
+
 			hitOverHeadLeft = false;
 			hitOverHeadRight = false;
 
@@ -498,7 +486,7 @@ namespace CL03
 				xVelocity /= crouchSpeedDivisor;
 
 			//if object above head hit then we dont move
-			if (!objectAboveHeadHit && !isObjectColliding)
+			if (!objectHitCheck)
 				//Apply the desired velocity othewise
 				rigidBody.velocity = new Vector2(xVelocity, rigidBody.velocity.y);
 			else //stop moving because we hit head
@@ -639,7 +627,8 @@ namespace CL03
 			//Jump:
 			//If the jump key is pressed AND the player isn't already jumping AND EITHER
 			//the player is on the ground or within the coyote time window...
-			if (input.jumpPressed && !jumpCoolingDown && !isJumping && (isOnGround || coyoteTime > Time.time))
+			if (input.jumpPressed && !jumpCoolingDown && !isJumping && (isOnGround || coyoteTime > Time.time)
+				&& !isHeadBlocked)
 			{
 				//check to see if crouching AND not blocked. If so
 				if (isCrouching && !isHeadBlocked)

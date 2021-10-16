@@ -154,26 +154,26 @@ namespace CL03
 
 
         /// <summary>
-        /// Main 
-        /// Pick up object if interact 
+        /// 
+        /// 
         /// </summary>
         /// <param name="character"></param>
         public override void Interact(CharacterEngine character)
         {
            // print(character.ToString()+"interacting with holdable object- object side");
 
-            //if object is not held
-            if (!isHeld)
-            {
-                GetPickedUp(character);
- //               isOnGround = false;  //do i need to know if object is on ground?
-            }
-
             if (isHeld && HeldBy.Equals(character.gameObject))
             {
                 Throw();
                 Debug.Log("Interacting with holdable object while being held.");
             }
+            //if object is not held
+            else if (!isHeld)
+            {
+                GetPickedUp(character);
+ //               isOnGround = false;  //do i need to know if object is on ground?
+            }
+
         }
 
 
@@ -319,7 +319,8 @@ namespace CL03
         {
             //no need to process this if the person holding object colldes with object
             if (collision.gameObject == HeldBy) return;
-            if (isHeld) { HeldBy_Engine.isObjectColliding = true; }
+            if (isHeld) { //HeldBy_Engine.isObjectColliding = true;
+                          }
             isColliding = true;
             
         }
@@ -333,7 +334,8 @@ namespace CL03
                 isOnGround = false;
                 delayBegan = false;
             }
-            if (isHeld) { HeldBy_Engine.isObjectColliding = false; }
+            if (isHeld) {// HeldBy_Engine.isObjectColliding = false;
+                         }
             isColliding = false;
 
 
@@ -351,7 +353,7 @@ namespace CL03
             if (!isHeld)
             {
                 MakeXStillState();
-                Debug.Log("DelayedStillState");
+             //   Debug.Log("DelayedStillState");
             }
             delayBegan = false;
             yield break;

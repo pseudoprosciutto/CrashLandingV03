@@ -30,7 +30,7 @@ namespace CL03
 
 		//cool down to not spam interact
 		bool interactCoolingDown = false;
-		public float interactCoolDownTime = 0.5f;      //prevent spamming interaction It takes time to lift objects or interact with something
+		public float interactCoolDownTime = 1f;      //prevent spamming interaction It takes time to lift objects or interact with something
 
 
 		//the layer for items that can be interacted with
@@ -49,7 +49,9 @@ namespace CL03
 
 		//public bool isInteracting_Test;    //test bool
 
-
+		/// <summary>
+        /// on awake we assign components and set what the layers are by looking at what engine has.
+        /// </summary>
 		void Awake()
 		{
 			//look on game object and pair components
@@ -57,17 +59,13 @@ namespace CL03
 			engine = GetComponent<CharacterEngine>();
 			inventory = GetComponent<InventorySystem>();
 
-
 			//layers that can be interacted with:
-			
 			//grabables (meaning can be held)
 			grabables = engine.crateLayer;
 			grabables |= engine.itemsLayer;
-
-			//items the interact key works with
+			//interactables
 			interactablesLayer = grabables;
 			interactablesLayer |= engine.staticInteractablesLayer; //interactables in environment
-
 		}
 
 		private void Start()
@@ -92,7 +90,7 @@ namespace CL03
 		/// Check to see if there is an item with in characters reach,
 		/// and decide what the character will do with that
 		///
-		/// </summary><returns>bool if there is an item in sight.</returns>
+		/// </summary><returns>bool true if there is an item in sight.</returns>
 		private bool ItemsCheck()
 		{
 			// if no object held then then look around for other items in sight. We're all grabby grabby here.
@@ -124,41 +122,35 @@ namespace CL03
 				else //nothing found
 				{
 					WithInArmsReach = null;
-					//if (WithInArmsReach) { }
-
 				}
-
 			}
 			//default false
 			return false;
 		}
 
-
-		
 		/// <summary>
         /// Interaction:
 		/// We check to see how we are going to interact with object.
         /// </summary>
 		void InteractCheck()
 		{
-			//Begin cooldown
+			//Begin cooldown since interact 
 			StartCoroutine(InteractCoolingDown());
 
+			//if holding something and object item is seen in inventory.
 			if (inventory.isHoldingSomething && inventory.objectBeingHeld != null)
 			{
-				StartCoroutine(InteractCoolingDown());
-				print("interacting with whats in hands, command side.");
+			//	print("interacting with whats in hands, command side.");
 
 				//interact with object in hands
 				inventory.objectBeingHeld.GetComponent<HoldableObjects>().Interact(engine);
 			}
-			//Free hands to interact with something not being held.
+
+			//if not holding anything to interact with something not being held.
 			else if (WithInArmsReach != null && !inventory.isHoldingSomething)
 			{
-				StartCoroutine(InteractCoolingDown());
 				WithInArmsReach.GetComponent<InteractableObjects>().Interact(engine);
-			}
-			
+			}		
 			//Hands full interact with whats in hands.
             else { print("there is an interaction going on but nothing is in hands or seen to interact with"); }
 		}
@@ -166,7 +158,7 @@ namespace CL03
         /// <summary>
         /// Interact cool down coroutine
         /// </summary>
-        /// <returns>jumpCollingDown = false</returns>
+        /// <returns>interactCoolingDown = false</returns>
         private IEnumerator InteractCoolingDown()
 		{
 			interactCoolingDown = true;
@@ -203,13 +195,12 @@ namespace CL03
 		}
 
 
-		//LOOK AT: this might be extra code, 
+		//this makes the character have to drop an object if character goes underneath a platform and cant fit object 
 		void BreakOverHead(HoldableObjects holdable)
 		{
 			print("Break over Head method   : holdable.GetPutDown();");
 			holdable.GetPutDown();
 		}
-
 		#endregion
 
 		/// <summary>
