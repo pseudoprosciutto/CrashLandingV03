@@ -152,6 +152,7 @@ namespace CL03
 			objectCollider = null;
 			objectScript = null;
 		}
+        #endregion
         #region Handling Objects
         private void PositionOfItemInHands()
         {
