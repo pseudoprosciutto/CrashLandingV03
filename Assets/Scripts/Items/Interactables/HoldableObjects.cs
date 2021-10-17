@@ -160,21 +160,22 @@ namespace CL03
         /// <param name="character"></param>
         public override void Interact(CharacterEngine character)
         {
+            
+                //if object is not held
+                if (!isHeld && character.isSelected)
+                {
+                    GetPickedUp(character);
+                    //               isOnGround = false;  //do i need to know if object is on ground?
+                }
+                else if (isHeld && (HeldBy_Engine == character) && isThrowable && character.isSelected)
+                {
+                    // print(character.ToString()+"interacting with holdable object- object side");
 
-            //if object is not held
-            if (!isHeld)
-            {
-                GetPickedUp(character);
-                //               isOnGround = false;  //do i need to know if object is on ground?
-            }
-            else if(isHeld && (HeldBy_Engine == character)&&isThrowable)
-            {
-                // print(character.ToString()+"interacting with holdable object- object side");
+                    Throw(HeldBy_Engine);
+                    Debug.Log("Holdable default action is to be thrown");
 
-                Throw(HeldBy_Engine);
-                Debug.Log("Holdable default action is to be thrown");
-
-            }
+                }
+            
         }
 
 
