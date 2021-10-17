@@ -74,13 +74,21 @@ namespace CL03
 
 		private void FixedUpdate()
 		{
-			//if items check detects items, then look for keyboard interaction 
-			if (ItemsCheck())
+			//if items check detects items, then look for keyboard interaction
+			if (input.interactPressed && !interactCoolingDown)
 			{
-				if (engine.isSelected && !interactCoolingDown && input.interactPressed)
+				if (inventory.objectBeingHeld != null)
 				{
-					InteractCheck();
+					InteractInHand();
 				}
+				else if(ItemsCheck())
+					{
+					if (engine.isSelected && !interactCoolingDown)
+					{
+						InteractCheck();
+					}
+				}
+			 
 			}
 		}
 
@@ -94,8 +102,7 @@ namespace CL03
 		private bool ItemsCheck()
 		{
 			// if no object held then then look around for other items in sight. We're all grabby grabby here.
-			if (inventory.objectBeingHeld == null)
-			{
+		
 				//ensure flag set/ we realize nothing is being held. should be unnecessary
 				inventory.isHoldingSomething = false;
 
@@ -123,9 +130,22 @@ namespace CL03
 				{
 					WithInArmsReach = null;
 				}
-			}
+			
 			//default false
 			return false;
+		}
+
+		void InteractInHand()
+		{           //Begin cooldown since interact 
+			StartCoroutine(InteractCoolingDown());
+
+			//if holding something and object item is seen in inventory.
+			if (inventory.isHoldingSomething && inventory.objectBeingHeld != null)
+			{
+					print("interacting with whats in hands, command side.");
+				//interact with object in hands
+				inventory.objectBeingHeld.GetComponent<HoldableObjects>().Interact(engine);
+			}
 		}
 
 		/// <summary>
@@ -137,17 +157,8 @@ namespace CL03
 			//Begin cooldown since interact 
 			StartCoroutine(InteractCoolingDown());
 
-			//if holding something and object item is seen in inventory.
-			if (inventory.isHoldingSomething && inventory.objectBeingHeld != null)
-			{
-			//	print("interacting with whats in hands, command side.");
-
-				//interact with object in hands
-				inventory.objectBeingHeld.GetComponent<HoldableObjects>().Interact(engine);
-			}
-
 			//if not holding anything to interact with something not being held.
-			else if (WithInArmsReach != null && !inventory.isHoldingSomething)
+			if (WithInArmsReach != null && !inventory.isHoldingSomething)
 			{
 				WithInArmsReach.GetComponent<InteractableObjects>().Interact(engine);
 			}		

@@ -79,7 +79,7 @@ namespace CL03
         {
             //realized this worked before initializeng this here but just in case...
             rb = GetComponent<Rigidbody2D>();
-
+            isThrowable = true;
             //made this collider find generic
             objectCollider = GetComponent<Collider2D>();
             objectMass = rb.mass;
@@ -160,20 +160,21 @@ namespace CL03
         /// <param name="character"></param>
         public override void Interact(CharacterEngine character)
         {
-           // print(character.ToString()+"interacting with holdable object- object side");
 
-            if (isHeld && HeldBy.Equals(character.gameObject))
-            {
-                Throw();
-                Debug.Log("Interacting with holdable object while being held.");
-            }
             //if object is not held
-            else if (!isHeld)
+            if (!isHeld)
             {
                 GetPickedUp(character);
- //               isOnGround = false;  //do i need to know if object is on ground?
+                //               isOnGround = false;  //do i need to know if object is on ground?
             }
+            else if(isHeld && (HeldBy_Engine == character)&&isThrowable)
+            {
+                // print(character.ToString()+"interacting with holdable object- object side");
 
+                Throw(HeldBy_Engine);
+                Debug.Log("Holdable default action is to be thrown");
+
+            }
         }
 
 
@@ -192,7 +193,8 @@ namespace CL03
             isHeld = true;
             isInHands = true;
             isInInventory= false; //cant be in inventory if just picked up.
-            rb.freezeRotation = true; //
+            rb.freezeRotation = true; //put rotation back to normal
+            rb.transform.rotation = new Quaternion(0f,0f,0f,0f);
             rb.bodyType = RigidbodyType2D.Kinematic;
             HeldBy = character.gameObject;
             HeldBy_Engine = character;
@@ -225,7 +227,14 @@ namespace CL03
             Debug.Log("Object was put down - object side");
         }
 
+        IEnumerator LaunchObject() {
+            yield break; }
 
+        /// <summary>
+        /// go through all state clearing, give gravity to just put down.
+        /// </summary>
+        /// <param name="temp"></param>
+        /// <returns></returns>
         IEnumerator DropObject(Transform temp)
         {
             rb.transform.position = temp.position;
@@ -266,8 +275,6 @@ namespace CL03
             this.enabled = false;
         }
 
-
-
         public void TakeOutOfInventory()
         {
             this.gameObject.SetActive(true);
@@ -278,18 +285,27 @@ namespace CL03
         #endregion
 
 
-        //Interact action when crate is being held by selected character.
-        // SHOULD this be at the character engine level instead?
-        public void Throw()
+         /// <summary>
+         ///Default Interact action when crate is being held by selected character.
+         /// 
+         /// </summary>
+         /// <param name="engine"></param>
+        public void Throw(CharacterEngine engine)
         {
-            Transform temp = HeldBy_Inventory.holdPoint_Front.transform;
+            HeldBy_Inventory.ReleaseItem(this.gameObject);
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            isHeld = false;
+            isInHands = false;
+            HeldBy = null;
+            rb.constraints = RigidbodyConstraints2D.None;
+            //Transform temp = HeldBy_Inventory.holdPoint_Front.transform;
+            rb.freezeRotation = false;
 
-
-            StartCoroutine(DropObject(temp));
-            rb.AddForce(new Vector2(30, 1));
+            rb.velocity=new Vector2(7f*engine.direction,2f);
+            //StartCoroutine(DropObject(temp));
 
             Debug.Log("Throw Object.");
-            GetPutDown();
+         //   GetPutDown();
         }
 
         #region OnCollision Event
@@ -383,10 +399,16 @@ namespace CL03
         /// </summary>
         public virtual void PhysicsCheck()
         {
-            if (!isHeld) return;
-
+           // if (isOnGround && !isHeld)
+            if (!isHeld) return;            
             if (rb.constraints == RigidbodyConstraints2D.FreezePositionX) MakeXMoveState();
         }
+
+
+        public void EnterStaticState() => rb.bodyType = RigidbodyType2D.Static;
+            
+        public void EnterDynamicState() => rb.bodyType = RigidbodyType2D.Dynamic;
+
 
         IEnumerator StaticCoolDown()
         {

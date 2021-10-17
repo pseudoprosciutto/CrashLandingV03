@@ -106,7 +106,7 @@ namespace CL03
                 //add force to this object to throw it
 
                 //change state so it can no longer be seen as held
-                Throw();
+             //   Throw();
             }
             //Pick up object:
             //if object is not held

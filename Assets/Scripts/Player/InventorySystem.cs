@@ -116,7 +116,17 @@ namespace CL03
 			objectScript = null;
 		}
 
-
+		public void ReleaseItem(GameObject Item)
+        {
+			if (Item == null) { print("null item drop sent to Inventory.DropItem(GameObject Item)"); return; }
+			if (isDroppingItemCoolDown) return;
+			StartCoroutine(DroppingItemCoolDown());
+			isHoldingSomethingAbove = false;
+			isHoldingSomething = false;
+			objectBeingHeld = null;
+			objectCollider = null;
+			objectScript = null;
+		}
 		private void FixedUpdate()
         {
 			//HandledObjectsCheck();
@@ -180,6 +190,9 @@ namespace CL03
             else{ print("Didn't Swap"); }
         }
 
+		/// <summary>
+        /// this is ugly and will change next.
+        /// </summary>
         void SwapItems()
         {
 			if (inventoryItem != null) tempObject = inventoryItem;
