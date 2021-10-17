@@ -189,78 +189,71 @@ namespace CL03
 					InventorySwap();
 				}
 			}
-#endregion
-        #region Inventory Management
-        /// <summary>
-        /// as long as an item is held a change item method will run when called.
-        /// </summary>
-        private void InventorySwap()
-        {
+		#endregion
+		#region Inventory Management
+		/// <summary>
+		/// as long as an item is held a change item method will run when called.
+		/// </summary>
+		private void InventorySwap()
+		{
 			//if an object exists in hand or in inventory a swap may happen
-			if((objectBeingHeld!=null)||(inventoryItem!=null))
-            {
+			if ((objectBeingHeld != null) || (inventoryItem != null))
+			{
 				tempObject = objectBeingHeld;//this may be null or not.
 											 //we know we can process the inventory item out because it already passed muster to get in. 
-				// temp object to store away is not null checked to see if we can access its get storeable bool.
+											 // temp object to store away is not null checked to see if we can access its get storeable bool.
 				if (tempObject != null)
 				{
 					//if (it cant be stored)
-                    if (objectBeingHeld.GetComponent<HoldableObjects>().canBeStored == false)
+					if (objectBeingHeld.GetComponent<HoldableObjects>().canBeStored == false)
 					{
-                    //we put down object clear holding states and tell the object its no longer held.
+						//we put down object clear holding states and tell the object its no longer held.
 						DropItem(objectBeingHeld);
 						//put temp object back to null
 						tempObject = null;
-					} else
+					}
+					else
 					{
-                    //else	it can be stored, we deactivate its physical self.
+						//else	it can be stored, we deactivate its physical self.
 						objectScript.StoreInInventory();
-//						objectBeingHeld.SetActive(false);
+						//						objectBeingHeld.SetActive(false);
 					}
 					//either way the space will be pushed between variables, all that matters is
-                    //that it is physically activated and deactivated after the variables have the object
+					//that it is physically activated and deactivated after the variables have the object
 				}
 
-				//we force item into hands
-			objectBeingHeld = inventoryItem;
-			inventoryItem = tempObject; //doesnt matter if tempobject is null.
+				//inventory item into hands
+				objectBeingHeld = inventoryItem;
+
+				inventoryItem = tempObject; //doesnt matter if tempobject is null.
+
+				//if there is an item in our hand
 				if (objectBeingHeld != null)
 				{
 					objectScript = objectBeingHeld.GetComponent<HoldableObjects>();
 					objectScript.TakeOutOfInventory();
 					objectCollider = objectBeingHeld.GetComponent<BoxCollider2D>();
-//					objectBeingHeld.SetActive(true);
+					//					objectBeingHeld.SetActive(true);
+				}
+				else //we ensure we dont recognize an item in our hands.
+				{
+					isHoldingSomethingAbove = false;
+					isHoldingSomething = false;
+					objectCollider = null;
+					objectScript = null;
 				}
 
 				//if this new object being held is a real object and not null
-                //make all the overwriting variable object scripts etc for this new item
+				//make all the overwriting variable object scripts etc for this new item
 				//we need physically activate, move and, assign it to the position of hand in front.
 				//else if null
 				//change all the variables to know what is in hand is null and doesnt exist,
 				//and are able to pick up objects again because hands are free.
-				
-					
 
-					
-			
-            }
-			// else an object didnt exist in hand or inventory
-/**
-			//if held is null but inventory has an item, or object held exists then a swap can happen. this should cover all cases
-				if((objectBeingHeld == null && inventoryItem !=null) || objectScript.canBeStored)
-				{
-				SwapItems();
-
-				}
-				//if there is an object being held and an inventory item we switch them
-				//if (objectBeingHeld.TryGetComponent<StoreableObjects>(out tempObject))
-				//{
-					//print("This tempObject try get Storeable");
-				//}
-
-                        //There is no inventory item so we put whatever is in our hands there provided it can Be Stored.
-            */else{ print("Didn't Swap"); }
-        }
+			}
+			// else an object didnt exist in hand or inventory and yet got past checking clause
+			else { print("Didn't Swap , this should not show."); }
+		}
 		/// <summary>
         /// regardless of what the inventory item is, it is no longer. now it is in the hands of
         /// </summary>
