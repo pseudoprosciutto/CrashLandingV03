@@ -76,7 +76,8 @@ namespace CL03
 			isHoldingSomethingAbove = false;
 			isDroppingItemCoolDown = false;
             Possessions = new HoldableObjects[2];
-			possessionsCursor = 0; 
+			possessionsCursor = 0;
+			inventoryItem = null;
         }
 
 		void Start()
@@ -96,14 +97,16 @@ namespace CL03
         /// </summary>
 		private void FixedUpdate()
         {
-			//HandledObjectsCheck();
+			if(!engine.isSelected)
 			//ROTATE OBJECTS IN POSSESSION
 			//if selected and object held. press up or down the object being held changes position
+				return;
 			if (objectBeingHeld != null)
 			{
 				PositionOfItemInHands();
 					//engine.ChangeCollider(objectCollider.size,false); }
 			}
+			
 			HandleObjectsInput();
 		}
 
@@ -153,7 +156,10 @@ namespace CL03
 			objectScript = null;
 		}
         #endregion
-        #region Handling Objects
+        #region Handling
+		/// <summary>
+        /// Look for input to change position of item in hands.
+        /// </summary>
         private void PositionOfItemInHands()
         {
 			//change position of object in hand if commanded and send change message to engine
@@ -177,7 +183,8 @@ namespace CL03
 			}
 			//SWITCH TO INVENTORY
 			if (input.changeObjectPressed  && (inventoryItem != null || objectBeingHeld != null)  && !changeObjectCoolingDown)
-				{		
+				{
+				StartCoroutine(ChangingItemCoolDown());
 					Debug.Log("Change object button pressed and change object cooling down is false. Inventory Swap()");
 					InventorySwap();
 				}
@@ -197,16 +204,35 @@ namespace CL03
 				// temp object to store away is not null checked to see if we can access its get storeable bool.
 				if (tempObject != null)
 				{
-					
 					//if (it cant be stored)
+                    if (objectBeingHeld.GetComponent<HoldableObjects>().canBeStored == false)
+					{
                     //we put down object clear holding states and tell the object its no longer held.
+						DropItem(objectBeingHeld);
+						//put temp object back to null
+						tempObject = null;
+					} else
+					{
                     //else	it can be stored, we deactivate its physical self.
+						objectScript.StoreInInventory();
+						objectBeingHeld.SetActive(false);
+					}
 
 					//either way the space will be pushed between variables, all that matters is
                     //that it is physically activated and deactivated after the variables have the object
+
 				}
+
 				//we force item into hands
 			objectBeingHeld = inventoryItem;
+			inventoryItem = tempObject; //doesnt matter if tempobject is null.
+				if (objectBeingHeld != null)
+				{
+					objectScript = objectBeingHeld.GetComponent<HoldableObjects>();
+					objectScript.TakeOutOfInventory();
+					objectCollider = objectBeingHeld.GetComponent<BoxCollider2D>();
+					objectBeingHeld.SetActive(true);
+				}
 
 				//if this new object being held is a real object and not null
                 //make all the overwriting variable object scripts etc for this new item
@@ -214,7 +240,6 @@ namespace CL03
 				//else if null
 				//change all the variables to know what is in hand is null and doesnt exist,
 				//and are able to pick up objects again because hands are free.
-			inventoryItem = tempObject; //doesnt matter if tempobject is null.
 				
 					
 

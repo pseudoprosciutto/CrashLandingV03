@@ -202,10 +202,7 @@ namespace CL03
             HeldBy_Inventory = HeldBy.GetComponent<InventorySystem>();
 
             HeldBy_Inventory.PickUpItem(this.gameObject);
-            print("object should be picked up here by "+character.ToString());
-                
-
-            
+            print("object should be picked up here by "+character.ToString());   
         }
         //Interact action for the object when putting down object
 
@@ -273,13 +270,13 @@ namespace CL03
             isInHands = false;
             isInInventory = true;
             this.gameObject.SetActive(false);
-            this.enabled = false;
+            //this.enabled = false;
         }
 
         public void TakeOutOfInventory()
         {
             this.gameObject.SetActive(true);
-            this.enabled = true;
+            //this.enabled = true;
             isInHands = true;
             isInInventory = false;
         }
