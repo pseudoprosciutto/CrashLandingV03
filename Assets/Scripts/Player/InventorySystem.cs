@@ -86,7 +86,29 @@ namespace CL03
 			bodyCollider = GetComponent<BoxCollider2D>();
 		}
 
+
 		/// <summary>
+        /// F Update cycle:
+        ///
+        /// Object in hands?
+        ///  -what position? 
+        ///
+        /// </summary>
+		private void FixedUpdate()
+        {
+			//HandledObjectsCheck();
+			//ROTATE OBJECTS IN POSSESSION
+			//if selected and object held. press up or down the object being held changes position
+			if (objectBeingHeld != null)
+			{
+				PositionOfItemInHands();
+					//engine.ChangeCollider(objectCollider.size,false); }
+			}
+			HandleObjectsInput();
+		}
+
+        #region Item Actions
+        /// <summary>
         /// Message from holdable once picked up
         /// </summary>
         /// <param name="Item"></param>
@@ -115,7 +137,10 @@ namespace CL03
 			objectScript.GetPutDown();
 			objectScript = null;
 		}
-
+		/// <summary>
+        /// This is a general disengagement of item.
+        /// </summary>
+        /// <param name="Item"></param>
 		public void ReleaseItem(GameObject Item)
         {
 			if (Item == null) { print("null item drop sent to Inventory.DropItem(GameObject Item)"); return; }
@@ -127,20 +152,7 @@ namespace CL03
 			objectCollider = null;
 			objectScript = null;
 		}
-		private void FixedUpdate()
-        {
-			//HandledObjectsCheck();
-			//ROTATE OBJECTS IN POSSESSION
-			//if selected and object held. press up or down the object being held changes position
-			if (objectBeingHeld != null)
-			{
-				PositionOfItemInHands();
-					//engine.ChangeCollider(objectCollider.size,false); }
-			}
-			HandledObjectsCheck();
-			//should this be after held? instead of pressed
-		}
-
+        #region Handling Objects
         private void PositionOfItemInHands()
         {
 			//change position of object in hand if commanded and send change message to engine
@@ -149,9 +161,11 @@ namespace CL03
 			if (input.vertical < -.2f && !engine.ObjectInFrontCornerCheck() && !(engine.hitOverHeadLeft || engine.hitOverHeadRight) && !engine.ObjectChangeHitFrontCheck()) { isHoldingSomethingAbove = false; }
 		}
 
-        void HandledObjectsCheck()
+		/// <summary>
+        /// check for input to drop or change object.
+        /// </summary>
+        void HandleObjectsInput()
 		{
-
 			//DROP OBJECT
 			if (input.dropObjectPressed)
 			{
@@ -162,23 +176,57 @@ namespace CL03
 			}
 			//SWITCH TO INVENTORY
 			if (input.changeObjectPressed  && (inventoryItem != null || objectBeingHeld != null)  && !changeObjectCoolingDown)
-				{
-				
+				{		
 					Debug.Log("Change object button pressed and change object cooling down is false. Inventory Swap()");
-
 					InventorySwap();
 				}
 			}
-/*******/
-		/// <summary>
+#endregion
+        #region Inventory Management
+        /// <summary>
         /// as long as an item is held a change item method will run when called.
         /// </summary>
         private void InventorySwap()
         {
+			//if an object exists in hand or in inventory a swap may happen
+			if((objectBeingHeld!=null)||(inventoryItem!=null))
+            {
+				tempObject = objectBeingHeld;//this may be null or not.
+											 //we know we can process the inventory item out because it already passed muster to get in. 
+				// temp object to store away is not null checked to see if we can access its get storeable bool.
+				if (tempObject != null)
+				{
+					
+					//if (it cant be stored)
+                    //we put down object clear holding states and tell the object its no longer held.
+                    //else	it can be stored, we deactivate its physical self.
+
+					//either way the space will be pushed between variables, all that matters is
+                    //that it is physically activated and deactivated after the variables have the object
+				}
+				//we force item into hands
+			objectBeingHeld = inventoryItem;
+
+				//if this new object being held is a real object and not null
+                //make all the overwriting variable object scripts etc for this new item
+				//we need physically activate, move and, assign it to the position of hand in front.
+				//else if null
+				//change all the variables to know what is in hand is null and doesnt exist,
+				//and are able to pick up objects again because hands are free.
+			inventoryItem = tempObject; //doesnt matter if tempobject is null.
+				
+					
+
+					
+			
+            }
+			// else an object didnt exist in hand or inventory
+/**
 			//if held is null but inventory has an item, or object held exists then a swap can happen. this should cover all cases
 				if((objectBeingHeld == null && inventoryItem !=null) || objectScript.canBeStored)
 				{
 				SwapItems();
+
 				}
 				//if there is an object being held and an inventory item we switch them
 				//if (objectBeingHeld.TryGetComponent<StoreableObjects>(out tempObject))
@@ -187,13 +235,40 @@ namespace CL03
 				//}
 
                         //There is no inventory item so we put whatever is in our hands there provided it can Be Stored.
-            else{ print("Didn't Swap"); }
+            */else{ print("Didn't Swap"); }
         }
+		/// <summary>
+        /// regardless of what the inventory item is, it is no longer. now it is in the hands of
+        /// </summary>
+		void BringInventoryItemToHands()
+		{
+		}
+
+		void BringItemInHandsToInventory(GameObject ItemInHands)
+		{
+			throw new NotImplementedException();
+		}
 
 		/// <summary>
-        /// this is ugly and will change next.
+		/// NYI   Force Remove Item inventory
+		/// </summary>
+		void ForceRemoveItemInventory()
+		{
+			throw new NotImplementedException(); 
+		}
+
+		/// <summary>
+        ///  NYI  Force Remove Item Hands
         /// </summary>
-        void SwapItems()
+		void ForceRemoveItemHands()
+		{
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// this is ugly and will change next.
+		/// </summary>
+		void SwapItems()
         {
 			if (inventoryItem != null) tempObject = inventoryItem;
 			else tempObject = null;
@@ -216,7 +291,9 @@ namespace CL03
 			
         }
 
-		public IEnumerator ChangingItemCoolDown()
+        #endregion
+        #region CoolDown IEnumerators
+        public IEnumerator ChangingItemCoolDown()
         {
 			changeObjectCoolingDown = true;
 			yield return new WaitForSeconds(changeItemCoolDownTime);
@@ -227,11 +304,11 @@ namespace CL03
 
 
 
-        /// <summary>
-        /// Dropping Items cant be spammed
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator DroppingItemCoolDown()
+		/// <summary>
+		/// Dropping Items cant be spammed
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerator DroppingItemCoolDown()
 		{
 			isDroppingItemCoolDown = true;
 			yield return new WaitForSeconds(dropItemCoolDownTime);
@@ -239,8 +316,8 @@ namespace CL03
 			Debug.Log("Can Drop Items again");
 			yield break;
 		}
-
-	}
+        #endregion
+    }
 }
 		///// <summary>
 		///// action: Drops Item that is active in hands
