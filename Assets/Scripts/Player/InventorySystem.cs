@@ -134,9 +134,9 @@ namespace CL03
         private void PositionOfItemInHands()
         {
 			//change position of object in hand if commanded and send change message to engine
-			if (input.vertical > .2f && !engine.isHeadBlocked) { isHoldingSomethingAbove = true; }
+			if (input.vertical > .2f && !engine.isHeadBlocked && !engine.ObjectInFrontCornerCheck() && !(engine.hitOverHeadLeft || engine.hitOverHeadRight) && !engine.ObjectChangeHitFrontCheck()) { isHoldingSomethingAbove = true; }
 			//engine.ChangeCollider(objectCollider.size,true); }
-			if (input.vertical < -.2f) { isHoldingSomethingAbove = false; }
+			if (input.vertical < -.2f && !engine.ObjectInFrontCornerCheck() && !(engine.hitOverHeadLeft || engine.hitOverHeadRight) && !engine.ObjectChangeHitFrontCheck()) { isHoldingSomethingAbove = false; }
 		}
 
         void HandledObjectsCheck()

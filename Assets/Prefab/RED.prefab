@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7203530896565526310}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.85, y: 1.15, z: 0}
+  m_LocalPosition: {x: 0.9, y: 1.15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7203530896771738686}
@@ -218,11 +218,14 @@ MonoBehaviour:
   isCrouching: 0
   isHeadBlocked: 0
   isHanging: 0
-  objectAboveHeadHit: 0
+  objectHitCheck: 0
   hitOverHeadLeft: 0
   hitOverHeadRight: 0
+  hitOverHeadFrontCorner: 0
   canHang: 1
   cantHangCoolDownTime: 1.5
+  objectHitCheckCoolDownTime: 0.5
+  objectHitCoolingDown: 0
   speed: 4.2
   walkSpeed: 4.2
   runSpeed: 6.2
@@ -250,7 +253,6 @@ MonoBehaviour:
   staticInteractablesLayer:
     serializedVersion: 2
     m_Bits: 1024
-  isObjectColliding: 0
   drawDebugRaycasts: 1
   headOffset: 0.35
   footOffset: 0.25
@@ -279,13 +281,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawDebugRaycasts: 1
-  WithInArmsReach: {fileID: 0}
-  interactCoolDownTime: 0.5
-  objectColliderSize: {x: 0, y: 0}
-  isInteracting_Test: 0
   reachDistance: 0.9
   grabHeightLow: 0.5
   grabHeightHigh: 1
+  interactCoolDownTime: 0.5
+  WithInArmsReach: {fileID: 0}
+  objectColliderSize: {x: 0, y: 0}
 --- !u!114 &1444689992
 MonoBehaviour:
   m_ObjectHideFlags: 0

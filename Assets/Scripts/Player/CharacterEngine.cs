@@ -40,17 +40,22 @@ namespace CL03
 		[BoxGroup("Character State")] public bool objectHitCheck;										  //[BoxGroup("Character State")] public bool isHoldingSomethingAbove;
 		[BoxGroup("Character State")] public bool hitOverHeadLeft;
 		[BoxGroup("Character State")] public bool hitOverHeadRight;
+		[BoxGroup("Character State")] public bool hitOverHeadFrontCorner;
 		#endregion
 
 		[Space]
-		#region hanging properties
+		#region hanging and object hit properties
 		//can hang
 		public bool canHang = true; // can the character even hang dawg and kick it with the other hanging homies?
 		public float cantHangCoolDownTime = .9f;
+		[SerializeField]
+		float objectHitCheckCoolDownTime =.5f;
+		[SerializeField]
+		bool objectHitCoolingDown = false;
+
 		#endregion
 		[Space]
 		#region Move and Jump Modifiers 
-
 		[FoldoutGroup("Movement Properties", expanded: false)]
 		public float speed = 4.2f;                //Player speed
 		[FoldoutGroup("Movement Properties")]
@@ -115,7 +120,7 @@ namespace CL03
 		[FoldoutGroup("Environment Check Properties")]
 		public float headClearance = .5f;       //Space needed above the player's head
 		[FoldoutGroup("Environment Check Properties")]
-		public float breakOverHeadDistance = .1f;
+		public float breakOverHeadDistance = .5f;
 		[FoldoutGroup("Environment Check Properties")]
 		public float groundDistance = .1f;      //Distance player is considered to be on the ground
 		[FoldoutGroup("Environment Check Properties")]
@@ -146,6 +151,8 @@ namespace CL03
 		Vector2 colliderStandOffset;            //Offset of the standing collider
 		Vector2 colliderCrouchSize;             //Size of the crouching collider
 		Vector2 colliderCrouchOffset;           //Offset of the crouching collider
+
+
 		#endregion
 		#endregion
 
@@ -312,52 +319,21 @@ namespace CL03
 		}
 
 		/// <summary>
-        /// Check around object above head.
-        /// if the object above head is not going to clear then character is stuck from moving any further
-        /// </summary>
-		public void ObjectAboveHeadCheck() {
-			objectHitCheck = false;
-					RaycastHit2D hitCheckObjectClearance = Raycast2(new Vector2(footOffset * direction, 2.5f), new Vector2(direction, 0f), 0.2f, walkables);
-				if (hitCheckObjectClearance)
-				{
-					Debug.Log("object above head hit check");
-				objectHitCheck = true;
-				}
-				
-			
-		}
-		/// <summary>
-		/// Check around object above head.
-		/// if the object above head is not going to clear then character is stuck from moving any further
-		/// </summary>
-		public void ObjectInFrontCheck()
-		{
-			objectHitCheck = false;
-			RaycastHit2D hitCheckObjectClearance1 = Raycast2(new Vector2((footOffset+reachOffset+.2f )* direction, 1.25f), new Vector2(direction, 0f), 0.2f, walkables);
-			RaycastHit2D hitCheckObjectClearance2 = Raycast2(new Vector2((footOffset + reachOffset + .2f) * direction, 1.25f), new Vector2(0, 1f), .7f, walkables);
-
-			if (hitCheckObjectClearance1 || hitCheckObjectClearance2)
-			{
-				Debug.Log("object in front of body hit check");
-				//bounce off wall slightly
-				rigidBody.AddForce(new Vector2(-8f*direction,0f), ForceMode2D.Impulse);
-				objectHitCheck = true;
-			}
-
-
-		}
-		/// <summary>
 		/// Head check. (aka Lets not put our head through things.)
 		/// sends out raycasthits and lets you know how large head trauma bill will be.
 		/// </summary>
-		void CharacterHeadCheck() {
+		void CharacterHeadCheck()
+		{
+			RaycastHit2D hitCheckObjectClearance = Raycast2(new Vector2(.5f * direction, 2f), new Vector2(direction, Mathf.Abs(direction)), 0.8f, walkables);
+
 			isHeadBlocked = false;
-/***********/
-		if (inventory.isHoldingSomethingAbove)
+
+			if (inventory.isHoldingSomethingAbove)
 			{
 				ObjectAboveHeadCheck();
 				isHeadBlocked = true;
-			} else if(inventory.isHoldingSomething)
+			}
+			else if (inventory.isHoldingSomething)
 			{
 				ObjectInFrontCheck();
 			}
@@ -365,7 +341,7 @@ namespace CL03
 			hitOverHeadLeft = false;
 			hitOverHeadRight = false;
 
-			//HEAD CHECK
+			//HEAD CHECK   ?? this one is confused with another isHeadBlocked below
 			RaycastHit2D fullHeadCheck = Raycast2(new Vector2(Math.Abs(direction) - 1.5f, playerHeight), Vector2.right, 1f, walkables);
 			if (fullHeadCheck) { isHeadBlocked = true; }
 
@@ -382,7 +358,7 @@ namespace CL03
 
 
 			//Cast the ray to check above the player's head
-			RaycastHit2D headCheck = Raycast2(new Vector2(0f, bodyCollider.size.y), Vector2.up, headClearance,walkables);
+			RaycastHit2D headCheck = Raycast2(new Vector2(0f, bodyCollider.size.y), Vector2.up, headClearance, walkables);
 
 			//If that ray hits, the player's head is blocked
 			if (headCheck)
@@ -399,9 +375,80 @@ namespace CL03
 				}
 			}
 		}
-
-
 		#endregion
+
+		#region object checks
+		/// <summary>
+		/// Check around object above corner head.
+		/// if the object above head is not going to clear then character is stuck from moving any further
+		/// </summary>
+		public bool ObjectInFrontCornerCheck()
+		{
+			RaycastHit2D hitCheckObjectClearance = Raycast2(new Vector2(.5f * direction, 2f), new Vector2(direction, Mathf.Abs(direction)), 0.8f, walkables);
+			if (hitCheckObjectClearance)
+			{
+				Debug.Log("object above corner hit check");
+				return true;
+			}
+			return false;
+		}
+		
+
+		/// <summary>
+        /// Check around object above head.
+        /// if the object above head is not going to clear then character is stuck from moving any further
+        /// </summary>
+		public void ObjectAboveHeadCheck() {
+			objectHitCheck = false;
+					RaycastHit2D hitCheckObjectClearance = Raycast2(new Vector2(footOffset * direction, 2.5f), new Vector2(direction, 0f), 0.2f, walkables);
+				if (hitCheckObjectClearance)
+				{
+					Debug.Log("object above head hit check");
+				objectHitCheck = true;
+				}
+		}
+
+		/// <summary>
+		/// Check for change item space from top of head to front
+		/// if the object above head is not going to clear then character is stuck from moving any further
+		/// </summary>
+		public bool ObjectChangeHitFrontCheck()
+		{
+			RaycastHit2D hitCheckObjectClearance1 = Raycast2(new Vector2((footOffset + reachOffset + .2f) * direction, 1.25f), new Vector2(direction, 0f), 0.2f, walkables);
+			RaycastHit2D hitCheckObjectClearance2 = Raycast2(new Vector2((footOffset + reachOffset + .2f) * direction, 1.25f), new Vector2(0, 1f), .4f, walkables);
+
+			if (hitCheckObjectClearance1 || hitCheckObjectClearance2)
+			{
+				Debug.Log("object change check caught");
+				//bounce off wall slightly
+				//rigidBody.AddForce(new Vector2(-8f*direction,0f), ForceMode2D.Impulse);
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// Check around object above head.
+		/// if the object above head is not going to clear then character is stuck from moving any further
+		/// </summary>
+		public void ObjectInFrontCheck()
+		{
+			objectHitCheck = false;
+			
+			RaycastHit2D hitCheckObjectClearance1 = Raycast2(new Vector2((footOffset+reachOffset+.2f )* direction, 1.25f), new Vector2(direction, 0f), 0.2f, walkables);
+			RaycastHit2D hitCheckObjectClearance2 = Raycast2(new Vector2((footOffset + reachOffset + .2f) * direction, 1.25f), new Vector2(0, 1f), .4f, walkables);
+
+			if (hitCheckObjectClearance1 || hitCheckObjectClearance2)
+			{
+				Debug.Log("object in front of body hit check");
+				//bounce off wall slightly
+				//rigidBody.AddForce(new Vector2(-8f*direction,0f), ForceMode2D.Impulse);
+				objectHitCheck = true;
+
+			}
+		}
+		#endregion
+
 
 		#region Hanging Actions
 		/// <summary>
@@ -480,7 +527,7 @@ namespace CL03
 			//If the sign of the velocity and direction don't match, flip the character
 			if (xVelocity * direction < 0f)
 				FlipCharacterDirection();
-			
+
 			//If the player is crouching, reduce the velocity
 			if (isCrouching)
 				xVelocity /= crouchSpeedDivisor;
@@ -489,8 +536,13 @@ namespace CL03
 			if (!objectHitCheck)
 				//Apply the desired velocity othewise
 				rigidBody.velocity = new Vector2(xVelocity, rigidBody.velocity.y);
-			else //stop moving because we hit head
-				rigidBody.velocity = new Vector2(0,0);
+
+			else if (objectHitCheck && !objectHitCoolingDown) //stop moving because we hit head
+			{
+				rigidBody.velocity = new Vector2(0, 0);
+				StartCoroutine(ObjectHitCheckCoolDown());
+			}
+			
 			//If the player is on the ground, extend the coyote time window
 			if (isOnGround)
 				//CoyoteTime is time that keeps you extended and gives player a
@@ -499,9 +551,17 @@ namespace CL03
 		}
 
 		#endregion
-		
-		#region Stop Scripts
 
+		public IEnumerator ObjectHitCheckCoolDown()
+        {
+			objectHitCoolingDown = true;
+			yield return new WaitForSeconds(objectHitCheckCoolDownTime);
+				objectHitCoolingDown = false;
+			yield break;
+        }
+
+
+		#region Stop Scripts
 		public void EnterStaticState() => rigidBody.bodyType = RigidbodyType2D.Static;
 		public void ExitStaticState() => rigidBody.bodyType = RigidbodyType2D.Dynamic;
 
