@@ -120,7 +120,7 @@ namespace CL03
 		[FoldoutGroup("Environment Check Properties")]
 		public float headClearance = .5f;       //Space needed above the player's head
 		[FoldoutGroup("Environment Check Properties")]
-		public float breakOverHeadDistance = .5f;
+		public float breakOverHeadDistance = 1f;
 		[FoldoutGroup("Environment Check Properties")]
 		public float groundDistance = .1f;      //Distance player is considered to be on the ground
 		[FoldoutGroup("Environment Check Properties")]
@@ -324,7 +324,7 @@ namespace CL03
 		/// </summary>
 		void CharacterHeadCheck()
 		{
-			RaycastHit2D hitCheckObjectClearance = Raycast2(new Vector2(.5f * direction, 2f), new Vector2(direction, Mathf.Abs(direction)), 0.8f, walkables);
+			RaycastHit2D hitCheckObjectClearance = Raycast2(new Vector2(.2f * direction, 1.8f), new Vector2(direction, Mathf.Abs(direction)), 0.8f, walkables);
 
 			isHeadBlocked = false;
 
@@ -384,7 +384,7 @@ namespace CL03
 		/// </summary>
 		public bool ObjectInFrontCornerCheck()
 		{
-			RaycastHit2D hitCheckObjectClearance = Raycast2(new Vector2(.5f * direction, 2f), new Vector2(direction, Mathf.Abs(direction)), 0.8f, walkables);
+			RaycastHit2D hitCheckObjectClearance = Raycast2(new Vector2(.2f * direction, 1.8f), new Vector2(direction, Mathf.Abs(direction)), 0.8f, walkables);
 			if (hitCheckObjectClearance)
 			{
 				Debug.Log("object above corner hit check");
