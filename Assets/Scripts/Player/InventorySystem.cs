@@ -215,12 +215,10 @@ namespace CL03
 					{
                     //else	it can be stored, we deactivate its physical self.
 						objectScript.StoreInInventory();
-						objectBeingHeld.SetActive(false);
+//						objectBeingHeld.SetActive(false);
 					}
-
 					//either way the space will be pushed between variables, all that matters is
                     //that it is physically activated and deactivated after the variables have the object
-
 				}
 
 				//we force item into hands
@@ -231,7 +229,7 @@ namespace CL03
 					objectScript = objectBeingHeld.GetComponent<HoldableObjects>();
 					objectScript.TakeOutOfInventory();
 					objectCollider = objectBeingHeld.GetComponent<BoxCollider2D>();
-					objectBeingHeld.SetActive(true);
+//					objectBeingHeld.SetActive(true);
 				}
 
 				//if this new object being held is a real object and not null

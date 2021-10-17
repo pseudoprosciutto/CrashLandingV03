@@ -83,8 +83,7 @@ namespace CL03
             //made this collider find generic
             objectCollider = GetComponent<Collider2D>();
             objectMass = rb.mass;
-
-
+            canBeHeld = true;
         }
         
         /// <summary>

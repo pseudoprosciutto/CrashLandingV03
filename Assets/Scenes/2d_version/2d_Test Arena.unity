@@ -790,8 +790,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cd0097436a4a4d2497ece59a79c654b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canBeHeld: 0
-  canBeStored: 0
+  canBeHeld: 1
+  canBeStored: 1
   isHeld: 0
   HeldBy: {fileID: 0}
   isInInventory: 0
@@ -1453,8 +1453,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cd0097436a4a4d2497ece59a79c654b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canBeHeld: 0
-  canBeStored: 0
+  canBeHeld: 1
+  canBeStored: 1
   isHeld: 0
   HeldBy: {fileID: 0}
   isInInventory: 0
