@@ -191,10 +191,10 @@ namespace CL03
 
 			//USE EQUIPPED ITEM
 			//needs to add equipment use held also.
-			if(input.equipmentUsePressed && inventoryItem != null)
-            {
+			if (input.equipmentUsePressed && inventoryItem != null)
+			{
 				inventoryItem.GetComponent<HoldableObjects>().UseAsEquipment();
-            }
+			}
 			//else if held.
 		}
 		#endregion

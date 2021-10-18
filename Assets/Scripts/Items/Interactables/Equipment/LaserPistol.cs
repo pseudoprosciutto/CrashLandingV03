@@ -15,10 +15,10 @@ namespace CL03
 
         private void LookForEquipmentBeingUsed()
         {
-            
+
         }
 
-        public void UseAsEquipment()
+        override public void UseAsEquipment()
         {
             Shoot();
         }
