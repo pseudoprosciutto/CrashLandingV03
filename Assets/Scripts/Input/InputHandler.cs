@@ -36,6 +36,8 @@ namespace CL03
             [Header("Basic Action States")]
             public bool interactPressed;
             public bool interactHeld;
+            public bool equipmentUsePressed;
+            public bool equipmentUseHeld;
             public bool dropObjectPressed;
             public bool dropObjectHeld;
             public bool changeObjectPressed;
@@ -139,9 +141,9 @@ namespace CL03
         public void OnEquipUse(InputAction.CallbackContext context)
         {
             if (context.interaction is HoldInteraction)
-                changeObjectHeld = context.ReadValueAsButton();
+                equipmentUseHeld = context.ReadValueAsButton();
             else
-                changeObjectPressed = context.ReadValueAsButton();
+                equipmentUsePressed = context.ReadValueAsButton();
         }
         #endregion
 

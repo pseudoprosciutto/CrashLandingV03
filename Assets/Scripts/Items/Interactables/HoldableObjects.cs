@@ -48,6 +48,8 @@ namespace CL03
         [SerializeField]
         [ReadOnly]
         protected bool isInInventory;
+        [SerializeField]
+        public bool useableInInventory = false;
 
         [Space]
         protected Rigidbody2D rb;
@@ -280,7 +282,10 @@ namespace CL03
             isInInventory = false;
         }
         #endregion
-
+        public virtual void UseAsEquipment()
+        {
+            print("using Item from Inventory");
+        }
 
          /// <summary>
          ///Default Interact action when crate is being held by selected character.

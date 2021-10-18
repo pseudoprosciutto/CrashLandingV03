@@ -6,6 +6,13 @@ namespace CL03
 {
 	public class ScriptHolders : MonoBehaviour
 	{
+
+
+
+
+
+
+
         #region INTERACTSYSTEM.CS as of 10/16/21
         /** INTERACT SYSTEM
          * 
@@ -1114,5 +1121,14 @@ namespace CL03
 
 
     }
+    #region Interfaces
+	/// <summary>
+    /// For Holdable Object which can be used in inventory.
+    /// </summary>
+    public interface IEquippedUseable
+	{
+		public void UseAsEquipment();
+	}
+    #endregion
 }
 

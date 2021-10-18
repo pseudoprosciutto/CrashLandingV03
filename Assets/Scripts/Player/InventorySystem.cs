@@ -169,9 +169,9 @@ namespace CL03
 		}
 
 		/// <summary>
-        /// check for input to drop or change object.
-        /// </summary>
-        void HandleObjectsInput()
+		/// check for input to drop or change object.
+		/// </summary>
+		void HandleObjectsInput()
 		{
 			//DROP OBJECT
 			if (input.dropObjectPressed)
@@ -182,13 +182,21 @@ namespace CL03
 				}
 			}
 			//SWITCH TO INVENTORY
-			if (input.changeObjectPressed  && (inventoryItem != null || objectBeingHeld != null)  && !changeObjectCoolingDown)
-				{
+			if (input.changeObjectPressed && (inventoryItem != null || objectBeingHeld != null) && !changeObjectCoolingDown)
+			{
 				StartCoroutine(ChangingItemCoolDown());
-					Debug.Log("Change object button pressed and change object cooling down is false. Inventory Swap()");
-					InventorySwap();
-				}
+				Debug.Log("Change object button pressed and change object cooling down is false. Inventory Swap()");
+				InventorySwap();
 			}
+
+			//USE EQUIPPED ITEM
+			//needs to add equipment use held also.
+			if(input.equipmentUsePressed && inventoryItem != null)
+            {
+				inventoryItem.GetComponent<HoldableObjects>().UseAsEquipment();
+            }
+			//else if held.
+		}
 		#endregion
 		#region Inventory Management
 		/// <summary>
@@ -285,28 +293,12 @@ namespace CL03
 		/// <summary>
 		/// this is ugly and will change next.
 		/// </summary>
-		void SwapItems()
-        {
-			if (inventoryItem != null) tempObject = inventoryItem;
-			else tempObject = null;
-			//tell objects to store state
-			objectScript = objectBeingHeld.GetComponent<HoldableObjects>();
-			if (objectScript != null) objectScript.StoreInInventory();
-			//put inventory item in hands
-			if (objectBeingHeld != null) inventoryItem = objectBeingHeld;
-			else inventoryItem = null;
-			possessionsCursor++;
-			if(possessionsCursor==2) possessionsCursor =0;
-			objectBeingHeld = tempObject;
-			//get script if not its null
-			if(objectBeingHeld !=null)
-			objectScript= objectBeingHeld.GetComponent<HoldableObjects>();
-			//tell object to take out store state
-			if (objectScript != null) objectScript.TakeOutOfInventory(); ;
-			inventoryItem = tempObject;
-			print("Swap Complete");
+		 void UseEquipment()
+		{
+
+		}
 			
-        }
+        
 
         #endregion
         #region CoolDown IEnumerators
