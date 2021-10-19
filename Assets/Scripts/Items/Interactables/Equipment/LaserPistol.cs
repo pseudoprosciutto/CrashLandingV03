@@ -91,6 +91,7 @@ namespace CL03
             isInHands = true;
             isInInventory = false;
         }
+
         #endregion
         /// <summary>
         /// The Laser Pistol's use
@@ -109,9 +110,6 @@ namespace CL03
             print("Pew Pew!");
         }
         #endregion
-
-
-
 
         /// <summary>
         /// 
@@ -141,7 +139,10 @@ namespace CL03
             //print("object should be picked up here by " + character.ToString());
         }
         //Interact action for the object when putting down object
-
+        /// <summary>
+        /// Cool down of shootingCoolDownTime
+        /// </summary>
+        /// <returns> wait for seconds shootingCoolDownTime</returns>
         IEnumerator ShootCoolingDown()
         {
             shootingIsCoolingDown = true;

@@ -265,7 +265,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 77820935}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.7829237, y: -0.27476302, z: -0.8899174}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1904917061}
@@ -356,7 +356,7 @@ GameObject:
   - component: {fileID: 379565271}
   - component: {fileID: 379565270}
   m_Layer: 8
-  m_Name: FUNGUN
+  m_Name: ItemPlaceHolder
   m_TagString: Item
   m_Icon: {fileID: 2800000, guid: 6ca50f5a9cd2e4331a0dae630c7a25a6, type: 3}
   m_NavMeshLayer: 0
@@ -1161,7 +1161,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 1059236020}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: 01f13d3c769394e278f3865b71cef5ff, type: 2}
+  m_Material: {fileID: 6200000, guid: 853de707003c0405e958954da5d1a4c4, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -3980,11 +3980,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 674575157009483734, guid: fe04cf3eab45e48c5b628c1ebf6962a3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.9048195
+      value: 2.79
       objectReference: {fileID: 0}
     - target: {fileID: 674575157009483734, guid: fe04cf3eab45e48c5b628c1ebf6962a3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.0075861
+      value: 1.06
       objectReference: {fileID: 0}
     - target: {fileID: 674575157009483734, guid: fe04cf3eab45e48c5b628c1ebf6962a3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4033,7 +4033,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3952251879592227186, guid: f9c32cc170982443dbb787defa0e8770, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 15.64482
+      value: 11.17
       objectReference: {fileID: 0}
     - target: {fileID: 3952251879592227186, guid: f9c32cc170982443dbb787defa0e8770, type: 3}
       propertyPath: m_LocalPosition.y
