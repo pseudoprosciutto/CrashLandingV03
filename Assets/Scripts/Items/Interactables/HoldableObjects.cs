@@ -54,7 +54,10 @@ namespace CL03
         [Space]
         protected Rigidbody2D rb;
         protected Collider2D objectCollider;
+        protected SpriteRenderer spriteRenderer;
 
+        protected int objectDirection = 1;
+        protected float originalXScale;
         //protect set because we dont want outside changing this.
 
         protected bool _freezeRotation = false; //when held object must be still.
@@ -86,6 +89,7 @@ namespace CL03
             objectCollider = GetComponent<Collider2D>();
             objectMass = rb.mass;
             canBeHeld = true;
+            originalXScale = transform.localScale.x;
         }
         
         /// <summary>
@@ -94,8 +98,7 @@ namespace CL03
         public virtual void FixedUpdate()
         {
             PhysicsCheck();
-            IsHeldPositionCheck();
-            
+            IsHeldPositionCheck();    
         }
 
         /// <summary>
@@ -266,7 +269,7 @@ namespace CL03
         /// <summary>
         /// Change state to store object in inventory
         /// </summary>
-        public void StoreInInventory()
+        public virtual void StoreInInventory()
         {
             isInHands = false;
             isInInventory = true;
@@ -274,7 +277,7 @@ namespace CL03
             //this.enabled = false;
         }
 
-        public void TakeOutOfInventory()
+        public virtual void TakeOutOfInventory()
         {
             this.gameObject.SetActive(true);
             //this.enabled = true;
