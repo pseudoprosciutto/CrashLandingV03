@@ -92,20 +92,20 @@ namespace CL03
         }
         #endregion
         /// <summary>
-        /// The Laser Pistol's 
+        /// The Laser Pistol's use
         /// </summary>
         override public void UseAsEquipment()
         {
-            if (shootingIsCoolingDown) return;
+            //cant use equipment if we are cooling down, hanging, or holding something else.
+            if (shootingIsCoolingDown || HeldBy_Engine.isHanging || HeldBy_Inventory.isHoldingSomething ) return;
+            StartCoroutine(ShootCoolingDown());
             Shoot();
         }
 
         #region Laser Pistol Methods
         void Shoot()
         {
-
             print("Pew Pew!");
-
         }
         #endregion
 
