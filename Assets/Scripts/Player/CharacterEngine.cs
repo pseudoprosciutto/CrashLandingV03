@@ -23,6 +23,7 @@ namespace CL03
 		Rigidbody2D rigidBody;                  //The rigidbody component
 		InputHandler input;                     //The current inputs for the player
 		InventorySystem inventory;              //inventory system
+		HealthSystem health;					//health system with revive stuffs
 		#endregion
 
 		#region Character State bools
@@ -161,7 +162,7 @@ namespace CL03
 		#region Initialization; Awake() and Start()
 		private void Awake()
 		{
-
+			
 			canHang = true;
 
 			objectHitCheck = false;
@@ -186,7 +187,7 @@ namespace CL03
 			rigidBody = GetComponent<Rigidbody2D>();
 			bodyCollider = GetComponent<BoxCollider2D>();
 			inventory = GetComponent<InventorySystem>();
-
+			health = GetComponent<HealthSystem>();
 			//Record the original x scale of the player
 			originalXScale = transform.localScale.x;
 
@@ -223,14 +224,14 @@ namespace CL03
 			PhysicsCheck();
 
 			//if player is selected and once physics have been checked then we can continue deciding how to player moves knowing state and environment
-			if (isSelected)
+			if (isSelected && health.isAlive)
 			{
 				//Process ground and air movements
 				GroundMovement();
 				MidAirMovement();
 			}
 			//else we arent selected and we have landed on ground so we need to be static
-			else if (!isSelected && isOnGround) EnterStaticState();
+			else if ((!isSelected || !health.isAlive)&& isOnGround) EnterStaticState();
 		}
 		#endregion
 
@@ -287,6 +288,14 @@ namespace CL03
 		
 			//set location of selected character so that they wont get stuck behind others.
 			if (isSelected) { bringFront(); } else { sendBack(); };
+
+            //if we are not alive then we need to be horizontal.
+            if (!health.isAlive /* but not in dead state.*/){  }
+			//then we need to be in need reviving position and all tags need to be set on.
+//might not even need rest of physics check.
+
+
+
 			//Start by assuming the character isn't on the ground and the head isn't blocked
 			CharacterStandingOnSurfaceCheck();
 			CharacterHeadCheck();
