@@ -26,6 +26,7 @@ namespace CL03
             BC = GetComponent<BoxCollider2D>();
             colliderSizeGround = new Vector2(colliderSizeGroundX, colliderSizeGroundY);
             colliderSizeHeld = new Vector2(colliderSizeHeldX, colliderSizeHeldY);
+            useableInInventory = true;
         }
         public override void FixedUpdate()
         {
@@ -85,7 +86,7 @@ namespace CL03
 
         public override void TakeOutOfInventory()
         {
-            //this.gameObject.SetActive(true);
+            this.gameObject.SetActive(true);
             //this.enabled = true;
             isInHands = true;
             isInInventory = false;

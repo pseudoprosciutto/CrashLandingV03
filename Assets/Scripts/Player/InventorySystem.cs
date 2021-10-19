@@ -120,7 +120,14 @@ namespace CL03
 			
 			//Possessions[possesionsCursor] = Item;
 			isHoldingSomething = true;
-			
+            if (inventoryItem != null)
+			{
+				if (inventoryItem.GetComponent<HoldableObjects>().useableInInventory)
+				{
+					inventoryItem.SetActive(false);
+				}
+			}
+
 			objectBeingHeld = Item;			
 			objectScript = Item.GetComponent<HoldableObjects>();
 			objectCollider = Item.GetComponent<BoxCollider2D>();
@@ -133,6 +140,13 @@ namespace CL03
 			if (isDroppingItemCoolDown) return;
 			//Possessions[possesionsCursor] = Null;
 			StartCoroutine(DroppingItemCoolDown());
+			if (inventoryItem != null)
+			{
+				if (inventoryItem.GetComponent<HoldableObjects>().useableInInventory)
+				{
+					inventoryItem.SetActive(true);
+				}
+			}
 			isHoldingSomethingAbove = false;
 			isHoldingSomething = false;
 			objectBeingHeld = null;
@@ -149,6 +163,13 @@ namespace CL03
 			if (Item == null) { print("null item drop sent to Inventory.DropItem(GameObject Item)"); return; }
 			if (isDroppingItemCoolDown) return;
 			StartCoroutine(DroppingItemCoolDown());
+			if (inventoryItem != null)
+			{
+				if (inventoryItem.GetComponent<HoldableObjects>().useableInInventory)
+				{
+					inventoryItem.SetActive(true);
+				}
+			}
 			isHoldingSomethingAbove = false;
 			isHoldingSomething = false;
 			objectBeingHeld = null;
