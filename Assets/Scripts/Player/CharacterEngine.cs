@@ -289,8 +289,13 @@ namespace CL03
 			//set location of selected character so that they wont get stuck behind others.
 			if (isSelected) { bringFront(); } else { sendBack(); };
 
+			//make sure we are alive
+			//if health says we arent alive but not in needs reviving state then change it to and set character horizontal.
+			if (!health.isAlive && !needsReviving){
+				needsReviving = true;
+	// ****** //transform.localRotation = new Vector3(90f, 0f, 0f);
             //if we are not alive then we need to be horizontal.
-            if (!health.isAlive /* but not in dead state.*/){  }
+			}
 			//then we need to be in need reviving position and all tags need to be set on.
 //might not even need rest of physics check.
 
