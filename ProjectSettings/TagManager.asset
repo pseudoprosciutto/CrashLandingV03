@@ -8,6 +8,7 @@ TagManager:
   - Holdable
   - Item
   - Environment
+  - LaserShot
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - Interactables
   - Collectable
   - Equippables
-  - 
+  - LaserShot
   - 
   - 
   - 
@@ -56,4 +57,7 @@ TagManager:
     locked: 0
   - name: Items
     uniqueID: 3177034663
+    locked: 0
+  - name: Projectile
+    uniqueID: 1903405725
     locked: 0

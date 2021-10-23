@@ -34,7 +34,27 @@ namespace CL03
             rb.mass = 6;
             objectMass = rb.mass;
             canBeStored = false;
+            isCrate = true;
         }
+
+        public override void GetPickedUp(CharacterEngine character)
+        {
+            isHeld = true;
+            isInHands = true;
+            
+            rb.freezeRotation = true; //put rotation back to normal
+            rb.transform.rotation = new Quaternion(0f, 0f, 0f, 0f);
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            HeldBy = character.gameObject;
+            HeldBy_Engine = character;
+            HeldBy_Inventory = HeldBy.GetComponent<InventorySystem>();
+
+            HeldBy_Inventory.PickUpItem(this.gameObject);
+            print("object should be picked up here by " + character.ToString());
+        }
+
+
+
         private void OnEnable()
         {
             //isHeld = lastHoldState; //  --redundant?
@@ -48,13 +68,15 @@ namespace CL03
             //  lastHoldState = isHeld;
             CanBeHeld_Off();
         }
-        //Update State
+
+        /// <summary>
+        /// crate ensure rigidbody type is static.
+        /// </summary>
         public override void IsHeldPositionCheck()
         {
             //Being held
             if (isHeld)
             {
-                
                 if (HeldBy != null)
                 {
                 rb.bodyType = RigidbodyType2D.Static;
@@ -90,32 +112,29 @@ namespace CL03
         #endregion
 
         #region Interactions
-        /// <summary>
-        /// CrateObject interact will hold and 
-        /// Interact - function found on all InteractableObjectss
-        /// </summary>
-        /// <param name="character"></param>
-        public override void Interact(CharacterEngine character)
-        {
-            //Throw crate:
-            //if is held and is throwable and the character is holding this object
-            if (isHeld && isThrowable && HeldBy.Equals(character.gameObject))
-            {
-                //change body type
-                rb.bodyType = RigidbodyType2D.Dynamic;
-                //add force to this object to throw it
-
-                //change state so it can no longer be seen as held
-             //   Throw();
-            }
-            //Pick up object:
-            //if object is not held
-            if (!isHeld)
-            {
-                rb.mass = 1;
-                GetPickedUp(character);
-            }
-        }
+        ///// <summary>
+        ///// CrateObject interact will hold and 
+        ///// Interact - function found on all InteractableObjectss
+        ///// </summary>
+        ///// <param name="character"></param>
+        //public override void Interact(CharacterEngine character)
+        //{
+        //    //Throw crate:
+        //    //if is held and is throwable and the character is holding this object
+        //    if (isHeld && isThrowable && HeldBy.Equals(character.gameObject))
+        //    {
+        //        //change body type
+        //        rb.bodyType = RigidbodyType2D.Dynamic;
+        //        //Throw();
+        //    }
+        //    //Pick up object:
+        //    //if object is not held
+        //    if (!isHeld)
+        //    {
+        //        rb.mass = 1;
+        //        GetPickedUp(character);
+        //    }
+        //}
 
 
 

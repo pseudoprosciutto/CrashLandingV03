@@ -27,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 674575157009483729}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 7.9048195, y: 1.0075861, z: 0.8899174}
   m_LocalScale: {x: 0.4857, y: 0.4247, z: 1}
   m_Children:
@@ -100,6 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canBeHeld: 1
   canBeStored: 1
+  isCrate: 0
   isHeld: 0
   HeldBy: {fileID: 0}
   isInInventory: 0
@@ -109,6 +110,7 @@ MonoBehaviour:
   isStaticCoolingDown: 0
   staticCoolDownTime: 0.1
   isColliding: 0
+  LaserPrefab: {fileID: 0}
 --- !u!50 &674575157009483733
 Rigidbody2D:
   serializedVersion: 4

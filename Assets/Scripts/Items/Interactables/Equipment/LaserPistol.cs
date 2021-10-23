@@ -20,6 +20,10 @@ namespace CL03
         float colliderSizeGroundY;
         Vector2 colliderSizeHeld;
         Vector2 colliderSizeGround;
+        public Transform LaserSpawn;
+
+        [SerializeField]
+        GameObject LaserPrefab;
 
         private void Start()
         {
@@ -107,7 +111,9 @@ namespace CL03
         #region Laser Pistol Methods
         void Shoot()
         {
-            print("Pew Pew!");
+            //GameObject projectile;
+            GameObject LaserBullet = Instantiate(LaserPrefab, LaserSpawn.position, transform.rotation) as GameObject;
+            LaserBullet.GetComponent<LaserController>().projectileDirection = objectDirection;
         }
         #endregion
 

@@ -25,7 +25,7 @@ namespace CL03
         protected bool canBeHeld;
        
         public bool canBeStored = false; //default false
-
+        public bool isCrate = false;
         [SerializeField]
         [ReadOnly]
         protected bool isHeld;
