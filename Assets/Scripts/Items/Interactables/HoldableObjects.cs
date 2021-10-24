@@ -37,16 +37,17 @@ namespace CL03
         protected InventorySystem HeldBy_Inventory; //inventory of object being held.
 
         [Space]
+        public bool hasAlwaysBeenThrowable =true; // im not gaslighting you, youre just crazyss.
+       [SerializeField]
         protected bool isThrowable;
-
         //inventory propertes
-        [SerializeField]
-        [ReadOnly]
+  
         public bool isInHands { get; protected set; } = false; //default false
 
         
         [SerializeField]
         [ReadOnly]
+        [Space]
         protected bool isInInventory;
         [SerializeField]
         public bool useableInInventory = false;
@@ -84,12 +85,17 @@ namespace CL03
         {
             //realized this worked before initializeng this here but just in case...
             rb = GetComponent<Rigidbody2D>();
-            isThrowable = true;
+            isThrowable = hasAlwaysBeenThrowable;
             //made this collider find generic
             objectCollider = GetComponent<Collider2D>();
             objectMass = rb.mass;
             canBeHeld = true;
             originalXScale = transform.localScale.x;
+        }
+
+        public virtual void OnEnable()
+        {
+            isThrowable = hasAlwaysBeenThrowable;
         }
         
         /// <summary>

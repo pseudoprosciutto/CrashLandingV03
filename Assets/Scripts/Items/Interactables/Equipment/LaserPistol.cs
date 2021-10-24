@@ -93,6 +93,7 @@ namespace CL03
             this.gameObject.SetActive(true);
             //this.enabled = true;
             isInHands = true;
+            isThrowable = true;
             isInInventory = false;
         }
 

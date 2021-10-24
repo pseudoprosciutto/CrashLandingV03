@@ -18,8 +18,7 @@ namespace CL03
         public LayerMask Stoppables;
 
         [SerializeField] float lifeLengthInSeconds = 2f;
-        [SerializeField] float ScreenWidth = 7f;
-        [SerializeField] float buffer = .1f;
+
 
         Rigidbody2D rb;
         #endregion
@@ -41,7 +40,7 @@ namespace CL03
         /// </summary>
         private void MoveProjectile()
         {
-            rb.velocity = Vector2.left * projectileSpeed * projectileDirection;
+            rb.velocity = -Vector2.left * projectileSpeed * projectileDirection;
             //  CheckBounds(); //this is now timed death.
         }
         public void explode()
@@ -63,9 +62,11 @@ namespace CL03
             switch (hitInfo.gameObject.layer)
             {
                 case 6:
-                    print("hit ground layer 6");
-                Destroy(gameObject);
-                    break;
+                    {
+                        print("hit ground layer 6");
+                        Destroy(gameObject);
+                        break;
+                    }
 
                 default:
                     break;

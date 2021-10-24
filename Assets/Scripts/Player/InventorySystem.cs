@@ -259,6 +259,7 @@ namespace CL03
 				//if there is an item in our hand
 				if (objectBeingHeld != null)
 				{
+					isHoldingSomething = true;
 					objectScript = objectBeingHeld.GetComponent<HoldableObjects>();
 					objectScript.TakeOutOfInventory();
 					objectCollider = objectBeingHeld.GetComponent<BoxCollider2D>();

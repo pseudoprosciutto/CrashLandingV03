@@ -110,7 +110,8 @@ MonoBehaviour:
   isStaticCoolingDown: 0
   staticCoolDownTime: 0.1
   isColliding: 0
-  LaserPrefab: {fileID: 0}
+  LaserSpawn: {fileID: 6829866361163996172}
+  LaserPrefab: {fileID: 1923500737393544478, guid: 3389a8970c6384c87aa3409b60e0e506, type: 3}
 --- !u!50 &674575157009483733
 Rigidbody2D:
   serializedVersion: 4

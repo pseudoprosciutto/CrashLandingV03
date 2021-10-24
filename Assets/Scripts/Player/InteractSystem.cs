@@ -81,7 +81,8 @@ namespace CL03
 				{
 					InteractInHand();
 				}
-				else if(ItemsCheck())
+				else
+				if(ItemsCheck())
 					{
 					if (engine.isSelected && !interactCoolingDown)
 					{

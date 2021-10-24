@@ -970,7 +970,7 @@ GameObject:
   - component: {fileID: 1036040106}
   - component: {fileID: 1036040105}
   - component: {fileID: 1036040104}
-  m_Layer: 9
+  m_Layer: 6
   m_Name: Crate
   m_TagString: Holdable
   m_Icon: {fileID: 2800000, guid: d0b99016b0bd840db9d7ba997f1df189, type: 3}
@@ -1058,7 +1058,7 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
@@ -1269,11 +1269,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!4 &1196871546 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6829866361163996172, guid: fe04cf3eab45e48c5b628c1ebf6962a3, type: 3}
-  m_PrefabInstance: {fileID: 674575156548521722}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1253061004
 GameObject:
   m_ObjectHideFlags: 0
@@ -4008,14 +4003,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 77820936}
     m_Modifications:
-    - target: {fileID: 674575157009483722, guid: fe04cf3eab45e48c5b628c1ebf6962a3, type: 3}
-      propertyPath: LaserSpawn
-      value: 
-      objectReference: {fileID: 1196871546}
-    - target: {fileID: 674575157009483722, guid: fe04cf3eab45e48c5b628c1ebf6962a3, type: 3}
-      propertyPath: LaserPrefab
-      value: 
-      objectReference: {fileID: 1923500737393544478, guid: 3389a8970c6384c87aa3409b60e0e506, type: 3}
     - target: {fileID: 674575157009483729, guid: fe04cf3eab45e48c5b628c1ebf6962a3, type: 3}
       propertyPath: m_Name
       value: machine_gun_blue
