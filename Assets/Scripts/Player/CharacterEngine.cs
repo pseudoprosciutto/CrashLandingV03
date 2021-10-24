@@ -330,6 +330,7 @@ namespace CL03
 			//If either ray hit the ground, the player is on the ground
 			if (leftFootCheck || rightFootCheck)
 				isOnGround = true;
+			
 			//isOnPlatform = true;
 		}
 

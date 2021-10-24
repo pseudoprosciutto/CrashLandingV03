@@ -8,7 +8,8 @@ using UnityEngine;
 namespace CL03
 {
 	/// <summary>
-    /// Singleton instance which manages game states.
+    /// This class or another static class will hold the values for the 
+	/// characters base and with equipment modifications so the class will look for what its value is in the right position
     /// </summary>
 	public class GameManager : MonoBehaviour
 	{
@@ -157,9 +158,6 @@ namespace CL03
 
 		void RestartScene()
 		{
-			//Clear the current list of orbs
-//			orbs.Clear();
-
 			//Play the scene restart audio
 //			AudioManager.PlaySceneRestartAudio();
 

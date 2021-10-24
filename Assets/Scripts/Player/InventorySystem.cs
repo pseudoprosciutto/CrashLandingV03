@@ -64,9 +64,7 @@ namespace CL03
 
 		public Vector2 objectColliderSize;
 		public bool isInteracting_Test;    //test bool
-
         #endregion
-
 
         void Awake()
         {
