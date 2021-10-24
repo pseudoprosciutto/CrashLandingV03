@@ -1,5 +1,6 @@
 /* Code by: Matthew Sheehan */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
@@ -11,39 +12,34 @@ namespace CL03
     /// This class or another static class will hold the values for the 
 	/// characters base and with equipment modifications so the class will look for what its value is in the right position
     /// </summary>
-	public class GameManager : MonoBehaviour
+	public class GameManager : Singleton<GameManager>
 	{
-		//Game manager singleton design pattern. Other
-		//scripts access this one through its public static methods
+
 		static public GameManager GM;
-
-//		public float deathSequenceDuration = 1.5f;  //How long player death takes before restarting
-
-//		List<Orb> orbs;                             //The collection of scene orbs
-//		Door lockedDoor;                            //The scene door
-//		SceneFader sceneFader;                      //The scene fader
-
-		int numberOfDeaths;                         //Number of times player has died
+        int numberOfDeaths;                         //Number of times player has died
 		float totalGameTime;                        //Length of the total game time
+
+		private DateTime _sessionStartTime;
+		private DateTime _sessionEndTime;
+
 		bool isGameOver;                            //Is the game currently over?
 
 
-		/// <summary>
-        /// Game Manager Awake: Create self instance and establish game states.
-        /// </summary>
-		void Awake()
-		{
-			if (GM != null && GM != this)
-			{
-				//There can only be one Game Manager
-				Destroy(gameObject);
-				return;
-			}
-			//Set this as the current game manager
-			GM = this;
-			//Persist this object between scene loads
-			DontDestroyOnLoad(gameObject);
+        void Start()
+        {
+			//TODO:
+			// - Load player save
+			// - if no save, redirect player to main menu scene
+			_sessionStartTime = DateTime.Now;
+			Debug.Log("Game session start @: " + DateTime.Now);
 		}
+
+
+        //		public float deathSequenceDuration = 1.5f;  //How long player death takes before restarting
+
+        //		List<Orb> orbs;                             //The collection of scene orbs
+        //		Door lockedDoor;                            //The scene door
+        //		SceneFader sceneFader;                      //The scene fader
 
 		void Update()
 		{
@@ -58,15 +54,62 @@ namespace CL03
 //			UIManager.UpdateTimeUI(totalGameTime);
 		}
 
+		void OnApplicationQuit()
+		{
+			_sessionEndTime = DateTime.Now;
+			TimeSpan timeDifference =
+			_sessionEndTime.Subtract(_sessionStartTime);
+			Debug.Log(
+			"Game session ended @: " + DateTime.Now);
+			Debug.Log(
+			"Game session lasted: " + timeDifference);
+		}
+		void OnGUI()
+		{
+			if (GUILayout.Button("Next Scene"))
+			{
+				SceneManager.LoadScene(
+				SceneManager.GetActiveScene().buildIndex + 1);
+			}
+		}
+
+
 		public static bool IsGameOver()
 		{
-			//If there is no current Game Manager, return false
+			//If there is no current Game Manager, return false as there is no game
 			if (GM == null)
 				return false;
 
 			//Return the state of the game
 			return GM.isGameOver;
 		}
+
+		public static void PlayerWon()
+		{
+			//If there is no current Game Manager, exit
+			if (GM == null)
+				return;
+
+			//The game is now over
+			GM.isGameOver = true;
+
+			//Tell UI Manager to show the game over text and tell the Audio Manager to play
+			//game over audio
+//			UIManager.DisplayGameOverText();
+//			AudioManager.PlayWonAudio();
+		}
+
+		void RestartScene()
+		{
+			//Play the scene restart audio
+//			AudioManager.PlaySceneRestartAudio();
+
+			//Reload the current scene
+//			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+		}
+	}
+}
+
 
 		//public static void RegisterSceneFader(SceneFader fader)
 		//{
@@ -140,29 +183,3 @@ namespace CL03
 //			//Invoke the RestartScene() method after a delay
 //			current.Invoke("RestartScene", current.deathSequenceDuration);
 //		}
-
-		public static void PlayerWon()
-		{
-			//If there is no current Game Manager, exit
-			if (GM == null)
-				return;
-
-			//The game is now over
-			GM.isGameOver = true;
-
-			//Tell UI Manager to show the game over text and tell the Audio Manager to play
-			//game over audio
-//			UIManager.DisplayGameOverText();
-//			AudioManager.PlayWonAudio();
-		}
-
-		void RestartScene()
-		{
-			//Play the scene restart audio
-//			AudioManager.PlaySceneRestartAudio();
-
-			//Reload the current scene
-//			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-		}
-	}
-}
