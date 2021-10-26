@@ -27,6 +27,7 @@ namespace CL03
 
         private void Start()
         {
+            itemType = ItemType.Pistol;
             BC = GetComponent<BoxCollider2D>();
             colliderSizeGround = new Vector2(colliderSizeGroundX, colliderSizeGroundY);
             colliderSizeHeld = new Vector2(colliderSizeHeldX, colliderSizeHeldY);

@@ -5,6 +5,15 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 namespace CL03
 {
+    public enum ItemType
+    {
+        Generic,
+        Crate,
+        Pistol, 
+        Boots,
+        Teleporter,
+        Receiver,
+    }
     /// <summary>
     /// Interactable Objects which can be held.
     /// 
@@ -23,7 +32,8 @@ namespace CL03
         //held properties
         [SerializeField]
         protected bool canBeHeld;
-       
+        [SerializeField]
+        protected ItemType itemType = ItemType.Generic;
         public bool canBeStored = false; //default false
         public bool isCrate = false;
         [SerializeField]
@@ -106,6 +116,9 @@ namespace CL03
             PhysicsCheck();
             IsHeldPositionCheck();    
         }
+
+        public virtual ItemType GetItemType { get { return itemType; } protected set { } }
+
 
         /// <summary>
         /// Holdable items can be held above head or below.

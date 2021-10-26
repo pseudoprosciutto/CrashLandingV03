@@ -5,18 +5,23 @@ using UnityEngine;
 
 namespace CL03
 {
+
+    /// <summary>
+    /// These boots are made for bouncing. off walls. Basically they add jump power behind each jump and allow bouncing off wall.
+    /// </summary>
     public class BounceBoots : HoldableObjects, IEquippedUseable
     {
         [Required]
         BoxCollider2D BC;
 
-        bool shootingIsCoolingDown = false;
-        float shootingCoolDownTime = .25f;
+        bool bounceOffWallCoolingDown = false;
+        float bounceOffWallCoolDownTime = .33f;
 
         float colliderSizeHeldX;
         float colliderSizeHeldY;
         float colliderSizeGroundX;
         float colliderSizeGroundY;
+
         Vector2 colliderSizeHeld;
         Vector2 colliderSizeGround;
         public Transform LaserSpawn;
@@ -26,6 +31,7 @@ namespace CL03
 
         private void Start()
         {
+         itemType = ItemType.Boots;
             BC = GetComponent<BoxCollider2D>();
             colliderSizeGround = new Vector2(colliderSizeGroundX, colliderSizeGroundY);
             colliderSizeHeld = new Vector2(colliderSizeHeldX, colliderSizeHeldY);

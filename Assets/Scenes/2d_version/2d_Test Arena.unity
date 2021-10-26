@@ -368,11 +368,10 @@ GameObject:
   - component: {fileID: 379565273}
   - component: {fileID: 379565272}
   - component: {fileID: 379565271}
-  - component: {fileID: 379565270}
   m_Layer: 8
-  m_Name: ItemPlaceHolder
+  m_Name: Bounce_Boots
   m_TagString: Item
-  m_Icon: {fileID: 2800000, guid: 6ca50f5a9cd2e4331a0dae630c7a25a6, type: 3}
+  m_Icon: {fileID: 2800000, guid: 2a5d0a7febdc741039abf135883517e5, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -390,32 +389,6 @@ Transform:
   m_Father: {fileID: 77820936}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &379565270
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 379565268}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 705d3e3d67c704d508ed34df0b2bb51b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canBeHeld: 1
-  canBeStored: 1
-  isCrate: 0
-  isHeld: 0
-  HeldBy: {fileID: 0}
-  isInInventory: 0
-  useableInInventory: 0
-  gravity: 20
-  objectMass: 20
-  isStaticCoolingDown: 0
-  staticCoolDownTime: 0.1
-  isColliding: 0
-  LaserSpawn: {fileID: 0}
-  LaserPrefab: {fileID: 0}
 --- !u!61 &379565271
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1008,6 +981,8 @@ MonoBehaviour:
   isCrate: 0
   isHeld: 0
   HeldBy: {fileID: 0}
+  hasAlwaysBeenThrowable: 1
+  isThrowable: 0
   isInInventory: 0
   useableInInventory: 0
   gravity: 600
@@ -1164,6 +1139,8 @@ MonoBehaviour:
   isCrate: 0
   isHeld: 0
   HeldBy: {fileID: 0}
+  hasAlwaysBeenThrowable: 1
+  isThrowable: 0
   isInInventory: 0
   useableInInventory: 0
   gravity: 1

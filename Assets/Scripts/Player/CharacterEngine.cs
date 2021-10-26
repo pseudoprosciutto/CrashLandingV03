@@ -14,6 +14,8 @@ namespace CL03
 {
 	/// <summary>
 	/// Character Script handles character properties and states, movement, and core character functions for other components to reference.
+	/// TO DO: 
+	/// Going to refactor this t
 	/// </summary>
 	public class CharacterEngine : MonoBehaviour
 	{
@@ -304,6 +306,7 @@ namespace CL03
 			//Start by assuming the character isn't on the ground and the head isn't blocked
 			CharacterStandingOnSurfaceCheck();
 			CharacterHeadCheck();
+			CharacterWallCheck();
 
 			//if hands are empty than we can attempt a wallgrab check.
 			if (!inventory.isHoldingSomething) //ObjectBeingHeld)
@@ -391,6 +394,7 @@ namespace CL03
 				}
 			}
 		}
+
 		#endregion
 
 		#region object checks

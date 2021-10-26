@@ -26,6 +26,8 @@ namespace CL03
 		[GUIColor(0.3f, 0.8f, 0.8f, .2f)]
 		[PreviewField]
 		public GameObject inventoryItem = null;
+		//[Title("Equipment Type:")]
+		//public 
 
 		[Required]
 		[ChildGameObjectsOnly]
