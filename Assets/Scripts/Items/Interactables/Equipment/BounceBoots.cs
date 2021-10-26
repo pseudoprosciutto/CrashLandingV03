@@ -104,24 +104,12 @@ namespace CL03
 
         #endregion
         /// <summary>
-        /// The Laser Pistol's use
+        /// The Bounce boots will have a passive ability so will not have a use
         /// </summary>
         override public void UseAsEquipment()
         {
-            //cant use equipment if we are cooling down, hanging, or holding something else.
-            if (shootingIsCoolingDown || HeldBy_Engine.isHanging || HeldBy_Inventory.isHoldingSomething) return;
-            StartCoroutine(ShootCoolingDown());
-            Shoot();
+       
         }
-
-        #region Laser Pistol Methods
-        void Shoot()
-        {
-            //GameObject projectile;
-            GameObject LaserBullet = Instantiate(LaserPrefab, LaserSpawn.position, transform.rotation) as GameObject;
-            LaserBullet.GetComponent<LaserController>().projectileDirection = objectDirection;
-        }
-        #endregion
 
         /// <summary>
         /// 
@@ -155,11 +143,11 @@ namespace CL03
         /// Cool down of shootingCoolDownTime
         /// </summary>
         /// <returns> wait for seconds shootingCoolDownTime</returns>
-        IEnumerator ShootCoolingDown()
+        IEnumerator BounceCoolingDown()
         {
-            shootingIsCoolingDown = true;
-            yield return new WaitForSeconds(shootingCoolDownTime);
-            shootingIsCoolingDown = false;
+            bounceOffWallCoolingDown = true;
+            yield return new WaitForSeconds(bounceOffWallCoolDownTime);
+            bounceOffWallCoolingDown = false;
             yield break;
         }
     }

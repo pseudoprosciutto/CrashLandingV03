@@ -75,6 +75,10 @@ namespace CL03
 		[FoldoutGroup("Jump Properties", expanded: false)]
 		public float jumpForce = 28.5f;           //Initial force of jump
 		[FoldoutGroup("Jump Properties")]
+		public float bootsJumpForce = 33.5f;           //Initial force of jump
+		[FoldoutGroup("Jump Properties")]
+		public float bootsModifier = 5f;           //Initial force of jump
+		[FoldoutGroup("Jump Properties")]
 		public float jumpCoolDownTime = 0.6f;   //To prevent spammable jumping
 		[FoldoutGroup("Jump Properties")]
 		public float crouchJumpBoost = 2.5f;    //Jump boost when crouching
@@ -301,13 +305,21 @@ namespace CL03
 			//then we need to be in need reviving position and all tags need to be set on.
 //might not even need rest of physics check.
 
-
-
 			//Start by assuming the character isn't on the ground and the head isn't blocked
 			CharacterStandingOnSurfaceCheck();
 			CharacterHeadCheck();
-			CharacterWallCheck();
+			//special case for bounce boots,
+			if(inventory.inventoryItem!= null)
+            {
+				if(inventory.inventoryItem.GetComponent<HoldableObjects>().GetItemType == ItemType.Boots)
+				{
+					if(!isOnGround && ObjectInBottomFrontCornerCheck())
+                    {
 
+                    }
+						;
+				}
+            }
 			//if hands are empty than we can attempt a wallgrab check.
 			if (!inventory.isHoldingSomething) //ObjectBeingHeld)
 			{
@@ -412,12 +424,28 @@ namespace CL03
 			}
 			return false;
 		}
-		
 
 		/// <summary>
-        /// Check around object above head.
-        /// if the object above head is not going to clear then character is stuck from moving any further
-        /// </summary>
+		/// Check around object below corner for jumping bounce.
+		/// if the object is clear then can jump again
+		/// </summary>
+		public bool ObjectInBottomFrontCornerCheck()
+		{
+			RaycastHit2D hitCheckObjectClearance = Raycast2(new Vector2(.2f * direction, .3f), new Vector2(direction, -Mathf.Abs(direction)), 0.8f, walkables);
+			if (hitCheckObjectClearance)
+			{
+
+				Debug.Log("object below corner hit check");
+				return true;
+			}
+			return false;
+		}
+
+
+		/// <summary>
+		/// Check around object above head.
+		/// if the object above head is not going to clear then character is stuck from moving any further
+		/// </summary>
 		public void ObjectAboveHeadCheck() {
 			objectHitCheck = false;
 					RaycastHit2D hitCheckObjectClearance = Raycast2(new Vector2(footOffset * direction, 2.5f), new Vector2(direction, 0f), 0.2f, walkables);
@@ -470,7 +498,7 @@ namespace CL03
 		#endregion
 
 
-		#region Hanging Actions
+		#region Special Action check
 		/// <summary>
 		/// Character grabs wall and hangs.
 		/// Check to see if there is a hangalble platform by raycasting.
@@ -769,6 +797,7 @@ namespace CL03
 		void MoveModify()
         {
 			isRunning = true;
+//modify bounce boots run speed here
 			speed = runSpeed;
         }
 		/// <summary>
