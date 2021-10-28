@@ -31,6 +31,7 @@ namespace CL03
 
         private void Start()
         {
+            canBeStored = true;
          itemType = ItemType.Boots;
             BC = GetComponent<BoxCollider2D>();
             colliderSizeGround = new Vector2(colliderSizeGroundX, colliderSizeGroundY);
@@ -88,13 +89,15 @@ namespace CL03
         {
             isInHands = false;
             isInInventory = true;
+            this.gameObject.SetActive(false);
+            HeldBy_Engine.setSateMode(StateMods.wearingBoots);
 
-            // this.gameObject.SetActive(false);
             //this.enabled = false;
         }
 
         public override void TakeOutOfInventory()
         {
+            HeldBy_Engine.setSateMode(StateMods.Default);
             this.gameObject.SetActive(true);
             //this.enabled = true;
             isInHands = true;

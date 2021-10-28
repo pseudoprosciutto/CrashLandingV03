@@ -209,6 +209,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bodyCollider: {fileID: 0}
+  state: 0
   isSelected: 1
   needsReviving: 0
   isOnGround: 0
@@ -217,13 +218,16 @@ MonoBehaviour:
   isJumping: 0
   isCrouching: 0
   isHeadBlocked: 0
+  isFrontHeadBlocked: 0
   isHanging: 0
   objectHitCheck: 0
   hitOverHeadLeft: 0
   hitOverHeadRight: 0
   hitOverHeadFrontCorner: 0
+  hitBottomFrontCorner: 0
+  canBounceOffWall: 0
   canHang: 1
-  cantHangCoolDownTime: 1.5
+  cantHangCoolDownTime: 0.9
   objectHitCheckCoolDownTime: 0.5
   objectHitCoolingDown: 0
   speed: 4.2
@@ -232,8 +236,12 @@ MonoBehaviour:
   crouchSpeedDivisor: 3
   coyoteDuration: 0.05
   maxFallSpeed: -25
-  jumpForce: 28.5
-  jumpCoolDownTime: 0.6
+  jumpForce: 25
+  bootsBounceUp: 42
+  bootsBounceOut: 15
+  bootsJumpForce: 30
+  bootsModifier: 1.5
+  jumpCoolDownTime: 0.5
   crouchJumpBoost: 2.5
   hangingJumpForce: 31
   jumpHoldForce: 1.9

@@ -53,7 +53,7 @@ namespace CL03
 
 		public bool isHoldingSomething;
 		public bool isHoldingSomethingAbove;
-		public float changeItemCoolDownTime = 1.2f;
+		public float changeItemCoolDownTime = .7f;
 		public bool changeObjectCoolingDown;  //is object cooling down?
 
 

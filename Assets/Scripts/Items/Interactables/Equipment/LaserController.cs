@@ -57,6 +57,21 @@ namespace CL03
         }
         #endregion
 
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            switch (collision.gameObject.layer)
+            {
+                case 6:
+                    {
+                        print("hit ground layer 6");
+                        Destroy(gameObject);
+                        break;
+                    }
+
+                default:
+                    break;
+            }
+        }
         void OnTriggerEnter2D(Collider2D hitInfo)
         {
             switch (hitInfo.gameObject.layer)

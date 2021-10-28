@@ -12,6 +12,15 @@ using Cinemachine;
 /// </summary>
 namespace CL03
 {
+
+	/// <summary>
+	/// Character engine states
+	/// </summary>
+	public enum StateMods
+    {
+		Default,
+		wearingBoots,
+    }
 	/// <summary>
 	/// Character Script handles character properties and states, movement, and core character functions for other components to reference.
 	/// TO DO: 
@@ -25,7 +34,8 @@ namespace CL03
 		Rigidbody2D rigidBody;                  //The rigidbody component
 		InputHandler input;                     //The current inputs for the player
 		InventorySystem inventory;              //inventory system
-		HealthSystem health;					//health system with revive stuffs
+		HealthSystem health;                    //health system with revive stuffs
+		public StateMods state;
 		#endregion
 
 		#region Character State bools
@@ -38,12 +48,15 @@ namespace CL03
 		[BoxGroup("Character State")] public bool isJumping;                  //Is player jumping?
 		[BoxGroup("Character State")] public bool isCrouching;                //Is player crouching?
 		[BoxGroup("Character State")] public bool isHeadBlocked;
+		[BoxGroup("Character State")] public bool isFrontHeadBlocked;
 		[BoxGroup("Character State")] public bool isHanging;                  //Is player hanging?
 																			  //[BoxGroup("Character State")] public bool isHoldingSomething;
 		[BoxGroup("Character State")] public bool objectHitCheck;										  //[BoxGroup("Character State")] public bool isHoldingSomethingAbove;
 		[BoxGroup("Character State")] public bool hitOverHeadLeft;
 		[BoxGroup("Character State")] public bool hitOverHeadRight;
 		[BoxGroup("Character State")] public bool hitOverHeadFrontCorner;
+		[BoxGroup("Character State")] public bool hitBottomFrontCorner;
+		[BoxGroup("Character State")] public bool canBounceOffWall;
 		#endregion
 
 		[Space]
@@ -55,6 +68,8 @@ namespace CL03
 		float objectHitCheckCoolDownTime =.5f;
 		[SerializeField]
 		bool objectHitCoolingDown = false;
+		bool jumpQuickCoolingDown = false;
+		bool dJumpCoolingDown = false;
 
 		#endregion
 		[Space]
@@ -73,13 +88,17 @@ namespace CL03
 		public float maxFallSpeed = -25f;       //Max speed player can fall
 
 		[FoldoutGroup("Jump Properties", expanded: false)]
-		public float jumpForce = 28.5f;           //Initial force of jump
+		public float jumpForce = 25f;           //Initial force of jump
 		[FoldoutGroup("Jump Properties")]
-		public float bootsJumpForce = 33.5f;           //Initial force of jump
+		public float bootsBounceUp = 42f;
 		[FoldoutGroup("Jump Properties")]
-		public float bootsModifier = 5f;           //Initial force of jump
+		public float bootsBounceOut = 15f;
 		[FoldoutGroup("Jump Properties")]
-		public float jumpCoolDownTime = 0.6f;   //To prevent spammable jumping
+		public float bootsJumpForce = 30f;           //Initial force of jump
+		[FoldoutGroup("Jump Properties")]
+		public float bootsModifier = 1.5f;           //Initial force of jump
+		[FoldoutGroup("Jump Properties")]
+		public float jumpCoolDownTime = 0.5f;   //To prevent spammable jumping
 		[FoldoutGroup("Jump Properties")]
 		public float crouchJumpBoost = 2.5f;    //Jump boost when crouching
 		[FoldoutGroup("Jump Properties")]
@@ -127,7 +146,7 @@ namespace CL03
 		[FoldoutGroup("Environment Check Properties")]
 		public float headClearance = .5f;       //Space needed above the player's head
 		[FoldoutGroup("Environment Check Properties")]
-		public float breakOverHeadDistance = 1f;
+		public float breakOverHeadDistance =.1f;
 		[FoldoutGroup("Environment Check Properties")]
 		public float groundDistance = .1f;      //Distance player is considered to be on the ground
 		[FoldoutGroup("Environment Check Properties")]
@@ -285,6 +304,16 @@ namespace CL03
 		}
 		#endregion
 
+		#region getmessages
+		///we are going to get a message to tell us we have certain equipment so as not to keep doing searches.
+		public void setSateMode(StateMods _state)
+        {
+			this.state = _state;
+        }
+
+		#endregion
+
+
 		#region Physics Check
 		/// <summary>
 		/// Check Environment and update status. 
@@ -308,18 +337,25 @@ namespace CL03
 			//Start by assuming the character isn't on the ground and the head isn't blocked
 			CharacterStandingOnSurfaceCheck();
 			CharacterHeadCheck();
-			//special case for bounce boots,
-			if(inventory.inventoryItem!= null)
-            {
-				if(inventory.inventoryItem.GetComponent<HoldableObjects>().GetItemType == ItemType.Boots)
-				{
-					if(!isOnGround && ObjectInBottomFrontCornerCheck())
-                    {
 
-                    }
-						;
+			//special case for bounce boots,
+			if (this.state == StateMods.wearingBoots)
+			{
+				//whenever off ground than we will check in bottom corner.
+				if (!isOnGround)
+                {
+					ObjectInBottomFrontCornerCheck();
+					if (hitBottomFrontCorner)
+					{
+						canBounceOffWall = true;
+					}
+					else
+					{
+						canBounceOffWall = false;
+					}
 				}
-            }
+
+			} 
 			//if hands are empty than we can attempt a wallgrab check.
 			if (!inventory.isHoldingSomething) //ObjectBeingHeld)
 			{
@@ -355,9 +391,11 @@ namespace CL03
 		/// </summary>
 		void CharacterHeadCheck()
 		{
-			RaycastHit2D hitCheckObjectClearance = Raycast2(new Vector2(.2f * direction, 1.8f), new Vector2(direction, Mathf.Abs(direction)), 0.8f, walkables);
-
 			isHeadBlocked = false;
+			isFrontHeadBlocked = false;
+			RaycastHit2D hitCheckObjectClearance = Raycast2(new Vector2(.2f * direction, 1.8f), new Vector2(direction, Mathf.Abs(direction)), 0.7f, walkables);
+			if (hitCheckObjectClearance)
+				isFrontHeadBlocked = true;
 
 			if (inventory.isHoldingSomethingAbove)
 			{
@@ -373,8 +411,8 @@ namespace CL03
 			hitOverHeadRight = false;
 
 			//HEAD CHECK   ?? this one is confused with another isHeadBlocked below
-			RaycastHit2D fullHeadCheck = Raycast2(new Vector2(Math.Abs(direction) - 1.5f, playerHeight), Vector2.right, 1f, walkables);
-			if (fullHeadCheck) { isHeadBlocked = true; }
+		//	RaycastHit2D fullHeadCheck = Raycast2(new Vector2(.3f*direction, playerHeight), Vector2.right, .6f, walkables);
+		//	if (fullHeadCheck) { isHeadBlocked = true; }
 
 			//this loc checks are to eventually push object a certain way to fall off head and not stick.
 			RaycastHit2D leftHeadCheck = Raycast(new Vector2(-headOffset, bodyCollider.size.y), Vector2.up, breakOverHeadDistance);
@@ -392,13 +430,13 @@ namespace CL03
 			RaycastHit2D headCheck = Raycast2(new Vector2(0f, bodyCollider.size.y), Vector2.up, headClearance, walkables);
 
 			//If that ray hits, the player's head is blocked
-			if (headCheck)
+			if (headCheck || hitOverHeadLeft || hitOverHeadRight)
 			{
 				isHeadBlocked = true;
 				Debug.Log("object hit head test");
 				//something bonks the head, it will no longer get stuck there because we are flat headed and smooth brained.
 				//if (!headCheck.collider.CompareTag("Environment") && !headCheck.collider.CompareTag("Surface") && !headCheck.collider.Equals(ObjectBeingHeld))
-				if (!headCheck.collider.CompareTag("Surface") && !headCheck.collider.Equals(inventory.objectBeingHeld))
+				if (!headCheck.collider.CompareTag("Surface") && (inventory.objectBeingHeld == null || !headCheck.collider.Equals(inventory.objectBeingHeld)))
 				{
 					//slight backwards force added to prevent objects from staying on head. things should just roll off
 					Rigidbody2D rb = headCheck.collider.GetComponent<Rigidbody2D>();
@@ -429,16 +467,16 @@ namespace CL03
 		/// Check around object below corner for jumping bounce.
 		/// if the object is clear then can jump again
 		/// </summary>
-		public bool ObjectInBottomFrontCornerCheck()
+		public void ObjectInBottomFrontCornerCheck()
 		{
-			RaycastHit2D hitCheckObjectClearance = Raycast2(new Vector2(.2f * direction, .3f), new Vector2(direction, -Mathf.Abs(direction)), 0.8f, walkables);
+			hitBottomFrontCorner = false;
+			RaycastHit2D hitCheckObjectClearance = Raycast2(new Vector2(.2f * direction, .3f), new Vector2(direction, -Mathf.Abs(direction)), 0.3f, walkables);
+			//hitBottomFrontCorner = hitCheckObjectClearance;
 			if (hitCheckObjectClearance)
 			{
-
-				Debug.Log("object below corner hit check");
-				return true;
+				print("Bouncable area");
+				hitBottomFrontCorner = true;
 			}
-			return false;
 		}
 
 
@@ -462,8 +500,8 @@ namespace CL03
 		/// </summary>
 		public bool ObjectChangeHitFrontCheck()
 		{
-			RaycastHit2D hitCheckObjectClearance1 = Raycast2(new Vector2((footOffset + reachOffset + .2f) * direction, 1.25f), new Vector2(direction, 0f), 0.2f, walkables);
-			RaycastHit2D hitCheckObjectClearance2 = Raycast2(new Vector2((footOffset + reachOffset + .2f) * direction, 1.25f), new Vector2(0, 1f), .4f, walkables);
+			RaycastHit2D hitCheckObjectClearance1 = Raycast2(new Vector2((footOffset + reachOffset + .4f) * direction, 1.25f), new Vector2(direction, 0f), 0.2f, walkables);
+			RaycastHit2D hitCheckObjectClearance2 = Raycast2(new Vector2((footOffset + reachOffset + .4f) * direction, 1.25f), new Vector2(0, 1f), .4f, walkables);
 
 			if (hitCheckObjectClearance1 || hitCheckObjectClearance2)
 			{
@@ -547,6 +585,11 @@ namespace CL03
 		}
 		#endregion
 
+
+
+
+
+
 		#region Basic Horizontal Movement
 		void GroundMovement()
 		{
@@ -559,6 +602,11 @@ namespace CL03
 				MoveModify();
 			else
 				speed = walkSpeed;
+			
+			if (state == StateMods.wearingBoots)
+				speed += bootsModifier;
+			
+			
 			//Handle crouching input. If holding the crouch button but not crouching, crouch
 			if (input.crouchHeld && !isCrouching && isOnGround)
 				Crouch();
@@ -754,14 +802,33 @@ namespace CL03
 				jumpTime = Time.time + jumpHoldDuration;
 
 				//...add the jump force to the rigidbody...
-				rigidBody.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
+				//if character is wearing boots
+				if (this.state == StateMods.wearingBoots)
+				{
+					rigidBody.AddForce(new Vector2(0f, bootsJumpForce), ForceMode2D.Impulse);
+				}
+				else//if character is not wearing boots
+				{
+					rigidBody.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
+				}
 				StartCoroutine(JumpCoolingDown());
 				//...and tell the Audio Manager to play the jump audio
 				//				AudioManager.PlayJumpAudio();
 			}
+			//else double jump
+			else if(state == StateMods.wearingBoots && input.jumpPressed && hitBottomFrontCorner &&!isOnGround
+				&& !jumpQuickCoolingDown && !dJumpCoolingDown&& rigidBody.velocity.x>.3f)
+					{
+				print("double Jump");
+				rigidBody.AddForce(new Vector2(bootsBounceOut*-direction, bootsBounceUp), ForceMode2D.Impulse);
+				StartCoroutine(DoubleJumpCoolingDown());
+			}
+
+
+
 
 			//Otherwise, if currently within the jump time window
-			else if (isJumping)
+						else if (isJumping)
 			{
 				//and the jump button is held, apply an incremental force to the rigidbody
 
@@ -772,6 +839,10 @@ namespace CL03
 				if (jumpTime <= Time.time)
 					isJumping = false;
 			}
+
+
+
+			// will come back to this because the player will need revival after a certain speed
 
 			//If player is falling too fast, reduce the Y velocity to the max
 			if (rigidBody.velocity.y < maxFallSpeed)
@@ -785,8 +856,24 @@ namespace CL03
 		IEnumerator JumpCoolingDown()
 		{
 			jumpCoolingDown = true;
+			jumpQuickCoolingDown = true;
+				yield return new WaitForSeconds(.25f);
+			jumpQuickCoolingDown = false;
 			yield return new WaitForSeconds(jumpCoolDownTime);
 			jumpCoolingDown = false;
+			//Debug.Log("jump Cooldown passed");
+			yield return null;
+		}
+
+		/// <summary>
+		/// Jump cool down coroutine
+		/// </summary>
+		/// <returns>jumpCollingDown = false</returns>
+		IEnumerator DoubleJumpCoolingDown()
+		{
+			dJumpCoolingDown = true;
+			yield return new WaitForSeconds(1.5f);
+			dJumpCoolingDown = false;
 			//Debug.Log("jump Cooldown passed");
 			yield return null;
 		}

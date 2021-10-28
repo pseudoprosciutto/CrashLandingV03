@@ -368,6 +368,7 @@ GameObject:
   - component: {fileID: 379565273}
   - component: {fileID: 379565272}
   - component: {fileID: 379565271}
+  - component: {fileID: 379565270}
   m_Layer: 8
   m_Name: Bounce_Boots
   m_TagString: Item
@@ -383,12 +384,41 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 379565268}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.36, y: -2.21, z: 0.8899174}
+  m_LocalPosition: {x: 2.59, y: -0.01, z: 0.8899174}
   m_LocalScale: {x: 0.78, y: 0.78, z: 1}
   m_Children: []
   m_Father: {fileID: 77820936}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &379565270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 379565268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed176183e54344e9f953e6f0276de008, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canBeHeld: 0
+  itemType: 0
+  canBeStored: 0
+  isCrate: 0
+  isHeld: 0
+  HeldBy: {fileID: 0}
+  hasAlwaysBeenThrowable: 1
+  isThrowable: 0
+  isInInventory: 0
+  useableInInventory: 0
+  gravity: 1
+  objectMass: 0
+  isStaticCoolingDown: 0
+  staticCoolDownTime: 0.1
+  isColliding: 0
+  LaserSpawn: {fileID: 0}
+  LaserPrefab: {fileID: 0}
 --- !u!61 &379565271
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -977,6 +1007,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canBeHeld: 1
+  itemType: 0
   canBeStored: 0
   isCrate: 0
   isHeld: 0
@@ -1135,6 +1166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canBeHeld: 1
+  itemType: 0
   canBeStored: 1
   isCrate: 0
   isHeld: 0
@@ -3990,11 +4022,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 674575157009483734, guid: fe04cf3eab45e48c5b628c1ebf6962a3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.79
+      value: 7.08
       objectReference: {fileID: 0}
     - target: {fileID: 674575157009483734, guid: fe04cf3eab45e48c5b628c1ebf6962a3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.06
+      value: 2.08
       objectReference: {fileID: 0}
     - target: {fileID: 674575157009483734, guid: fe04cf3eab45e48c5b628c1ebf6962a3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4094,6 +4126,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 573176512}
     m_Modifications:
+    - target: {fileID: 7203530896771738682, guid: 02f986a87a88845ddbe18b2794f12690, type: 3}
+      propertyPath: crateLayer.m_Bits
+      value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 7203530896771738682, guid: 02f986a87a88845ddbe18b2794f12690, type: 3}
+      propertyPath: itemsLayer.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 7203530896771738682, guid: 02f986a87a88845ddbe18b2794f12690, type: 3}
+      propertyPath: groundLayer.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 7203530896771738682, guid: 02f986a87a88845ddbe18b2794f12690, type: 3}
+      propertyPath: walkableObject.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7203530896771738682, guid: 02f986a87a88845ddbe18b2794f12690, type: 3}
+      propertyPath: staticInteractablesLayer.m_Bits
+      value: 1024
+      objectReference: {fileID: 0}
     - target: {fileID: 7203530896771738685, guid: 02f986a87a88845ddbe18b2794f12690, type: 3}
       propertyPath: m_Name
       value: RED
