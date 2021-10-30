@@ -246,7 +246,7 @@ namespace CL03
                 // crouchPressed = crouchPressed;// || Input.GetButtonDown("Crouch");
                 // crouchHeld = crouchHeld;// || Input.GetButton("Crouch");
                 //Process keyboard, mouse, gamepad (etc) inputs
-            ProcessInputs();
+          //  ProcessInputs();
             }
         void ProcessInputs()
         {
