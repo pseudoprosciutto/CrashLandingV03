@@ -19,16 +19,18 @@ namespace CL03
         /// <summary>
         /// Handles the input events by caching them into public variables to be accessed.
         /// </summary>
-        public class InputHandler : MonoBehaviour
+       // not sure if ready to make this a singleton public class InputHandler : Singleton<InputHandler>
+       public class InputHandler :MonoBehaviour
         {
+      //  static public InputHandler Input;
 
             [Header("Basic Move States")]
             public bool crouchPressed;
             public bool crouchHeld;
             public bool jumpPressed;
             public bool jumpHeld;
-        public bool moveModifyPressed;
-        public bool moveModifyHeld;
+            public bool moveModifyPressed;
+            public bool moveModifyHeld;
             [Header("Move Value")]
             public float horizontal;
             public float vertical;
@@ -72,6 +74,7 @@ namespace CL03
             #region BASIC MOVEMENT
             public void OnMove(InputAction.CallbackContext context)
             {
+            
                 tempMovement = context.ReadValue<Vector2>();
                 horizontal = tempMovement.x;
                 vertical = tempMovement.y;
@@ -147,45 +150,21 @@ namespace CL03
         }
         #endregion
 
-        #region GENERIC ACTIONS
-        public void OnAction1(InputAction.CallbackContext context)
-            {
-                if (context.interaction is HoldInteraction)
-                    action1Held = context.ReadValueAsButton();
-                else
-                    action1Pressed = context.ReadValueAsButton();
-            }
-            public void OnAction2(InputAction.CallbackContext context)
-            {
-                if (context.interaction is HoldInteraction)
-                    action2Held = context.ReadValueAsButton();
-                else
-                    action2Pressed = context.ReadValueAsButton();
-            }
 
-            #endregion
-            #region LAUNCH CONSOLE
-            public void OnConsoleLaunch(InputAction.CallbackContext context)
-            {
-                if (context.interaction is HoldInteraction)
-                    consoleLaunchHeld = context.ReadValueAsButton();
-                else
-                    consoleLaunchPressed = context.ReadValueAsButton();
-            }
-            #endregion
+         
 
         //this is in switch character controller
 
             #region CHARACTER CHANGE
-            //public void OnChangeForward(InputAction.CallbackContext context)
-            //{
-            //    forwardChange = context.ReadValueAsButton();
-            //}
+            public void OnChangeForward(InputAction.CallbackContext context)
+            {
+                forwardChange = context.ReadValueAsButton();
+            }
 
-            //public void OnChangeBackward(InputAction.CallbackContext context)
-            //{
-            //    backwardChange = context.ReadValueAsButton();
-            //}
+            public void OnChangeBackward(InputAction.CallbackContext context)
+            {
+                backwardChange = context.ReadValueAsButton();
+            }
             //public void OnChar1(InputAction.CallbackContext context)
             //{
             //    chooseChar1= context.ReadValueAsButton();
@@ -232,7 +211,7 @@ namespace CL03
                     controls = new PlayerControls();
                     // Tell the "gameplay" action map that we want to get told about
                     // when actions get triggered.
-                    //                controls.Player.SetCallbacks(this);
+                      //  controls.Player.SetCallbacks(this);
                 }
                 controls.Enable();
             }
@@ -252,6 +231,8 @@ namespace CL03
 
                 interactPressed = false;
                 interactHeld = false;
+
+
             }
 
 
@@ -265,9 +246,13 @@ namespace CL03
                 // crouchPressed = crouchPressed;// || Input.GetButtonDown("Crouch");
                 // crouchHeld = crouchHeld;// || Input.GetButton("Crouch");
                 //Process keyboard, mouse, gamepad (etc) inputs
-                // ProcessInputs();
+            ProcessInputs();
             }
-
+        void ProcessInputs()
+        {
+            horizontal = tempMovement.x;
+            vertical = tempMovement.y;
+        }
             /**
             void Update()
                 {

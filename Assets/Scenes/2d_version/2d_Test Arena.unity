@@ -675,10 +675,6 @@ MonoBehaviour:
     m_ActionName: Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: f890fe02-52d5-42e3-8d48-06d4ef455253
-    m_ActionName: Player/Fire[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: 220538d0-258a-48a4-8488-18ec19798b86
     m_ActionName: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
   - m_PersistentCalls:
@@ -782,11 +778,35 @@ MonoBehaviour:
     m_ActionId: 5ce3d485-5960-4d37-9797-44a572f526c2
     m_ActionName: Player/Interact[/Keyboard/e]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 573176515}
+        m_TargetAssemblyTypeName: CL03.InputHandler, Assembly-CSharp
+        m_MethodName: OnChangeForward
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: ce40b40f-ff21-4801-b519-c0815d2c256b
     m_ActionName: Player/ChangeForward[/Keyboard/tab]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 573176515}
+        m_TargetAssemblyTypeName: CL03.InputHandler, Assembly-CSharp
+        m_MethodName: OnChangeBackward
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: e56eeecb-0b13-4b57-ac70-471ad102b82f
     m_ActionName: Player/ChangeBack[/Keyboard/backquote]
   - m_PersistentCalls:

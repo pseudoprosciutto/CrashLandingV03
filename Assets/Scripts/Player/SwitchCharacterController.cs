@@ -26,6 +26,7 @@ namespace CL03
         public GameObject[] Characters;
 
         public GameObject currentChar;
+        bool changeCoolingDown = false;
 
         [SerializeField] int selectedCharNumber;
         InputHandler input;
@@ -105,8 +106,10 @@ namespace CL03
         {
 
             //rotate forwards through char choices
-            if (Keyboard.current.tabKey.wasPressedThisFrame || Keyboard.current.periodKey.wasPressedThisFrame)
+            //if (Keyboard.current.tabKey.wasPressedThisFrame || Keyboard.current.periodKey.wasPressedThisFrame)
+            if(input.forwardChange && !changeCoolingDown)
             {
+                StartCoroutine(changeCoolDown());
                 //     CharSelectCursor.SendMessage("removeSelector");
                 selectedCharNumber++;
                 int selectChar = Mathf.Abs(selectedCharNumber % Characters.Length);
@@ -116,7 +119,8 @@ namespace CL03
             }
 
             //rotate backwards through char choices
-            if (Keyboard.current.backquoteKey.wasPressedThisFrame || Keyboard.current.commaKey.wasPressedThisFrame)
+            //if (Keyboard.current.backquoteKey.wasPressedThisFrame || Keyboard.current.commaKey.wasPressedThisFrame)
+            if (input.backwardChange && !changeCoolingDown)
             {
                 //      CharSelectCursor.SendMessage("removeSelector");
                 selectedCharNumber--;
@@ -126,6 +130,7 @@ namespace CL03
                 //     CharSelectCursor.SendMessage("showSelector");
             }
 
+            // number keys for keyboard debugging:
             //choose char 1
             if (Keyboard.current.digit1Key.wasPressedThisFrame)
             {
@@ -226,6 +231,13 @@ namespace CL03
             newChar.isSelected = true;
             //       print("remove successful.");
             //currentChar.transform.position = new Vector3(currentChar.transform.position.x, currentChar.transform.position.y,0f);
+        }
+        IEnumerator changeCoolDown()
+        {
+            changeCoolingDown = true;
+            yield return new WaitForSeconds(.7f);
+            changeCoolingDown = false;
+            yield return null;
         }
         #endregion
     }

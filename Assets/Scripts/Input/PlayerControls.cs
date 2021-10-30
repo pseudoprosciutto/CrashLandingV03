@@ -29,14 +29,6 @@ namespace CL03
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Fire"",
-                    ""type"": ""Button"",
-                    ""id"": ""f890fe02-52d5-42e3-8d48-06d4ef455253"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
                     ""name"": ""MoveModify"",
                     ""type"": ""Button"",
                     ""id"": ""6a65342f-026f-4c27-b33a-43df9cff609c"",
@@ -307,59 +299,59 @@ namespace CL03
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""143bb1cd-cc10-4eca-a2f0-a3664166fe91"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""name"": ""Left Directions"",
+                    ""id"": ""b52ab068-9846-4ebf-874e-4d3876a22dec"",
+                    ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Fire"",
-                    ""isComposite"": false,
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""05f6913d-c316-48b2-a6bb-e225f14c7960"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""name"": ""up"",
+                    ""id"": ""32fea9f6-c203-4c12-8a71-8aef7686c33f"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Fire"",
+                    ""groups"": """",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""886e731e-7071-4ae4-95c0-e61739dad6fd"",
-                    ""path"": ""<Touchscreen>/primaryTouch/tap"",
+                    ""name"": ""down"",
+                    ""id"": ""9793def9-9b12-41b8-8f0e-ee0895682cb4"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Touch"",
-                    ""action"": ""Fire"",
+                    ""groups"": """",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""ee3d0cd2-254e-47a7-a8cb-bc94d9658c54"",
-                    ""path"": ""<Joystick>/trigger"",
+                    ""name"": ""left"",
+                    ""id"": ""f0ba3019-6340-41e0-87d5-e3817e3e0fb6"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Joystick"",
-                    ""action"": ""Fire"",
+                    ""groups"": """",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""8255d333-5683-4943-a58a-ccb207ff1dce"",
-                    ""path"": ""<XRController>/{PrimaryAction}"",
+                    ""name"": ""right"",
+                    ""id"": ""42612d99-4d86-4e02-8f70-260c98393a98"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""XR"",
-                    ""action"": ""Fire"",
+                    ""groups"": """",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
@@ -367,7 +359,18 @@ namespace CL03
                     ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""MoveModify"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0235f846-3b57-4859-af55-75d44b42dd25"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
                     ""action"": ""MoveModify"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -378,7 +381,18 @@ namespace CL03
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7f631908-e804-43b0-b5e9-ec76948c9e91"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -389,8 +403,19 @@ namespace CL03
                     ""path"": ""<Keyboard>/leftCtrl"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bfef1dd4-bd3b-480d-b2ab-0298b6e3745f"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -418,11 +443,33 @@ namespace CL03
                 },
                 {
                     ""name"": """",
+                    ""id"": ""f6edeab9-1dc0-413f-be92-a28b99223f20"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""ChangeForward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""1caf2419-462a-4505-8a62-acdb7fdc7196"",
                     ""path"": ""<Keyboard>/backquote"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
+                    ""action"": ""ChangeBack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2f22541d-07e6-4628-bad1-8ccb4341d87c"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
                     ""action"": ""ChangeBack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -506,12 +553,34 @@ namespace CL03
                 },
                 {
                     ""name"": """",
+                    ""id"": ""3097e1d1-bd0b-48b0-89ad-11bf92da1c65"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""ebfc6732-ab5d-48cb-81c2-b4d873b36a0a"",
                     ""path"": ""<Keyboard>/i"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""CharInfo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""99e0eef1-c83c-42d0-81db-9b95df50740a"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SwitchInventory"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -539,6 +608,17 @@ namespace CL03
                 },
                 {
                     ""name"": """",
+                    ""id"": ""bb6ba10d-c67f-48df-a52c-c27a57739565"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""DropObject"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""729d6130-8af3-433e-8614-471aa5243dd4"",
                     ""path"": ""<Keyboard>/x"",
                     ""interactions"": """",
@@ -555,6 +635,17 @@ namespace CL03
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
+                    ""action"": ""EquipUse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7f69be2e-215b-469f-afcf-6881783a3abc"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
                     ""action"": ""EquipUse"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1134,7 +1225,6 @@ namespace CL03
             // Player
             m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
             m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
-            m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
             m_Player_MoveModify = m_Player.FindAction("MoveModify", throwIfNotFound: true);
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
@@ -1214,7 +1304,6 @@ namespace CL03
         private readonly InputActionMap m_Player;
         private IPlayerActions m_PlayerActionsCallbackInterface;
         private readonly InputAction m_Player_Move;
-        private readonly InputAction m_Player_Fire;
         private readonly InputAction m_Player_MoveModify;
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_Crouch;
@@ -1237,7 +1326,6 @@ namespace CL03
             private @PlayerControls m_Wrapper;
             public PlayerActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
             public InputAction @Move => m_Wrapper.m_Player_Move;
-            public InputAction @Fire => m_Wrapper.m_Player_Fire;
             public InputAction @MoveModify => m_Wrapper.m_Player_MoveModify;
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
             public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
@@ -1267,9 +1355,6 @@ namespace CL03
                     @Move.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
                     @Move.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
                     @Move.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
-                    @Fire.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
-                    @Fire.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
-                    @Fire.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
                     @MoveModify.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMoveModify;
                     @MoveModify.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMoveModify;
                     @MoveModify.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMoveModify;
@@ -1328,9 +1413,6 @@ namespace CL03
                     @Move.started += instance.OnMove;
                     @Move.performed += instance.OnMove;
                     @Move.canceled += instance.OnMove;
-                    @Fire.started += instance.OnFire;
-                    @Fire.performed += instance.OnFire;
-                    @Fire.canceled += instance.OnFire;
                     @MoveModify.started += instance.OnMoveModify;
                     @MoveModify.performed += instance.OnMoveModify;
                     @MoveModify.canceled += instance.OnMoveModify;
@@ -1539,7 +1621,6 @@ namespace CL03
         public interface IPlayerActions
         {
             void OnMove(InputAction.CallbackContext context);
-            void OnFire(InputAction.CallbackContext context);
             void OnMoveModify(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
             void OnCrouch(InputAction.CallbackContext context);

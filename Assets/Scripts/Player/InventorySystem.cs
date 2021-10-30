@@ -174,7 +174,9 @@ namespace CL03
 			isHoldingSomething = false;
 			objectBeingHeld = null;
 			objectCollider = null;
+			objectScript.GetPutDown();
 			objectScript = null;
+			
 		}
         #endregion
         #region Handling
