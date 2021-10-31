@@ -4,6 +4,11 @@ using UnityEngine;
 
 namespace CL03
 {
+    /// <summary>
+    /// in process of refactoring with new scripts.
+    /// 
+    /// component for inventory
+    /// </summary>
     public class Inventory : MonoBehaviour
     {
         // Start is called before the first frame update

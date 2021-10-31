@@ -17,10 +17,16 @@ namespace CL03
     [DefaultExecutionOrder(-100)]
 
     /// <summary>
+    ///    
+    /// in process of refactoring with new scripts.
+    /// 
+    /// 
+    /// Singleton Input Event Manager
     /// Handles the input events by caching them into public variables to be accessed.
+    /// 
     /// </summary>
     // not sure if ready to make this a singleton public class InputHandler : Singleton<InputHandler>
-    public class Input : Singleton<Input>
+    public class Input : Singleton <Input>
     {
         //  static public InputHandler Input;
 

@@ -350,13 +350,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawDebugRaycasts: 1
-  WithInArmsReach: {fileID: 0}
-  interactCoolDownTime: 0.5
-  objectColliderSize: {x: 0, y: 0}
-  isInteracting_Test: 0
   reachDistance: 0.9
   grabHeightLow: 0.5
   grabHeightHigh: 1
+  interactCoolDownTime: 0.5
+  WithInArmsReach: {fileID: 0}
+  objectColliderSize: {x: 0, y: 0}
 --- !u!114 &317936105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -470,7 +469,6 @@ GameObject:
   - component: {fileID: 573176512}
   - component: {fileID: 573176513}
   - component: {fileID: 573176516}
-  - component: {fileID: 573176515}
   - component: {fileID: 573176514}
   m_Layer: 0
   m_Name: Player
@@ -522,7 +520,7 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 573176515}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CL03.InputHandler, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
@@ -536,10 +534,6 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 440290bc-72fa-4ce1-bad0-e777c92fae12
     m_ActionName: Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: f890fe02-52d5-42e3-8d48-06d4ef455253
-    m_ActionName: Player/Fire[/Mouse/leftButton]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 220538d0-258a-48a4-8488-18ec19798b86
@@ -582,7 +576,7 @@ MonoBehaviour:
     m_ActionName: UI/TrackedDeviceOrientation
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 573176515}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CL03.InputHandler, Assembly-CSharp
         m_MethodName: OnMoveModifier
         m_Mode: 0
@@ -598,7 +592,7 @@ MonoBehaviour:
     m_ActionName: Player/MoveModify[/Keyboard/leftShift]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 573176515}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CL03.InputHandler, Assembly-CSharp
         m_MethodName: OnJump
         m_Mode: 0
@@ -614,7 +608,7 @@ MonoBehaviour:
     m_ActionName: Player/Jump[/Keyboard/space]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 573176515}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CL03.InputHandler, Assembly-CSharp
         m_MethodName: OnCrouch
         m_Mode: 0
@@ -630,7 +624,7 @@ MonoBehaviour:
     m_ActionName: Player/Crouch[/Keyboard/leftCtrl]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 573176515}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CL03.InputHandler, Assembly-CSharp
         m_MethodName: OnInteract
         m_Mode: 0
@@ -682,7 +676,7 @@ MonoBehaviour:
     m_ActionName: Player/CharInfo[/Keyboard/i,/Keyboard/r]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 573176515}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CL03.InputHandler, Assembly-CSharp
         m_MethodName: OnChangeObject
         m_Mode: 0
@@ -698,7 +692,7 @@ MonoBehaviour:
     m_ActionName: Player/SwitchInventory[/Keyboard/q]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 573176515}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CL03.InputHandler, Assembly-CSharp
         m_MethodName: OnDropObject
         m_Mode: 0
@@ -713,19 +707,7 @@ MonoBehaviour:
     m_ActionId: 7e35f211-8c20-4140-9638-560d3b3db459
     m_ActionName: Player/DropObject[/Keyboard/v]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 573176515}
-        m_TargetAssemblyTypeName: CL03.InputHandler, Assembly-CSharp
-        m_MethodName: OnAction1
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: cd62859e-f7f2-4736-83c0-50188a3db044
     m_ActionName: Player/Generic Action1[/Keyboard/x]
   - m_PersistentCalls:
@@ -768,46 +750,6 @@ MonoBehaviour:
   - {fileID: 317936099}
   currentChar: {fileID: 0}
   selectedCharNumber: 0
---- !u!114 &573176515
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 573176511}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33241502e510e4982875146a28b6d4ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  crouchPressed: 0
-  crouchHeld: 0
-  jumpPressed: 0
-  jumpHeld: 0
-  moveModifyPressed: 0
-  moveModifyHeld: 0
-  horizontal: 0
-  vertical: 0
-  interactPressed: 0
-  interactHeld: 0
-  dropObjectPressed: 0
-  dropObjectHeld: 0
-  changeObjectPressed: 0
-  changeObjectHeld: 0
-  consoleLaunchHeld: 0
-  consoleLaunchPressed: 0
-  action1Pressed: 0
-  action1Held: 0
-  action2Pressed: 0
-  action2Held: 0
-  lastCharacterCalled: 0
-  forwardChange: 0
-  backwardChange: 0
-  chooseChar1: 1
-  chooseChar2: 0
-  chooseChar3: 0
-  chooseChar4: 0
-  chooseChar5: 0
 --- !u!114 &573176516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1079,13 +1021,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawDebugRaycasts: 1
-  WithInArmsReach: {fileID: 0}
-  interactCoolDownTime: 0.5
-  objectColliderSize: {x: 0, y: 0}
-  isInteracting_Test: 0
   reachDistance: 0.9
   grabHeightLow: 0.5
   grabHeightHigh: 1
+  interactCoolDownTime: 0.5
+  WithInArmsReach: {fileID: 0}
+  objectColliderSize: {x: 0, y: 0}
 --- !u!114 &1444689992
 MonoBehaviour:
   m_ObjectHideFlags: 0
