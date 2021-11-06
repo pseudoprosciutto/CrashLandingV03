@@ -72,7 +72,6 @@ GameObject:
   - component: {fileID: 7203530896771738687}
   - component: {fileID: 7203530896771738680}
   - component: {fileID: 7203530896771738681}
-  - component: {fileID: 7203530896771738682}
   m_Layer: 7
   m_Name: YELLOW
   m_TagString: Untagged
@@ -159,7 +158,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 2
+  m_Mass: 10
   m_LinearDrag: 1
   m_AngularDrag: 0.05
   m_GravityScale: 5
@@ -194,84 +193,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.73, y: 1.8}
   m_EdgeRadius: 0
---- !u!114 &7203530896771738682
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7203530896771738685}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da39a2b1487294ddf879c1c608285e74, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isSelected: 0
-  needsReviving: 0
-  isOnGround: 0
-  isOnPlatform: 0
-  isRunning: 0
-  isJumping: 0
-  isCrouching: 0
-  isHeadBlocked: 0
-  isHanging: 0
-  isHoldingSomething: 0
-  isHoldingSomethingAbove: 0
-  hitOverHeadLeft: 0
-  hitOverHeadRight: 0
-  canHang: 1
-  cantHangCoolDownTime: 1.5
-  speed: 4.2
-  walkSpeed: 4.2
-  runSpeed: 6.2
-  crouchSpeedDivisor: 3
-  coyoteDuration: 0.05
-  maxFallSpeed: -25
-  jumpForce: 28.5
-  jumpCoolDownTime: 0.6
-  crouchJumpBoost: 2.5
-  hangingJumpForce: 31
-  jumpHoldForce: 1.9
-  jumpHoldDuration: 0.1
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  itemsLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  staticInteractablesLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  crateLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  walkableObject:
-    serializedVersion: 2
-    m_Bits: 0
-  inSwitchItemProcess: 0
-  switchItemCoolDownTime: 1.7
-  InventoryItem: {fileID: 0}
-  ObjectBeingHeld: {fileID: 0}
-  holdPoint_Front: {fileID: 7203530896565526311}
-  holdPoint_Above: {fileID: 7203530896745214612}
-  WithInArmsReach: {fileID: 0}
-  interactCoolDownTime: 0.5
-  objectColliderSize: {x: 0, y: 0}
-  isInteracting_Test: 0
-  changeObjectCoolingDown: 0
-  changeObjectCoolDownTime: 1.2
-  drawDebugRaycasts: 1
-  headOffset: 0.35
-  footOffset: 0.25
-  eyeHeight: 1.5
-  grabHeightLow: 0.5
-  grabHeightHigh: 1
-  reachOffset: 0.7
-  headClearance: 0.5
-  breakOverHeadDistance: 0.1
-  groundDistance: 0.1
-  grabDistance: 0.4
-  reachDistance: 0.9
-  hangingDistanceFromLedge: 0.1
-  headBounce: 0.2
-  direction: 1
