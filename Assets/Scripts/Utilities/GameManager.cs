@@ -8,22 +8,25 @@ using UnityEngine;
 
 namespace CL03
 {
+	public enum GameStates { }
+
 	/// <summary>
-    /// This class or another static class will hold the values for the 
-	/// characters base and with equipment modifications so the class will look for what its value is in the right position
+	/// Singleton which manages game states for the overall game.
     /// </summary>
 	public class GameManager : Singleton<GameManager>
 	{
 
 		static public GameManager GM;
-        int numberOfDeaths;                         //Number of times player has died
-		float totalGameTime;                        //Length of the total game time
-
+		public GameStates state;
+        int numberOfDeaths; //times characters got themelves dead
+		int numberOfRevives; //times characters been revived 
+		float totalGameTime;                        //Length of the total session time
+		
 		private DateTime _sessionStartTime;
 		private DateTime _sessionEndTime;
 
 		bool isGameOver;                            //Is the game currently over?
-
+		public int Chapter;
 
         void Start()
         {

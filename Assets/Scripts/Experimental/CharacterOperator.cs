@@ -1,17 +1,26 @@
+/*
+ * See for equations/physics: https://en.wikipedia.org/wiki/Equations_of_motion
+ * See: http://lolengine.net/blog/2011/12/14/understanding-motion-in-games for Verlet integration vs. Euler
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CL03;
+
 
 namespace CL03.Experimental
-{ 
+{
     /// <summary>
-    /// Handles Character movement
+    /// uses input events to operate character components
+    ///
+	/// gets player's intended velocity & displacement (caused by enviroment variables + user input which is taken from PlayerInput)
     /// </summary>
-    [RequireComponent (typeof (CharacterInputHandler))]
-    public class CharacterHandler : MonoBehaviour
+//	[RequireComponentInParent (typeof(InputManager))]
+	[RequireComponent (typeof(CharacterPhysics2D))]
+    public class CharacterOperator : MonoBehaviour
     {
-        CharacterInputHandler input;
-        
+        InputManager input;
+        CharacterPhysics2D physics;
         public bool isSelected { get; protected set; }
 
         float gravity = -20;
@@ -22,25 +31,18 @@ namespace CL03.Experimental
         /// </summary>
         void Start()
         {
-            input = GetComponent<CharacterInputHandler>();
+            input = GetComponentInParent<InputManager>();
+            physics = GetComponent<CharacterPhysics2D>();
         }
 
         
         private void Update()
         {
-            velocity.y += gravity * Time.deltaTime;
-            Move(velocity * Time.deltaTime);
+            velocity.y += gravity * Time.deltaTime; //eventually will be gravity on physics
+            physics.Move(velocity * Time.deltaTime);
         }
 
-        /// <summary>
-        /// move character translation via vector 3 velocity
-        /// </summary>
-        /// <param name="velocity">vector 3 velocity</param>
-        public void Move(Vector3 velocity)
-        {
 
-            transform.Translate(velocity);
-        }
 
         /// <summary>
         /// This will set isSelected to opposite property
