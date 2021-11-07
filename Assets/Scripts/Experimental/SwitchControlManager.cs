@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace CL03
+namespace CL03.Experimental
 {
     /// <summary>
     /// in process of refactoring with new scripts.

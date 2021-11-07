@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CL03
+namespace CL03.Experimental
 {
     /// <summary>
     /// in process of refactoring with new scripts.

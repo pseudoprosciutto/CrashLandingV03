@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CL03
 {
-    public class Character : MonoBehaviour
+    public class CharacterMovement2D : MonoBehaviour
     {
         // Start is called before the first frame update
         void Start()

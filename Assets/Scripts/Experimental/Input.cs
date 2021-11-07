@@ -11,7 +11,7 @@ using UnityEngine.InputSystem.Interactions;
 /// <summary>
 /// CrashLanding v03 
 /// </summary>
-namespace CL03
+namespace CL03.Experimental
 {
     ///this needs to go first
     [DefaultExecutionOrder(-100)]
