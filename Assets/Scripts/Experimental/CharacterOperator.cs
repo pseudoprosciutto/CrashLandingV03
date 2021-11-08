@@ -15,6 +15,7 @@ namespace CL03.Experimental
     ///
 	/// gets player's intended velocity & displacement (caused by enviroment variables + user input which is taken from PlayerInput)
     /// </summary>
+       
 //	[RequireComponentInParent (typeof(InputManager))]
 	[RequireComponent (typeof(CharacterPhysics2D))]
     public class CharacterOperator : MonoBehaviour
@@ -35,7 +36,6 @@ namespace CL03.Experimental
             physics = GetComponent<CharacterPhysics2D>();
         }
 
-        
         private void Update()
         {
             velocity.y += gravity * Time.deltaTime; //eventually will be gravity on physics

@@ -8,6 +8,8 @@ namespace CL03.Experimental
 
     /// <summary>
     /// Raycast detection. Char Collision Manager 2d casts rays about like it aint nothing.
+    /// 
+    /// Must have preferences>physics2d>Auto Sync Transforms activated.
     /// </summary>
     [RequireComponent(typeof(BoxCollider2D))]
     public class CharCollisionManager2D : MonoBehaviour
@@ -75,8 +77,6 @@ namespace CL03.Experimental
             collider = GetComponent<BoxCollider2D>();
             CalculateRaySpacing();
         }
-
-     
 
 
         /// <summary>
