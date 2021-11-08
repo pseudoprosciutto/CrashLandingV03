@@ -10,6 +10,11 @@ namespace CL03.Experimental
 	/// </summary>
     public class CharacterPhysics2D : CharCollisionManager2D
     {
+
+
+
+
+
         /// <summary>
         /// move character translation via vector 3 velocity
         /// </summary>
@@ -21,5 +26,42 @@ namespace CL03.Experimental
             VerticalCollisions(ref _velocity);
             transform.Translate(_velocity);
         }
+
+
+        public void Move(Vector2 displacement, Vector2 input)
+        {
+            ResetDetection();
+            objectInput = input;
+
+            if (displacement.y < 0)
+            {
+                CheckSlopeDescent(ref displacement);
+            }
+
+            // Check face direction - done after slope descent in case of sliding down max slope
+            if (displacement.x != 0)
+            {
+                faceDirection = (int)Mathf.Sign(displacement.x);
+            }
+
+            CheckHorizontalCollisions(ref displacement);
+
+            if (displacement.y != 0)
+            {
+                CheckVerticalCollisions(ref displacement);
+            }
+
+            transform.Translate(displacement);
+
+            // Reset grounded variables
+            if (collisionDirection.below == true)
+            {
+                forceFall = false;
+            }
+        }
+
+ 
+
+
     }
 }
