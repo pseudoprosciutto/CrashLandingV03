@@ -22,7 +22,7 @@ namespace CL03.Experimental
         float horizontalRaySpacing;
         float verticalRaySpacing;
 
-        BoxCollider2D collider;
+        BoxCollider2D  boxCollider;
         RaycastOrigins raycastOrigins;
 
 
@@ -37,7 +37,7 @@ namespace CL03.Experimental
 
         void Start()
         {
-            collider = GetComponent<BoxCollider2D>();
+            boxCollider = GetComponent<BoxCollider2D>();
             CalculateRaySpacing();
         }
 
@@ -51,7 +51,7 @@ namespace CL03.Experimental
         private Bounds GetBounds()
         {
             //get bounds of collider
-            Bounds bounds = collider.bounds;
+            Bounds bounds = boxCollider.bounds;
             //shrink bounds so inset by skinwidth
             bounds.Expand(skinWidth * -2);
             return bounds;
@@ -87,15 +87,16 @@ namespace CL03.Experimental
 
         protected void VerticalCollisions(ref Vector3 velocity)
         {
-                float directionY = MathF.Sign(velocity.y); // set negative or positive
-                float rayLength = MathF.Abs(velocity.y) + skinWidth;
+                float directionY = Mathf.Sign(velocity.y); // set negative or positive
+                float rayLength = Mathf.Abs(velocity.y) + skinWidth;
             for (int i = 0; i < verticalRayCount; i++)
             {
+/**
                 //where do rays start if moving    - Maybe will not depend on moving and always cast rays. tbd
                 //ray origin equals bottom left if direction equals -1 (moving down) otherwise its top left (moving up and else case)
                 Vector2 rayOrigin = (directionY == -1) ? raycastOrigins.bottomLeft : raycastOrigins.topLeft;
                 rayOrigin += Vector2.right * (verticalRaySpacing * i + velocity.x);
-                RaycastHit2d hit = CharacterPhysics2D.Raycast(rayOrigin, Vector2.up * directionY, rayLength, collisionMask);
+                RaycastHit2D hit = Raycast(rayOrigin, Vector2.up * directionY, rayLength, collisionMask);
                 Debug.DrawRay(raycastOrigins.bottomLeft + Vector2.right * verticalRaySpacing * i, Vector2.up * -2, Color.red);
                 //if raycast hits,
                 if (hit)
@@ -105,7 +106,7 @@ namespace CL03.Experimental
                     //shorten distance to prevent clipping
                         rayLength.hit.distance;
                 }
-            }
+*/            }
         }
 
 
