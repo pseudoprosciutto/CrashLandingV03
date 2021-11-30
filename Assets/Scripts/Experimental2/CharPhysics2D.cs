@@ -3,6 +3,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace CL03
@@ -13,16 +14,16 @@ namespace CL03
 	public class CharPhysics2D : BoxRaycastSystem
 	{
 
-		float maxClimbAngle = 80;
-		float maxDescendAngle = 80;
+		
+		public float maxClimbAngle = 65;
+		public float maxDescendAngle = 65f;
 
 		public CollisionInfo collisions;
-
+		 void Awake() { boxCollider = GetComponent<BoxCollider2D>(); }
 
 		public override void Start()
 		{
 			base.Start();
-
 		}
 
 		public void Move(Vector3 velocity)
