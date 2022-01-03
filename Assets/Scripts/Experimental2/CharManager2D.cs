@@ -61,12 +61,18 @@ namespace CL03
 		public float timeToJumpLedgeApex = .35f;
 
 
+		[Header("Layer Masks")]
 
 		//Layer of the ground
 		[SerializeField]
 		protected LayerMask walkables;
-		[SerializeField]
-		protected LayerMask crateLayer;
+		
+		public LayerMask crateLayer;
+
+		//Interactable classified layers
+		protected LayerMask interactablesLayer;
+		public LayerMask itemsLayer;
+		public LayerMask staticInteractablesLayer;
 		[SerializeField]
 		protected LayerMask characterLayer;
 		[ReadOnly]

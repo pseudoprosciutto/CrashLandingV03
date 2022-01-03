@@ -97,14 +97,15 @@ namespace CL03
         //    ChangeChar(Characters[selectChar]);
         //    //     CharSelectCursor = CharIcons[selectChar];
         //    //     CharSelectCursor.SendMessage("showSelector");
-        //} */
+        //}
+        */
+
 
         /// <summary>
         /// Instead of calling events, I tried this way since I only needed one single press once. I hope this holds up.
         /// </summary>
         private void LookForInputToChangeChar()
         {
-
             //rotate forwards through char choices
             //if (Keyboard.current.tabKey.wasPressedThisFrame || Keyboard.current.periodKey.wasPressedThisFrame)
             if (input.forwardChange && !changeCoolingDown)
@@ -165,6 +166,7 @@ namespace CL03
                 //     CharSelectCursor = CharIcons[selectedCharNumber];
                 //     CharSelectCursor.SendMessage("showSelector");
             }
+
             //choose char 4
             if (Keyboard.current.digit4Key.wasPressedThisFrame)
             {
@@ -176,6 +178,7 @@ namespace CL03
                 //    CharSelectCursor = CharIcons[selectedCharNumber];
                 //    CharSelectCursor.SendMessage("showSelector");
             }
+
             //choose char 5
             if (Keyboard.current.digit5Key.wasPressedThisFrame)
             {

@@ -22,6 +22,12 @@ MonoBehaviour:
   crateLayer:
     serializedVersion: 2
     m_Bits: 512
+  itemsLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  staticInteractablesLayer:
+    serializedVersion: 2
+    m_Bits: 0
   characterLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -53,7 +59,7 @@ MonoBehaviour:
   hangingDistanceFromLedge: 0.1
   headBounce: 0.2
   grabDistance: 0.4
-  jumpCoolDownTime: 0.4
+  jumpCoolDownTime: 0.3
   drawDebugRaycasts: 1
   direction: 1
   canHang: 1
@@ -103,7 +109,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7203530896771738685, guid: d90fadfdcb5004b23982d2db1e1596e0, type: 3}
       propertyPath: m_Name
-      value: BLUE
+      value: BLUE Variant
       objectReference: {fileID: 0}
     - target: {fileID: 7203530896771738686, guid: d90fadfdcb5004b23982d2db1e1596e0, type: 3}
       propertyPath: m_RootOrder

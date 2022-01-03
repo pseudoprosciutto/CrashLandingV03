@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace CL03.Experimental
 {
-
     /// <summary>
     /// Raycast detection. Char Collision Manager 2d casts rays about like it aint nothing.
     /// </summary>
