@@ -36,14 +36,14 @@ namespace CL03
 
 
 		void Awake()
-        {
+		{
 			input = GetComponentInParent<InputHandler>();
 			character = GetComponent<CharManager2D>();
 			inventory = GetComponent<CharInventory2D>();
 
 			grabables = character.crateLayer;
 			grabables |= character.itemsLayer;
-        }
+		}
 		/**
 		//This is commanded from an action of the interactable object.
 		/// <summary>
@@ -110,6 +110,7 @@ namespace CL03
 			//Return the results of the raycast
 			return hit;
 		}
-        #endregion
-    }
+		#endregion
+	}
+}
 
