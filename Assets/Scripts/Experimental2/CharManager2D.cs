@@ -1,4 +1,4 @@
-/* Code By: Matthew Sheehan */
+/* Code amalgamated together By: Matthew Sheehan */
 
 using System.Collections;
 using System.Collections.Generic;
