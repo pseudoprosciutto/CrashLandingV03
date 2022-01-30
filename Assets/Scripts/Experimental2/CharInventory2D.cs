@@ -43,12 +43,20 @@ namespace CL03
         [SerializeField]
         GameObject GMTransition;
 
+        public float dropItemCoolDownTime = 1f;
+        public bool isDroppingItemCoolDown;
 
+        public bool isHoldingSomething;
+        public bool isHoldingSomethingAbove;
+        public float changeItemCoolDownTime = .7f;
+        public bool changeObjectCoolingDown;  //is object cooling down?
 
         // Start is called before the first frame update
         void Start()
         {
-            // to be gotten from game manager through character for
+
+            // to be gotten from game manager through character
+            // or directly loaded into character from debugger engine for
             // when scenes change and debugging this option they
             // load characters current item
             GameObject _GMHolding = GMHolding;
@@ -65,6 +73,9 @@ namespace CL03
 
         /// <summary>
         /// Each character has their own inventory.
+        /// Holding space in hands
+        /// Inventory space in bag
+        /// Transition space inbetween
         /// </summary>
         struct Inventory
         {

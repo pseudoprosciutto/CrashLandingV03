@@ -7,6 +7,12 @@ using UnityEngine;
 
 namespace CL03
 {
+	public enum Identity
+	{ RED,
+		BLUE,
+			YELLOW,
+				GREEN
+	}
 	/// <summary>
 	/// Character Equipment states
 	/// </summary>
@@ -73,6 +79,7 @@ namespace CL03
 		protected LayerMask interactablesLayer;
 		public LayerMask itemsLayer;
 		public LayerMask staticInteractablesLayer;
+
 		[SerializeField]
 		protected LayerMask characterLayer;
 		[ReadOnly]
@@ -167,11 +174,24 @@ namespace CL03
 		Vector2 colliderCrouchSize;             //Size of the crouching collider
 		Vector2 colliderCrouchOffset;
 
+		Identity identity;
+
 		#endregion
 		private void Awake()
         {
 			transform.position = new Vector3(transform.position.x, transform.position.y, 2f);
 		}
+
+		/// <summary>
+        /// Identity of character
+        /// This exists for tracking and when game spawn characters
+        /// </summary>
+        /// <param name="id"></param>
+		public void ChangeId(Identity id)
+        {
+			identity = id;
+        }
+
 		void Start()
 		{
 			canHang = true;
