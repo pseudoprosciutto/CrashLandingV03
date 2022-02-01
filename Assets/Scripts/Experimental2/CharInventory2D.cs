@@ -65,11 +65,7 @@ namespace CL03
             Inventory inv = new Inventory(_GMHolding, _GMInventory, _GMTransition);
 
         }
-            // Update is called once per frame
-            void Update()
-            {
 
-            }
 
         /// <summary>
         /// Each character has their own inventory.
