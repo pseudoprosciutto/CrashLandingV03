@@ -4,18 +4,25 @@ using UnityEngine;
 
 namespace CL03
 {
-    public class Interactables : MonoBehaviour
+    /// <summary>
+    /// Base class for which objects which the character interacts with
+    /// are abstracted from.
+    ///
+    /// state can be interacted with
+    /// state is being interacted with
+    /// </summary>
+    public class Interactable : MonoBehaviour //ScriptableObject
     {
-        // Start is called before the first frame update
-        void Start()
-        {
-        
-        }
+        // an interactable doesnt always have to be interactable
+        public bool isInteractable { get; protected set; }
+        public bool isInteractedWith { get; protected set; }
 
-        // Update is called once per frame
-        void Update()
+        //to be overwritten
+        public virtual void Interact(CharManager2D character)
         {
-        
+            //this script wont show unless using this class as a test.
+            Debug.Log("Object recognizes - interact test");
+            //            character.isInteracting_Test = true;
         }
     }
 }

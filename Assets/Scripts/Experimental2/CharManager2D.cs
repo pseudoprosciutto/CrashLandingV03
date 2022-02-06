@@ -176,6 +176,12 @@ namespace CL03
 
 		Identity identity;
 
+        #endregion
+        #region Creation of character if need be
+        public void CharManager2d(Identity id)
+        {
+			identity = id;
+		}
 		#endregion
 		private void Awake()
         {
@@ -190,8 +196,8 @@ namespace CL03
 		public void ChangeId(Identity id)
         {
 			identity = id;
+			
         }
-
 		void Start()
 		{
 			canHang = true;
