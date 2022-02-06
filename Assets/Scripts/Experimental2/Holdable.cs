@@ -8,6 +8,8 @@ namespace CL03
     /// <summary>
     /// Interactable Objects which can be held.
     /// 
+    /// holdable items must have generic gravity physics
+    /// 
     /// Holdable Objects properties:
     /// isHeld state, - Can be held by character;
     /// heldby know who is holding it if any character;

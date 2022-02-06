@@ -9,6 +9,7 @@ namespace CL03
     /// <summary>
     /// The inventory system for the characters.
     /// Crashlanding only has one inventory space for each character
+    /// The inventory system directly uses the button drop item and the
     /// </summary>
     public class CharInventory2D : MonoBehaviour
     {
@@ -29,6 +30,8 @@ namespace CL03
         //public 
 
         [Required]
+        //this is probably temporary used to visualize package is in front but will not be
+
         [ChildGameObjectsOnly]
         public Transform holdPoint_Front;  //the front location for generic object being held (maybe will need to change pivot point of object depending on sizes)
         [Required]
@@ -43,6 +46,7 @@ namespace CL03
         [SerializeField]
         GameObject GMTransition;
 
+        //how long it takes to recognize dropping item button can be pressed again
         public float dropItemCoolDownTime = 1f;
         public bool isDroppingItemCoolDown;
 
