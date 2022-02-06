@@ -19,28 +19,31 @@ namespace CL03
     /// </summary>
     public class Holdable : Interactable
     {
+        //ID
+        protected ItemType itemType = ItemType.Generic;
+        
         //held properties
         [SerializeField]
         protected bool canBeHeld;
         [SerializeField]
-        protected ItemType itemType = ItemType.Generic;
         public bool canBeStored = false; //default false
-        public bool isCrate = false;
-        [SerializeField]
         [ReadOnly]
         protected bool isHeld;
+        public bool isCrate = false; //holdable objects need to distinguish from crate class object
 
         [SerializeField]
         protected GameObject HeldBy; //who is holding this object?
+        //quick stored scripts of HeldBy
+        
         protected CharManager2D HeldBy_Char; //engine of object being held
         protected CharInventory2D HeldBy_Inventory; //inventory of object being held.
 
         [Space]
-        public bool normallyThrowable = true; //ussually what an object is throwable
+        public bool normallyThrowable = true; //usually what an object is throwable
         [SerializeField]
         protected bool isThrowable;  /* throwing an object is currently seen as
                                       * if yes when normally is no, means its 
-                                      * super heavy and need special ability to 
+                                      * super heavy and character needs special ability to 
                                       * throw object. if no but normally is yes
                                       * then we dont throw it at all right now.
         */
