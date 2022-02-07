@@ -6,6 +6,7 @@ using Sirenix.OdinInspector;
 namespace CL03
 {
 	/// <summary>
+    /// the interact system is used when character hits interact
 	/// Handling control of the interact system on a character
 	/// This is the scripts behind how the character interacts with object if in close proximity.
 	/// and looking at object

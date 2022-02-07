@@ -19,6 +19,9 @@ namespace CL03
     /// (maybe?) isPushable; (maybe will be under heavycrate specific?)
     /// PushorPull state; (maybe will be under heavycrate specific
     /// </summary>
+    [RequireComponent(typeof(Object2D))]
+    [RequireComponent(typeof(BoxRaycastSystem))]
+
     public class Holdable : Interactable
     {
         //ID
