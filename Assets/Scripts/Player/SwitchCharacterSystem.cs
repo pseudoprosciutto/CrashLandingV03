@@ -234,7 +234,7 @@ namespace CL03
             newChar.StartSelectedCharacter();
             newChar.bringFront();
             newChar.isSelected = true;
-                  print("remove successful.");
+            print(oldChar.gameObject.name + " selected remove successful. Now " + this.gameObject.name + " has " + newChar.gameObject.name + " selected.");
             //currentChar.transform.position = new Vector3(currentChar.transform.position.x, currentChar.transform.position.y,0f);
         }
         IEnumerator changeCoolDown()

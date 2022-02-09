@@ -1,5 +1,9 @@
-/* Code derived from Sebastian Lague https://github.com/SebLague/2DPlatformer-Tutorial/
- * Adapted by Matthew Sheehan */
+/* Code mainly derived from Sebastian Lague https://github.com/SebLague/2DPlatformer-Tutorial/
+ * and another source which used box collisions in a way i found interesting but dont know credit
+ * most code is unoriginal
+ * Amalgamated by Matthew Sheehan. 
+ 
+ */
 
 using System.Collections;
 using System.Collections.Generic;
@@ -28,6 +32,10 @@ namespace CL03
 		[HideInInspector]
 		public BoxCollider2D boxCollider;
 		public RaycastOrigins raycastOrigins;
+		public BoxCastOrigins boxCastOrigins;
+
+		[HideInInspector] public float boundsWidth;
+		[HideInInspector] public float boundsHeight;
 
 		public virtual void Start()
 		{
@@ -51,6 +59,9 @@ namespace CL03
 			Bounds bounds = boxCollider.bounds;
 			bounds.Expand(skinWidth * -2);
 
+			boundsWidth = bounds.size.x;
+			boundsHeight = bounds.size.y;
+
 			horizontalRayCount = Mathf.Clamp(horizontalRayCount, 2, int.MaxValue);
 			verticalRayCount = Mathf.Clamp(verticalRayCount, 2, int.MaxValue);
 
@@ -58,10 +69,30 @@ namespace CL03
 			verticalRaySpacing = bounds.size.x / (verticalRayCount - 1);
 		}
 
+		/// <summary>
+        /// for objects with boxcasts
+        /// </summary>
+		public void UpdateBoxCastOrigins()
+		{
+			Bounds bounds = boxCollider.bounds;
+
+			boxCastOrigins.bottomCenter = new Vector2(bounds.center.x, bounds.min.y);
+			boxCastOrigins.topCenter = new Vector2(bounds.center.x, bounds.max.y);
+			boxCastOrigins.leftCenter = new Vector2(bounds.min.x, bounds.center.y);
+			boxCastOrigins.rightCenter = new Vector2(bounds.max.x, bounds.center.y);
+		}
+
+
 		public struct RaycastOrigins
 		{
 			public Vector2 topLeft, topRight;
 			public Vector2 bottomLeft, bottomRight;
+		}
+
+		//for objects with box collision
+		public struct BoxCastOrigins
+		{
+			public Vector2 bottomCenter, topCenter, leftCenter, rightCenter;
 		}
 	}
 }
