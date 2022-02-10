@@ -19,11 +19,16 @@ namespace CL03
     /// (maybe?) isPushable; (maybe will be under heavycrate specific?)
     /// PushorPull state; (maybe will be under heavycrate specific
     /// </summary>
-    [RequireComponent(typeof(Object2D))]
-    [RequireComponent(typeof(BoxRaycastSystem))]
 
+
+    [RequireComponent(typeof(Object2D))]
     public class Holdable : Interactable
     {
+        //Physics of a holdable object
+        Object2D physics;
+    
+
+
         //ID
         protected ItemType itemType = ItemType.Generic;
         
@@ -89,7 +94,12 @@ namespace CL03
         //public bool inPushOrPullState;
         bool delayBegan = false;
 
+        private void Awake()
+        {
+            physics = GetComponent<Object2D>();
+            BoxCollider2D boxCollider = physics.boxCollider;
 
+        }
 
         // Start is called before the first frame update
         void Start()

@@ -20,7 +20,8 @@ namespace CL03
 	{
 		Default,
 		WearingBoots,
-		WearingReceiver
+		WearingReceiver,
+		HoldingRifle,
 	}
 
 	/// <summary>
@@ -57,6 +58,9 @@ namespace CL03
 
 		CharPhysics2D physics;
 
+
+		//has pistol -> if pull pistol item in hands must drop before animation can begin.
+		bool hasPistol = false; 
 
 		/**New Code **/
 		InputHandler input;

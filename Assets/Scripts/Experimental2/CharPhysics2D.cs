@@ -9,7 +9,7 @@ using UnityEngine;
 namespace CL03
 {
 	/// <summary>
-	/// Handles movement physics in the game world
+	/// Handles Character specific movement physics in the game world
 	/// </summary>
 	public class CharPhysics2D : BoxRaycastSystem
 	{

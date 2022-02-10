@@ -296,6 +296,7 @@ GameObject:
   - component: {fileID: 379565269}
   - component: {fileID: 379565273}
   - component: {fileID: 379565271}
+  - component: {fileID: 379565270}
   m_Layer: 8
   m_Name: Holdable
   m_TagString: Item
@@ -317,6 +318,32 @@ Transform:
   m_Father: {fileID: 77820936}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &379565270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 379565268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4eb77310204154c82a1d89f0252c808f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 64
+  horizontalRayCount: 4
+  verticalRayCount: 4
+  horizontalRaySpacing: 0
+  verticalRaySpacing: 0
+  boxCollider: {fileID: 0}
+  boundsWidth: 0
+  boundsHeight: 0
+  objectInput: {x: 0, y: 0}
+  slidingDownMaxSlope: 0
+  forceFall: 0
+  maxSlopeAngle: 80
 --- !u!61 &379565271
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1228,21 +1255,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 1036040102}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff019a043c4bd40ddb7fba3e33a6465f, type: 3}
+  m_Script: {fileID: 11500000, guid: a4a5393ff9f4f489588fe468e4cf6483, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   canBeHeld: 1
-  itemType: 0
+  itemType: 1
   canBeStored: 0
   isCrate: 1
   isHeld: 0
   HeldBy: {fileID: 0}
   hasAlwaysBeenThrowable: 1
-  isThrowable: 0
+  isThrowable: 1
   isInInventory: 0
   useableInInventory: 0
-  gravity: 600
-  objectMass: 100
+  gravity: 1
+  objectMass: 0
   isStaticCoolingDown: 0
   staticCoolDownTime: 0.1
   isColliding: 0
@@ -1745,6 +1772,24 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3253411122093854982, guid: 10870b8967022417897755b2a020e587, type: 3}
   m_PrefabInstance: {fileID: 3253411123535915332}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1444689987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1444689985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c8f79833c09546afac5802f508634ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drawDebugRaycasts: 1
+  reachDistance: 0.9
+  grabHeightLow: 0.5
+  grabHeightHigh: 1
+  interactCoolDownTime: 0.15
+  WithInArmsReach: {fileID: 0}
 --- !u!1 &1533391551
 GameObject:
   m_ObjectHideFlags: 0

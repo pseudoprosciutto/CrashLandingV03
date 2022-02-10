@@ -9,13 +9,29 @@ using UnityEngine;
 
 namespace CL03
 {
-    /// <summary>
-    /// This is the physics base class of a 2D object using the boxRaycast System.
-    /// Handles basic objects not related to CharPhysics2D but requiring gravity
-    /// </summary>
-    public class Object2D : BoxRaycastSystem
-
+	public enum ObjectState
+	{
+		PhysicsActive, NoPhysics,
+	}
+	/// <summary>
+	/// This is the physics base class of a 2D object using the boxRaycast System.
+	/// Handles basic objects not related to CharPhysics2D but requiring gravity
+	/// </summary>
+	public class Object2D : BoxRaycastSystem
     {
+
+		float gravity;
+		Vector3 velocity;
+		float velocityXSmoothing;
+		bool knowsGravity;
+		int direction = 1;
+
+		
+		string identity = "Generic Object";
+
+		//default on
+		[ReadOnly]
+		ObjectState state = ObjectState.PhysicsActive;
 
 		[HideInInspector] public CollisionDirection collisionDirection;
 		[HideInInspector] public CollisionAngle collisionAngle;
@@ -32,7 +48,24 @@ namespace CL03
 		private bool ascendSlope = false;
 		private bool descendSlope = false;
 
-		public override void Start()
+		/// <summary>
+        /// Object ID string. custom game 2D object name.
+        /// </summary>
+        /// <returns> string object identity</returns>
+		public string GetObjectID() => identity;
+        public void SetObjectID(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+				print("Object ID cant be null");
+                throw new System.ArgumentException($"'{nameof(id)}' cannot be null or empty.", nameof(id));
+            }
+            _ = identity;
+        }
+        
+
+
+        public override void Start()
 		{
 			base.Start();
 		}
@@ -247,6 +280,7 @@ namespace CL03
 			RaycastHit2D maxSlopeHitLeft = Physics2D.Raycast(raycastOrigins.bottomLeft, Vector2.down, Mathf.Abs(displacement.y) + skinWidth, collisionMask);
 			RaycastHit2D maxSlopeHitRight = Physics2D.Raycast(raycastOrigins.bottomRight, Vector2.down, Mathf.Abs(displacement.y) + skinWidth, collisionMask);
 			if (maxSlopeHitLeft ^ maxSlopeHitRight)
+
 			{
 				if (maxSlopeHitLeft)
 				{

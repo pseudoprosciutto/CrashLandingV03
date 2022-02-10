@@ -58,13 +58,16 @@ namespace CL03
 			{
 				print("Interacting...");
 				StartCoroutine(InteractCoolDown());
-
+				/**
 				if (inventory.objectBeingHeld != null)
 				{
 					print("...within hands");
 					InteractInHand();
 				}
-				else if (ItemsCheck())
+
+				else
+				*/
+				if (	ItemsCheck())
 					{
 						print("...with empty hands"); 
 						InteractCheck();
