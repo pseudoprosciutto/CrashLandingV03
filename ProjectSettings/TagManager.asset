@@ -9,6 +9,7 @@ TagManager:
   - Item
   - Environment
   - LaserShot
+  - Destination
   layers:
   - Default
   - TransparentFX
