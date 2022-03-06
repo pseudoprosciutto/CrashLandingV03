@@ -19,7 +19,7 @@ namespace CL03
 	/// </summary>
 	public class Object2D : BoxRaycastSystem
     {
-
+		
 		float gravity;
 		Vector3 velocity;
 		float velocityXSmoothing;
@@ -30,8 +30,7 @@ namespace CL03
 		string identity = "Generic Object";
 
 		//default on
-		[ReadOnly]
-		ObjectState state = ObjectState.PhysicsActive;
+		public ObjectState state = ObjectState.PhysicsActive;
 
 		[HideInInspector] public CollisionDirection collisionDirection;
 		[HideInInspector] public CollisionAngle collisionAngle;

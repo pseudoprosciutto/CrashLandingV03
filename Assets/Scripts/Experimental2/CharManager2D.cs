@@ -64,7 +64,7 @@ namespace CL03
 
 		/**New Code **/
 		InputHandler input;
-
+		public HoldItemsInHand Hands { protected set; get; }
 		float ledgeGravity;
 
 		public float jumpLedgeHeight = 2.25f;
@@ -206,6 +206,7 @@ namespace CL03
 		{
 			canHang = true;
 			isHanging = false;
+			Hands = GetComponent<HoldItemsInHand>();
 			input = GetComponentInParent<InputHandler>();
 			/** Old Code **/
 			physics = GetComponent<CharPhysics2D>();

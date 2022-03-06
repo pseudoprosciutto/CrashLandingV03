@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEditor.PackageManager;
+using System;
 
 namespace CL03
 {
@@ -18,7 +20,8 @@ namespace CL03
 	{
 		InputHandler input;
 		CharManager2D character;
-		CharInventory2D inventory;
+		//CharInventory2D inventory;
+		HoldItemsInHand carryItem;
 
 		[SerializeField]
 		bool drawDebugRaycasts = true;
@@ -36,66 +39,67 @@ namespace CL03
 
 
 		//the layer for items that can be interacted with
-		protected LayerMask interactablesLayer;
-		protected LayerMask grabables;
+		public LayerMask interactablesLayer;
+		protected LayerMask holdablesLayer;
 
 
-		void Awake()
+		void Start()
 		{
 			input = GetComponentInParent<InputHandler>();
 			character = GetComponent<CharManager2D>();
-			inventory = GetComponent<CharInventory2D>();
+			//inventory = GetComponent<CharInventory2D>();
+			carryItem = GetComponent<HoldItemsInHand>();
 
-			grabables = character.crateLayer;
-			grabables |= character.itemsLayer;
-			interactablesLayer = grabables;
+			holdablesLayer = character.crateLayer;
+			holdablesLayer |= character.itemsLayer;
+			interactablesLayer = holdablesLayer;
 			interactablesLayer |= character.staticInteractablesLayer;
 		}
-		private void Update()
+		private void FixedUpdate()
 		{
 			if (!character.isSelected) return;
 			if (input.interactPressed && !interactCoolingDown)
 			{
 				print("Interacting...");
 				StartCoroutine(InteractCoolDown());
-				/**
-				if (inventory.objectBeingHeld != null)
+
+				if (carryItem.isHolding)
 				{
 					print("...within hands");
-					InteractInHand();
+					//	InteractInHand();
 				}
 
-				else
-				*/
-				if (	ItemsCheck())
+				else //not holding item
+				//if ray cast sees an object to interact with in front
+				if (ItemsCheck())
+				{
+					//interaction
+					if (WithInArmsReach.TryGetComponent<Interactable>(out Interactable _interactable))
 					{
-						print("...with empty hands"); 
-						InteractCheck();
+						_interactable.Interact(character);
 					}
+                    else { throw new Exception("interactable object not found after itemcheck"); }
+				}	
 			}
-			
 		}
+
 		/// <summary>
         ///
         /// (If hands are empty) Check to see if an object is in front of character to interact with
         /// </summary>
-        private void InteractCheck()
+        private void InteractWorldItem()
         {
-
-			//if not holding anything to interact with something not being held.
-			if (WithInArmsReach != null && !inventory.isHoldingSomething)
-			{
-				print("interacting with object not in possession or being held");
-				// WithInArmsReach.GetComponent<InteractableObjects>().Interact(engine);
+			/** too specific
+			if(TryGetComponent(out HoldableR _holdableItem))
+            {
+				_holdableItem.Interact(character);
+				carryItem.PickUp(_holdableItem);
+				print("Item picked up");
+				WithInArmsReach = null;
+				
 			}
-			//Hands full interact with whats in hands.
-			else
-			{
-				print("there is an interaction going on but nothing is in hands or seen to interact with");
-			}
-
-			//RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right * directionX, rayLength, collisionMask);
-
+            else { print("Item not picked up"); }
+			*/
 
 		}
 
@@ -112,6 +116,7 @@ namespace CL03
 			//look to see if there is something close by to interact with (note: using Raycast 2 to show different debug colors (cyan, magenta))
 			RaycastHit2D ObjectCheckLow = Raycast2(new Vector2(character.footOffset * character.direction, grabHeightLow), new Vector2(character.direction, 0f), reachDistance, interactablesLayer);
 			RaycastHit2D ObjectCheckHigh = Raycast2(new Vector2(character.footOffset * character.direction, grabHeightHigh), new Vector2(character.direction, 0f), reachDistance, interactablesLayer);
+			
 
 			//if something close by is found then can (only be one object in front of character)
 			if (ObjectCheckHigh) //up high (priority)
@@ -119,6 +124,8 @@ namespace CL03
 				WithInArmsReach = ObjectCheckHigh.collider.gameObject;
 				//run a check to see if player has any input to interact with nearby object.
 				//	InteractCheck();
+
+				print("Item found High");
 				return true;
 			}
 			else if (ObjectCheckLow) //or down low
@@ -127,24 +134,30 @@ namespace CL03
 				WithInArmsReach = ObjectCheckLow.collider.gameObject;
 				//run a check to see if player has any input to interact with nearby object.
 				//	InteractCheck();
+
+				print("Item found Low");
 				return true;
 			}
 			else //nothing found
 			{
+				print("nothing found");
 				WithInArmsReach = null;
 			}
 
 			//default false
 			return false;
+			
+			 
 		}
-
+		
 		/// <summary>
         /// take the item that is held in hand (found in inventory ) and interact with it
         /// </summary>
 		void InteractInHand()
 		{           //Begin cooldown since interact 
 			
-
+			/**
+			 
 			//if holding something and object item is seen in inventory.
 			if (inventory.isHoldingSomething && inventory.objectBeingHeld != null)
 			{
@@ -155,6 +168,8 @@ namespace CL03
 	//	inventory.objectBeingHeld.GetComponent<HoldableObjects>().Interact(character);
 
 			}
+
+			*/
 		}
 
 

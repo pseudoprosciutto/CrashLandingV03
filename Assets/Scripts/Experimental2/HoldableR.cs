@@ -6,21 +6,11 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 namespace CL03
 {
-    /*
-    public enum ItemType
-    {
-        Generic,
-        Crate,
-        Pistol,
-        Boots,
-        Teleporter,
-        Receiver,
-    }
-    */
-
     /// <summary>
     /// Rigidbody2D Interactable which can be held 
-    /// 
+    /// </summary>
+    public class HoldableR : Interactable
+    {
     /// Holdable Objects properties:
     /// isHeld state, - Can be held by character;
     /// heldby know who is holding it if any character;
@@ -29,9 +19,6 @@ namespace CL03
     /// isOnGround;
     /// (maybe?) isPushable; (maybe will be under heavycrate specific?)
     /// PushorPull state; (maybe will be under heavycrate specific
-    /// </summary>
-    public class HoldableR : Interactable
-    {
 
         //held properties
         [SerializeField]
@@ -45,26 +32,64 @@ namespace CL03
         protected bool isHeld;
 
         [SerializeField]
-        protected GameObject HeldBy; //who is holding this object?
+        protected CharManager2D HeldBy; //who is holding this object?
 
-        protected CharManager2D HeldBy_Char; //engine of object being held
-        protected InventorySystem HeldBy_Inventory; //inventory of object being held.
+       // protected CharManager2D HeldBy_Char; //engine of object being held
+        //protected InventorySystem HeldBy_Inventory; //inventory of object being held.
 
         [Space]
-        public bool hasAlwaysBeenThrowable = true; // im not gaslighting you, youre just crazyss.
+        public bool hasAlwaysBeenThrowable = true; //for setting isThrowable on Awake and reEnable.
         [SerializeField]
+
         protected bool isThrowable;
         //inventory propertes
 
         public bool isInHands { get; protected set; } = false; //default false
 
+        //should be in storable;
+        #region Inventory States
+        //[SerializeField]
+        //[ReadOnly]
+        //[Space]
+        //protected bool isInInventory;
+        //[SerializeField]
+        //public bool useableInInventory = false;
+        /**
+                /// <summary>
+                /// Change state to store object in inventory
+                /// </summary>
+                public virtual void StoreInInventory()
+                {
+                    isInHands = false;
+                    isInInventory = true;
+                    this.gameObject.SetActive(false);
+                    //this.enabled = false;
+                }
 
-        [SerializeField]
-        [ReadOnly]
-        [Space]
-        protected bool isInInventory;
-        [SerializeField]
-        public bool useableInInventory = false;
+                public virtual void TakeOutOfInventory()
+                {
+                    this.gameObject.SetActive(true);
+                    //this.enabled = true;
+                    isInHands = true;
+                    isInInventory = false;
+                }
+                #endregion
+                public virtual void UseAsEquipment()
+                {
+                    print("using Item from Inventory");
+                }
+        /// <summary>
+        /// can be stored force method
+        /// </summary>
+        public virtual void CanBeStored_TRUE()
+        {
+            //Can not be stored this is holdable object
+            //canBeStored = true; 
+        }
+*/
+        #endregion
+
+
 
         [Space]
         protected Rigidbody2D rb;
@@ -90,6 +115,35 @@ namespace CL03
         //public bool inPushOrPullState;
         bool delayBegan = false;
 
+        /// <summary>
+        /// Get ItemType
+        /// </summary>
+        public virtual ItemType GetItemType { get { return itemType; } protected set { } }
+        /// <summary>
+        /// Set ItemType
+        /// </summary>
+        /// <param name="_itemType"></param>
+        public virtual void SetItemType(ItemType _itemType) => itemType = _itemType; 
+        /// <summary>
+        /// cant be stored this is a holdable object 
+        /// </summary>
+        public virtual void CanBeStored_TRUE()=>
+            print("This can not be stored. This is a holdable object");
+        /// <summary>
+        /// cant be stored forced method
+        /// </summary>
+        public virtual void CanBeStored_FALSE()=>
+            canBeStored = false;
+        /// <summary>
+        /// prevent ability to be held
+        /// </summary>
+        public virtual void CanBeHeld_Off()=>
+            canBeHeld = false;
+        /// <summary>
+        /// allow ability to be held
+        /// </summary>
+        public virtual void CanBeHeld_On()=>
+            canBeHeld = true;
 
 
         /// <summary>
@@ -99,89 +153,16 @@ namespace CL03
         {
             //realized this worked before initializeng this here but just in case...
             rb = GetComponent<Rigidbody2D>();
-            isThrowable = hasAlwaysBeenThrowable;
-            //made this collider find generic
+            spriteRenderer = GetComponent<SpriteRenderer>();
             objectCollider = GetComponent<Collider2D>();
             canBeHeld = true;
-            originalXScale = transform.localScale.x;
-  
-            gravity = rb.gravityScale;
-            objectMass = rb.mass;
-        }
-
-        public virtual void OnEnable()
-        {
             isThrowable = hasAlwaysBeenThrowable;
         }
 
-        /// <summary>
-        /// physics check
-        /// </summary>
-        public virtual void FixedUpdate()
-        {
-            PhysicsCheck();
-            IsHeldPositionCheck();
-        }
+        public virtual void OnEnable()=> isThrowable = hasAlwaysBeenThrowable;
 
-        public virtual ItemType GetItemType { get { return itemType; } protected set { } }
-
-
-        /// <summary>
-        /// Holdable items can be held above head or below.
-        /// </summary>
-        public virtual void IsHeldPositionCheck()
-        {
-            if (isHeld && HeldBy != null && isInHands)
-            {
-
-                if (HeldBy_Inventory.isHoldingSomethingAbove) //held above so stay above
-                    this.gameObject.transform.position = HeldBy_Inventory.holdPoint_Above.position;
-
-                else if (!HeldBy_Inventory.isHoldingSomethingAbove) //held front so stay front
-                    this.gameObject.transform.position = HeldBy_Inventory.holdPoint_Front.position;
-
-                else
-                {
-                    rb.mass = objectMass;
-                }
-            }
-        }
-
-        /// <summary>
-        /// can be stored
-        /// </summary>
-        public void CanBeStored_TRUE()
-        {
-            canBeStored = true;
-        }
-
-        /// <summary>
-        /// cant be stored
-        /// </summary>
-        public void CanBeStored_FALSE()
-        {
-            canBeStored = false;
-        }
-
-        // Start is called before the first frame update
-        /// <summary>
-        /// prevent ability to be held
-        /// </summary>
-        public void CanBeHeld_Off()
-        {
-            canBeHeld = false;
-        }
-
-        /// <summary>
-        /// allow ability to be held
-        /// </summary>
-        public void CanBeHeld_On()
-        {
-            canBeHeld = true;
-        }
-
-
-
+        
+        
         /// <summary>
         /// 
         /// 
@@ -189,22 +170,22 @@ namespace CL03
         /// <param name="character"></param>
         public override void Interact(CharManager2D character)
         {
-
-            //if object is not held
             if (!isHeld && character.isSelected)
             {
+                print("Item will be picked up");
+
                 GetPickedUp(character);
                 //               isOnGround = false;  //do i need to know if object is on ground?
             }
+            /*
             else if (isHeld && (HeldBy_Char == character) && isThrowable && character.isSelected)
             {
                 // print(character.ToString()+"interacting with holdable object- object side");
 
                 Throw(HeldBy_Char);
                 Debug.Log("Holdable default action is to be thrown");
-
             }
-
+           */
         }
 
 
@@ -222,12 +203,13 @@ namespace CL03
         {
             isHeld = true;
             isInHands = true;
-            isInInventory = false; //cant be in inventory if just picked up.
+//            isInInventory = false; //cant be in inventory if just picked up.
             rb.freezeRotation = true; //put rotation back to normal
             rb.transform.rotation = new Quaternion(0f, 0f, 0f, 0f);
-            rb.bodyType = RigidbodyType2D.Kinematic;
-            HeldBy = character.gameObject;
-            HeldBy_Char = character;
+          //  rb.bodyType = RigidbodyType2D.Kinematic;
+            HeldBy = character;
+            HeldBy.Hands.PickUpItem(this);
+           // HeldBy_Char = character;
 
             /**
 
@@ -250,13 +232,12 @@ namespace CL03
             isHeld = false;
             isInHands = false;
             HeldBy = null;
-            Transform temp = HeldBy_Inventory.holdPoint_Front.transform;
             rb.freezeRotation = false;
             rb.bodyType = RigidbodyType2D.Dynamic;
             rb.gravityScale = 12;
             rb.mass = 100;
 
-            StartCoroutine(DropObject(temp));
+//            StartCoroutine(DropObject(temp));
 
             Debug.Log("Object was put down - object side");
         }
@@ -275,7 +256,7 @@ namespace CL03
         {
             rb.transform.position = temp.position;
             HeldBy = null;
-            HeldBy_Char = null;
+       //     HeldBy_Char = null;
             isInteractedWith = false;
             isHeld = false;
             isInHands = false;
@@ -298,31 +279,6 @@ namespace CL03
             rb.isKinematic = false;
         }
 
-        #region Inventory States
-
-        /// <summary>
-        /// Change state to store object in inventory
-        /// </summary>
-        public virtual void StoreInInventory()
-        {
-            isInHands = false;
-            isInInventory = true;
-            this.gameObject.SetActive(false);
-            //this.enabled = false;
-        }
-
-        public virtual void TakeOutOfInventory()
-        {
-            this.gameObject.SetActive(true);
-            //this.enabled = true;
-            isInHands = true;
-            isInInventory = false;
-        }
-        #endregion
-        public virtual void UseAsEquipment()
-        {
-            print("using Item from Inventory");
-        }
 
         /// <summary>
         ///Default Interact action when crate is being held by selected character.
@@ -331,7 +287,7 @@ namespace CL03
         /// <param name="_char"></param>
         public void Throw(CharManager2D _char)
         {
-            HeldBy_Inventory.ReleaseItem(this.gameObject);
+            //HeldBy_Inventory.ReleaseItem(this.gameObject);
             rb.bodyType = RigidbodyType2D.Dynamic;
             isHeld = false;
             isInHands = false;
@@ -438,15 +394,6 @@ namespace CL03
             rb.constraints -= RigidbodyConstraints2D.FreezePositionX;
         }
 
-        /// <summary>
-        /// from fixed update usually - Physics Check to manage states
-        /// </summary>
-        public virtual void PhysicsCheck()
-        {
-            // if (isOnGround && !isHeld)
-            if (!isHeld) return;
-            if (rb.constraints == RigidbodyConstraints2D.FreezePositionX) MakeXMoveState();
-        }
 
 
         public void EnterStaticState() => rb.bodyType = RigidbodyType2D.Static;
@@ -479,3 +426,15 @@ namespace CL03
 //{
 //    yield return new WaitForSeconds(.2f);
 //}
+
+/*
+public enum ItemType
+{
+    Generic,
+    Crate,
+    Pistol,
+    Boots,
+    Teleporter,
+    Receiver,
+}
+*/

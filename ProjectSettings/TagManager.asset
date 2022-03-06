@@ -62,3 +62,6 @@ TagManager:
   - name: Projectile
     uniqueID: 1903405725
     locked: 0
+  - name: UIsortingLayer
+    uniqueID: 6094109
+    locked: 0

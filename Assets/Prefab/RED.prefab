@@ -70,11 +70,11 @@ GameObject:
   m_Component:
   - component: {fileID: 7203530896771738686}
   - component: {fileID: 7203530896771738687}
-  - component: {fileID: 7203530896771738680}
   - component: {fileID: 7203530896771738681}
-  - component: {fileID: 7203530896771738682}
   - component: {fileID: 1444689987}
-  - component: {fileID: 1444689992}
+  - component: {fileID: 1444689988}
+  - component: {fileID: 1444689989}
+  - component: {fileID: 1444689990}
   m_Layer: 7
   m_Name: RED
   m_TagString: Player
@@ -149,27 +149,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!50 &7203530896771738680
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7203530896771738685}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 2
-  m_LinearDrag: 1
-  m_AngularDrag: 0.05
-  m_GravityScale: 5
-  m_Material: {fileID: 0}
-  m_Interpolate: 1
-  m_SleepingMode: 1
-  m_CollisionDetection: 1
-  m_Constraints: 4
 --- !u!61 &7203530896771738681
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -196,86 +175,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.73, y: 1.8}
   m_EdgeRadius: 0
---- !u!114 &7203530896771738682
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7203530896771738685}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da39a2b1487294ddf879c1c608285e74, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bodyCollider: {fileID: 0}
-  state: 0
-  isSelected: 1
-  needsReviving: 0
-  isOnGround: 0
-  isOnPlatform: 0
-  isRunning: 0
-  isJumping: 0
-  isCrouching: 0
-  isHeadBlocked: 0
-  isFrontHeadBlocked: 0
-  isHanging: 0
-  objectHitCheck: 0
-  hitOverHeadLeft: 0
-  hitOverHeadRight: 0
-  hitOverHeadFrontCorner: 0
-  hitBottomFrontCorner: 0
-  canBounceOffWall: 0
-  canHang: 1
-  cantHangCoolDownTime: 0.9
-  objectHitCheckCoolDownTime: 0.5
-  objectHitCoolingDown: 0
-  speed: 4.2
-  walkSpeed: 4.2
-  runSpeed: 6.2
-  crouchSpeedDivisor: 3
-  coyoteDuration: 0.05
-  maxFallSpeed: -25
-  jumpForce: 25
-  bootsBounceUp: 42
-  bootsBounceOut: 15
-  bootsJumpForce: 30
-  bootsModifier: 1.5
-  jumpCoolDownTime: 0.5
-  crouchJumpBoost: 2.5
-  hangingJumpForce: 31
-  jumpHoldForce: 1.9
-  jumpHoldDuration: 0.1
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  walkableObject:
-    serializedVersion: 2
-    m_Bits: 0
-  crateLayer:
-    serializedVersion: 2
-    m_Bits: 512
-  itemsLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  staticInteractablesLayer:
-    serializedVersion: 2
-    m_Bits: 1024
-  drawDebugRaycasts: 1
-  headOffset: 0.35
-  footOffset: 0.25
-  eyeHeight: 1.5
-  objectJumpCheckHeight: 2.7
-  objectAboveHeadForwardOffset: 1
-  objectAboveHeadUpwardOffset: 1
-  reachOffset: 0.7
-  headClearance: 0.5
-  breakOverHeadDistance: 0.1
-  groundDistance: 0.1
-  grabDistance: 0.4
-  hangingDistanceFromLedge: 0.1
-  headBounce: 0.2
-  direction: 1
 --- !u!114 &1444689987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -285,17 +184,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 7203530896771738685}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb22bc30d254e46d3bdf301c98b41280, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c8f79833c09546afac5802f508634ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   drawDebugRaycasts: 1
   reachDistance: 0.9
   grabHeightLow: 0.5
   grabHeightHigh: 1
-  interactCoolDownTime: 0.5
+  interactCoolDownTime: 0.15
   WithInArmsReach: {fileID: 0}
-  objectColliderSize: {x: 0, y: 0}
---- !u!114 &1444689992
+--- !u!114 &1444689988
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -304,22 +202,98 @@ MonoBehaviour:
   m_GameObject: {fileID: 7203530896771738685}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2742322d5edb3423f9e3a1ae4a44e093, type: 3}
+  m_Script: {fileID: 11500000, guid: 8925abcc19dc5443ea88c96c5dbfe64b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectBeingHeld: {fileID: 0}
-  inventoryItem: {fileID: 0}
-  holdPoint_Front: {fileID: 7203530896565526311}
-  holdPoint_Above: {fileID: 7203530896745214612}
-  Possessions: []
-  dropItemCoolDownTime: 1
-  isDroppingItemCoolDown: 0
+  holdableObject: {fileID: 0}
+  isHolding: 0
+--- !u!114 &1444689989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7203530896771738685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 883ba2b53eab543f7a9dfb9e30f63bbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumpHeight: 1.35
+  timeToJumpApex: 0.25
+  jumpLedgeHeight: 2.25
+  timeToJumpLedgeApex: 0.35
+  walkables:
+    serializedVersion: 2
+    m_Bits: 64
+  crateLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  itemsLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  staticInteractablesLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  characterLayer:
+    serializedVersion: 2
+    m_Bits: 128
   isHoldingSomething: 0
-  isHoldingSomethingAbove: 0
-  changeItemCoolDownTime: 1.2
-  changeObjectCoolingDown: 0
-  interactCoolDownTime: 0.5
-  objectCollider: {fileID: 0}
-  objectScript: {fileID: 0}
-  objectColliderSize: {x: 0, y: 0}
-  isInteracting_Test: 0
+  equipState: 0
+  charState: 0
+  isSelected: 1
+  canMove: 0
+  isOnGround: 0
+  isOnPlatform: 0
+  isRunning: 0
+  isJumping: 0
+  isCrouching: 0
+  isHeadBlocked: 0
+  isFrontHeadBlocked: 0
+  isHanging: 0
+  knowsGravity: 1
+  speed: 4.2
+  walkSpeed: 4.2
+  runSpeed: 6.2
+  crouchSpeedDivisor: 3
+  coyoteDuration: 0.05
+  maxFallSpeed: -25
+  hangingJumpForce: 15
+  headOffset: 0.35
+  footOffset: 0.25
+  eyeHeight: 1.5
+  reachOffset: 0.7
+  hangingDistanceFromLedge: 0.1
+  headBounce: 0.2
+  grabDistance: 0.4
+  jumpCoolDownTime: 0.3
+  drawDebugRaycasts: 1
+  direction: 1
+  canHang: 1
+  cantHangCoolDownTime: 0.9
+  objectHitCheckCoolDownTime: 0.5
+  isOnAnotherChar: 0
+--- !u!114 &1444689990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7203530896771738685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8355344ee7ff4549b6bf3801267b9d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 64
+  horizontalRayCount: 4
+  verticalRayCount: 4
+  horizontalRaySpacing: 0
+  verticalRaySpacing: 0
+  boxCollider: {fileID: 0}
+  boundsWidth: 0
+  boundsHeight: 0
+  maxClimbAngle: 60
+  maxDescendAngle: 60
